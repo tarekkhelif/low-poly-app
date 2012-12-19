@@ -39,13 +39,9 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("class", "PiYG")
-    .on("mousemove", update);
+    .on("mousemove", function() { vertices[0] = d3.mouse(this); redraw(); });
 
-svg.selectAll("path")
-    .data(d3.geom.voronoi(vertices))
-  .enter().append("path")
-    .attr("class", function(d, i) { return i ? "q" + (i % 9) + "-9" : null; })
-    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+var path = svg.append("g").selectAll("path");
 
 svg.selectAll("circle")
     .data(vertices.slice(1))
@@ -53,13 +49,13 @@ svg.selectAll("circle")
     .attr("transform", function(d) { return "translate(" + d + ")"; })
     .attr("r", 2);
 
-function update() {
+redraw();
+
+function redraw() {
   vertices[0] = d3.mouse(this);
-  svg.selectAll("path")
-      .data(d3.geom.voronoi(vertices)
-      .map(function(d) { return "M" + d.join("L") + "Z"; }))
-    .filter(function(d) { return this.getAttribute("d") != d; })
-      .attr("d", function(d) { return d; });
+  path = path.data(d3.geom.voronoi(vertices).map(function(d) { return "M" + d.join("L") + "Z"; }), String);
+  path.exit().remove();
+  path.enter().append("path").attr("class", function(d, i) { return "q" + (i % 9) + "-9"; }).attr("d", String);
 }
 
 </script>
