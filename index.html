@@ -52,7 +52,6 @@ svg.selectAll("circle")
 redraw();
 
 function redraw() {
-  vertices[0] = d3.mouse(this);
   path = path.data(d3.geom.voronoi(vertices).map(function(d) { return "M" + d.join("L") + "Z"; }), String);
   path.exit().remove();
   path.enter().append("path").attr("class", function(d, i) { return "q" + (i % 9) + "-9"; }).attr("d", String);
