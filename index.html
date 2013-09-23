@@ -7,7 +7,7 @@ path {
 }
 
 path:first-child {
-  fill: yellow !important;  
+  fill: yellow !important;
 }
 
 circle {
@@ -58,10 +58,14 @@ svg.selectAll("circle")
 redraw();
 
 function redraw() {
-  path = path.data(voronoi(vertices).map(function(d) { return "M" + d.join("L") + "Z"; }), String);
+  path = path.data(voronoi(vertices).map(function(d) { return "M" + d.join("L") + "Z"; }), identity);
   path.exit().remove();
-  path.enter().append("path").attr("class", function(d, i) { return "q" + (i % 9) + "-9"; }).attr("d", String);
+  path.enter().append("path").attr("class", function(d, i) { return "q" + (i % 9) + "-9"; }).attr("d", identity);
   path.order();
+}
+
+function identity(d) {
+  return d;
 }
 
 </script>
