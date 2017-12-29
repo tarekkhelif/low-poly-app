@@ -1,0 +1,22 @@
+{
+  "name": "paperjs-sandbox",
+  "version": "1.0.0",
+  "description": "Sandbox for learning paperjs",
+  "main": "sandbox.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tarekkhelif/paperjs-sandbox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tarekkhelif/paperjs-sandbox/issues"
+  },
+  "homepage": "https://github.com/tarekkhelif/paperjs-sandbox#readme",
+  "dependencies": {
+    "paper": "^0.11.5"
+  }
+}
