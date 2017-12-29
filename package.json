@@ -1,8 +1,8 @@
 {
-  "name": "paperjs-sandbox",
+  "name": "low-poly-app",
   "version": "1.0.0",
-  "description": "Sandbox for learning paperjs",
-  "main": "sandbox.js",
+  "description": "Quickly prototype a low-poly graphic from a raster image",
+  "main": "progress.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
