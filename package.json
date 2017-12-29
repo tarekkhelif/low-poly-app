@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/tarekkhelif/paperjs-sandbox#readme",
   "dependencies": {
-    "paper": "^0.11.5"
+    "paper": "^0.11.5",
+    "voronoi": "^1.0.0"
   }
 }
