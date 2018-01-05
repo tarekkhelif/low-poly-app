@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <!-- Load the Paper.js library -->
-        <script type="text/javascript" src="node_modules/paper/dist/paper-full.js"></script>
-        <!-- Load Voroni script -->
-        <script type="text/javascript" src="node_modules/voronoi/rhill-voronoi-core.js"></script>
+        <script src="node_modules/paper/dist/paper-full.js"></script>
+        <script src="node_modules/voronoi/rhill-voronoi-core.js"></script>
+        <script src="node_modules/papaparse/papaparse.js"></script>
+        
+        <script src="progress.js"></script>
         <!-- Define inlined PaperScript associate it with myCanvas -->
-        <script type="text/paperscript" src="progress.js" canvas="myCanvas"></script>
+        <!-- <script type="text/paperscript" src="progress.js" canvas="myCanvas"></script> -->
     </head>
     <body>
+        <h1>Canvas:</h1>
         <canvas id="myCanvas"></canvas>
+
+        <h1>Choose File:</h1>
+        <form>
+            <input type="file" id="input" accept=".csv" required/>
+            <button type="submit" id="submit">Submit</button>
+        </form>
+
+        <h1>Table:</h1>
+        <table id="table"></table>
+
     </body>
