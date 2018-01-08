@@ -36,13 +36,6 @@ function onDocumentDrop(e) {
 
             // Display data as table
             results.data.forEach(function (row) {
-                var tr = document.createElement('tr');
-                row.forEach(function (crd) {
-                    var td = document.createElement('td');
-                    td.innerText = Math.round(crd);
-                    tr.appendChild(td);
-                });
-                table.appendChild(tr);
             });
 
             
@@ -56,8 +49,17 @@ function onDocumentDrop(e) {
             var y_max = Math.max.apply(null, ys);
             if(!firstYmax) firstYmax = y_max; // Set the y-translation according to the first dataset
 
-            // Plot data in canvas
             results.data.forEach(function (row) {
+                // Display data as table
+                var tr = document.createElement('tr');
+                row.forEach(function (crd) {
+                    var td = document.createElement('td');
+                    td.innerText = Math.round(crd);
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+
+                // Plot data in canvas
                 var x = row[0];
                 var y = firstYmax - row[1]; // Looks like it's necessary to invert y??
                 new Path.Circle({
