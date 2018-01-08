@@ -1,3 +1,6 @@
+//TODO: Validate `.csv` data before plotting/displaying
+
+
 console.log("starting draw-path.js");
 
 function onDocumentDrag(event) {
@@ -11,6 +14,9 @@ function onDocumentDrop(e) {
         
     // PapaParse
     Papa.parse(f, {
+        dynamicTyping: true, // Recognize as numbers
+        skipEmptyLines: true, // My `.csv` files end in an empty line
+
         error: function (err, file) {
             console.log("ERROR:", err, file);
         },

@@ -1,3 +1,5 @@
+//TODO: Validate `.csv` data before plotting/displaying
+
 // Read and display data
 document.addEventListener('drop', (e) => {
     e.preventDefault();
@@ -8,6 +10,9 @@ document.addEventListener('drop', (e) => {
     for (const f of event.dataTransfer.files) { // File is in a 1-element list of files
         // PapaParse
         Papa.parse(f, {
+            dynamicTyping: true, // Recognize as numbers
+	        skipEmptyLines: true, // My `.csv` files end in an empty line
+            
             error: (err, file) => {
                 console.log("ERROR:", err, file);
             },
@@ -27,8 +32,6 @@ document.addEventListener('drop', (e) => {
                 }
 
             },
-
-            dynamicTyping: true // Recognize as numbers
         });
     }
 })
