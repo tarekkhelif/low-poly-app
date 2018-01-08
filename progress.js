@@ -59,8 +59,8 @@ function onDocumentDrop(e) {
                     radius: 2,
                     fillColor: '#FF0000',
                     opacity: 1
-                })
-            })
+                });
+            });
             
             // Resize canvas to fit data
             view.viewSize.width  = Math.max(x_max, view.viewSize.width);
@@ -70,7 +70,7 @@ function onDocumentDrop(e) {
             // Actually update the canvas
             view.update();
         }
-    })
+    });
 }
 
 
