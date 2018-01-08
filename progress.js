@@ -34,11 +34,6 @@ function onDocumentDrop(e) {
         complete: function (results) {
             numberOfDataSets++;
 
-            // Display data as table
-            results.data.forEach(function (row) {
-            });
-
-            
             // Find x_max and y_max
             function slice2D(col, arr) {
                 return arr.map(function (row) {return row[col];});
@@ -65,7 +60,7 @@ function onDocumentDrop(e) {
                 new Path.Circle({
                     center: [x, y],
                     radius: 2,
-                    fillColor: '#FF0000',
+                    fillColor: (numberOfDataSets === 1) ? '#009900': '#FF0000',
                     opacity: 1
                 });
             });
