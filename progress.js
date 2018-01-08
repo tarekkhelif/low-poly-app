@@ -4,6 +4,9 @@
             I'm displaying x: (0, x_max) and y: (0, y_max)
 */
 
+var numberOfDataSets = 0;
+var firstYmax;
+
 
 console.log("starting draw-path.js");
 
@@ -29,6 +32,8 @@ function onDocumentDrop(e) {
         },
 
         complete: function (results) {
+            numberOfDataSets++;
+
             // Display data as table
             results.data.forEach(function (row) {
                 var tr = document.createElement('tr');
@@ -49,11 +54,12 @@ function onDocumentDrop(e) {
             var ys = slice2D(1, results.data);
             var x_max = Math.max.apply(null, xs);
             var y_max = Math.max.apply(null, ys);
+            if(!firstYmax) firstYmax = y_max; // Set the y-translation according to the first dataset
 
             // Plot data in canvas
             results.data.forEach(function (row) {
                 var x = row[0];
-                var y = y_max - row[1]; // Looks like it's necessary to invert y??
+                var y = firstYmax - row[1]; // Looks like it's necessary to invert y??
                 new Path.Circle({
                     center: [x, y],
                     radius: 2,
