@@ -22,7 +22,7 @@ def plotPolygon(polygonCoords):
     ax.add_patch(patch)
     
     # Set axes limits
-    buff = 0.05 # Buffer as a fraction of the polygon's bbox
+    buff = 0.05 # Whitespace buffer as a fraction of the polygon's bbox
     minx, miny, maxx, maxy = polygon.bounds
     width = maxx - minx
     height = maxy - miny
