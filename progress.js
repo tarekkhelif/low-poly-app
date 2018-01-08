@@ -1,4 +1,8 @@
-//TODO: Validate `.csv` data before plotting/displaying
+/* 
+    TODO: Validate `.csv` data before plotting/displaying
+          - Currently I'm assuming all data is in the positive quadrant, ie 
+            I'm displaying x: (0, x_max) and y: (0, y_max)
+*/
 
 
 console.log("starting draw-path.js");
@@ -36,10 +40,20 @@ function onDocumentDrop(e) {
                 table.appendChild(tr);
             });
 
+            
+            // Find x_max and y_max
+            function slice2D(col, arr) {
+                return arr.map(function (row) {return row[col];});
+            }
+            var xs = slice2D(0, results.data);
+            var ys = slice2D(1, results.data);
+            var x_max = Math.max.apply(null, xs);
+            var y_max = Math.max.apply(null, ys);
+
             // Plot data in canvas
-            results.data.forEach(function (row, i) {
+            results.data.forEach(function (row) {
                 var x = row[0];
-                var y = 600 - row[1]; // Looks like it's necessary to invert y??
+                var y = y_max - row[1]; // Looks like it's necessary to invert y??
                 new Path.Circle({
                     center: [x, y],
                     radius: 2,
@@ -47,7 +61,13 @@ function onDocumentDrop(e) {
                     opacity: 1
                 })
             })
-                
+            
+            // Resize canvas to fit data
+            view.viewSize.width  = Math.max(x_max, view.viewSize.width);
+            view.viewSize.height = Math.max(y_max, view.viewSize.height);
+            view.center = new Point(view.size.width / 2, view.size.height / 2);
+            
+            // Actually update the canvas
             view.update();
         }
     })
