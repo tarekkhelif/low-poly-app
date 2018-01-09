@@ -5,14 +5,34 @@ TODO: Conform to conventions; specifically naming, docstring, etc.
 
 import numpy as np
 from lxml import etree
-import matplotlib.pyplot as plt
 
 from from_py_project.v0_3_1m import extractPaths
 import shapely.geometry as sh
-from descartes.patch import PolygonPatch
 
 #################################### LOGIC ####################################
 # A helper function
+def get_bbox(coords):
+    """
+    Finds the coordinates of a box containing *coords*
+
+    :param coords: A list of coordinates
+    :type coords: list(tuple)
+                  [(x1, y1, ...),
+                   (x2, y2, ...), 
+                   ...           ]
+    :return: The bounding box of *coords*
+    :rtype: np.array([[minx, miny, ...],
+                      [maxx, maxy, ...]])
+    """
+    # Ensure coords is a numpy array
+    coords = np.asarray(coords)
+
+    bbox = np.zeros((2, coords.shape[1]))
+    bbox[0] = np.min(coords, axis=0)
+    bbox[1] = np.max(coords, axis=0)
+    return bbox
+
+# Another helper function
 def makeCoordsPositive(coords):
     """
     Slides (ie pure translation) *coords* into the positive quadrant
@@ -24,7 +44,7 @@ def makeCoordsPositive(coords):
     :rtype: list(tuple)
     """
     coords = np.array(coords)
-    mins = np.array([min(coord) for coord in zip(*coords)])
+    mins, _ = get_bbox(coords)
     translation = (-1)*np.array([min(minCoord, 0) for minCoord in mins])
     coords += translation
     return coords
