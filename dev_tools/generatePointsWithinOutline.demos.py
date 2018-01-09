@@ -31,6 +31,9 @@ def plotPolygon(polygonCoords):
     height = maxy - miny
     ax.set_xlim(minx - width  * buff, maxx + width  * buff)
     ax.set_ylim(miny - height * buff, maxy + height * buff)
+
+    # In computer graphics, y-axis increases down
+    ax.invert_yaxis()
     
     return fig, ax
 

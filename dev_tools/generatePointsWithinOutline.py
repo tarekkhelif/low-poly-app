@@ -75,9 +75,8 @@ def getOutlineFromFile(svgFile):
               "exactly 1 path, not {} in exactly 1 path").format(len(subpaths))
     outlineCoords = subpaths[0]
     
-    # Adjust polygon position
-    outlineCoords *= (1, -1) # Flip vertically to account for inkscape's unconventional axes
-    outlineCoords = makeCoordsPositive(outlineCoords) # Translate to positive quadrant
+    # Translate to positive quadrant
+    outlineCoords = makeCoordsPositive(outlineCoords)
     
     return outlineCoords
 
