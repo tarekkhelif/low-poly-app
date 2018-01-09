@@ -5,26 +5,46 @@ TODO: Conform to conventions; specifically naming, docstring, etc.
 
 import numpy as np
 from lxml import etree
-import matplotlib.pyplot as plt
 
 from from_py_project.v0_3_1m import extractPaths
 import shapely.geometry as sh
-from descartes.patch import PolygonPatch
 
 #################################### LOGIC ####################################
 # A helper function
+def get_bbox(coords):
+    """
+    Finds the coordinates of a box containing *coords*
+
+    :param coords: A list of coordinates
+    :type coords: list(tuple)
+                  [(x1, y1, ...),
+                   (x2, y2, ...), 
+                   ...           ]
+    :return: The bounding box of *coords*
+    :rtype: np.array([[minx, miny, ...],
+                      [maxx, maxy, ...]])
+    """
+    # Ensure coords is a numpy array
+    coords = np.asarray(coords)
+
+    bbox = np.zeros((2, coords.shape[1]))
+    bbox[0] = np.min(coords, axis=0)
+    bbox[1] = np.max(coords, axis=0)
+    return bbox
+
+# Another helper function
 def makeCoordsPositive(coords):
     """
-    Translates *coords* into the positive quadrant
+    Slides (ie pure translation) *coords* into the positive quadrant
 
     :param coords: A list of coordinates
     :type coords: list(tuple)
 
-    :return: The same list of coordates, translated into the positive quadrant
+    :return: The coordates, translated into the positive quadrant
     :rtype: list(tuple)
     """
     coords = np.array(coords)
-    mins = np.array([min(coord) for coord in zip(*coords)])
+    mins, _ = get_bbox(coords)
     translation = (-1)*np.array([min(minCoord, 0) for minCoord in mins])
     coords += translation
     return coords
@@ -35,13 +55,14 @@ def getOutlineFromFile(svgFile):
     
     The *svgFile* should contain exactly one closed path with one exactly subpath.
     
-    The coordinates are transformed so that the path is in the positive 
-    quadrant and oriented in the right direction. (The svgFile is assumed to be 
-    from Inkscape, which has the y-axis in the opposite orientation as usual.)
+    The coordinates are transformed so that the path is (1) in the positive 
+    quadrant and (2) oriented in the right direction. (svgFile is assumed to be 
+    from Inkscape, which has the y-axis increase vertically, which is opposite
+    the convention for graphics.)
 
     :param svgFile: An SVG file containing one closed path
     :type svgFile: str
-    :return: Coordinates of the path in the *svgFile*
+    :return: Coordinates of the path
     :rtype: np.array(list(list))
     """
     
@@ -54,9 +75,8 @@ def getOutlineFromFile(svgFile):
               "exactly 1 path, not {} in exactly 1 path").format(len(subpaths))
     outlineCoords = subpaths[0]
     
-    # Adjust polygon position
-    outlineCoords *= (1, -1) # Flip vertically to account for inkscape's unconventional axes
-    outlineCoords = makeCoordsPositive(outlineCoords) # Move to positive quadrant
+    # Translate to positive quadrant
+    outlineCoords = makeCoordsPositive(outlineCoords)
     
     return outlineCoords
 
@@ -93,9 +113,9 @@ def getPointsInPolygon(polygonCoords, num=25):
     ### implementation was roughly "while len(validPoints) < num, generate 
     ### random points and append to validPoints if valid"
     ### 
-    ###       num    original > orig-REV    numpy-thonic      diff
-    ###       250     53.5 ms    45.1 ms         44.5 ms    16.8 % > 1.33 %
-    ###     25000     4.58  s                    4.49  s    2.00 %
+    ###       num    original -> orig-REV    numpy-thonic      diff
+    ###       250     53.5 ms     45.1 ms         44.5 ms    16.8 % -> 1.33 %
+    ###     25000     4.58  s                     4.49  s    2.00 %
     ###
     ### The numpy-thonic version is faster, though a 10 ms difference doesn't matter practically
     ### REVISION: In the original implementation, leaving *validPoints* as 

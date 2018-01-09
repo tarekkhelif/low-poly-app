@@ -1,3 +1,7 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+
 from generatePointsWithinOutline import *
 
 ################################## PLOTTING ##################################
@@ -17,17 +21,19 @@ def plotPolygon(polygonCoords):
     ax.set_aspect('equal')
 
     # Add polygon to plot
-    polygon = sh.Polygon(polygonCoords)
-    patch = PolygonPatch(polygon, facecolor="green", edgecolor="black")
-    ax.add_patch(patch)
+    polygon = Polygon(polygonCoords, facecolor="green", edgecolor="black")
+    ax.add_patch(polygon)
     
     # Set axes limits
-    buff = 0.05 # Buffer as a fraction of the polygon's bbox
-    minx, miny, maxx, maxy = polygon.bounds
+    buff = 0.05 # Whitespace buffer as a fraction of the polygon's bbox
+    (minx, miny), (maxx, maxy) = get_bbox(polygon.get_xy())
     width = maxx - minx
     height = maxy - miny
     ax.set_xlim(minx - width  * buff, maxx + width  * buff)
     ax.set_ylim(miny - height * buff, maxy + height * buff)
+
+    # In computer graphics, y-axis increases down
+    ax.invert_yaxis()
     
     return fig, ax
 
