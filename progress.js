@@ -66,14 +66,14 @@ function onDocumentDrop(e) {
             if (numberOfDataSets !== 1) {
                 var outline = new Path({
                     segments: points,
-                    strokeColor: 'black',
+                    //strokeColor: 'black',
                     //fillColor: 'blue',
                     strokeWidth: 3
                 });
                 var box = Path.Rectangle(outline.bounds);
                 console.log(box);
                 var cover = box.subtract(outline);
-                cover.fillColor = 'yellow';
+                cover.fillColor = 'white';
             }
             else {
                 sites = points;
@@ -91,13 +91,13 @@ function onDocumentDrop(e) {
                 tr.appendChild(tdy);
                 table.appendChild(tr);
 
-                // Plot data in canvas
+                /* // Plot data in canvas
                 new Path.Circle({
                     center: point,
                     radius: 4,
                     fillColor: (numberOfDataSets === 1) ? '#009900': '#FF0000',
                     opacity: 1
-                });
+                }); */
             });
             
             // Actually update the canvas
@@ -130,8 +130,8 @@ function renderDiagram() {
 
 function createPath(points, center) {
 	var path = new Path();
-    path.fillColor = "#3df55f";
-    path.strokeColor = 'black';
+    path.fillColor = "#eac086";
+    //path.strokeColor = 'black';
     path.closed = true;
 
 	for (var i = 0, l = points.length; i < l; i++) {
@@ -143,8 +143,24 @@ function createPath(points, center) {
 			handleIn: -vector,
 			handleOut: vector
 		});
-	}
+    }
+	path.scale(0.95);
+	removeSmallBits(path);
 	return path;
+}
+
+function removeSmallBits(path) {
+	var averageLength = path.length / path.segments.length;
+	var min = path.length / 50;
+	for(var i = path.segments.length - 1; i >= 0; i--) {
+		var segment = path.segments[i];
+		var cur = segment.point;
+		var nextSegment = segment.next;
+		var next = nextSegment.point + nextSegment.handleIn;
+		if (cur.getDistance(next) < min) {
+			segment.remove();
+		}
+	}
 }
 
 document.addEventListener('drop', onDocumentDrop, false);
