@@ -1,0 +1,30 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "globals": {
+        "Papa": false,
+        "Voronoi": false,
+        "Point": false,
+        "Path": false,
+        "Color": false,
+        "view": false,
+        "project": false
+    },
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-console": 0
+    }
+}

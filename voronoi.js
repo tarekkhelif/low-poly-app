@@ -1,3 +1,9 @@
+/*eslint "indent": [
+            "error",
+            "tab"
+        ],
+         "no-unused-vars": 0*/
+
 var voronoi =  new Voronoi();
 var sites = generateBeeHivePoints(view.size / 200, true);
 var bbox, diagram;
@@ -33,7 +39,7 @@ function renderDiagram() {
 				if (length > 2) {
 					var points = [];
 					for (var j = 0; j < length; j++) {
-						v = halfedges[j].getEndpoint();
+						var v = halfedges[j].getEndpoint();
 						points.push(new Point(v));
 					}
 					createPath(points, sites[i]);

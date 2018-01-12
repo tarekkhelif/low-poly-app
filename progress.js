@@ -1,7 +1,8 @@
 /* 
     TODO: Validate `.csv` data before plotting/displaying
           - Currently I'm assuming all data is in the positive quadrant, ie 
-            I'm displaying x: (0, x_max) and y: (0, y_max)
+            I'm displaying x: (0, x_max)
+                           y: (0, y_max)
 */
 
 console.log("starting draw-path.js");
@@ -12,10 +13,10 @@ var bbox;
 var voronoi = new Voronoi();
 
 function onDocumentDrag(event) {
-	event.preventDefault();
+    event.preventDefault();
 }
 
-function onDocumentDrop(e) {
+function onDocumentDrop(event) {
     event.preventDefault();
 
     var f = event.dataTransfer.files[0];
@@ -38,8 +39,8 @@ function onDocumentDrop(e) {
             // Turn data into array of paperjs `Points`
             var points = [];
             results.data.forEach(function (row) {
-                points.push(new Point(row))
-            })
+                points.push(new Point(row));
+            });
 
             // Find x_max and y_max
             function slice2D(col, arr) {
@@ -110,57 +111,56 @@ function onDocumentDrop(e) {
 function renderDiagram() {
     var diagram = voronoi.compute(sites, bbox);
     if (diagram) {
-		for (var i = 0, l = sites.length; i < l; i++) {
-			var cell = diagram.cells[sites[i].voronoiId];
-			if (cell) {
-				var halfedges = cell.halfedges,
-					length = halfedges.length;
-				if (length > 2) {
-					var points = [];
-					for (var j = 0; j < length; j++) {
-						v = halfedges[j].getEndpoint();
-						points.push(new Point(v));
-					}
-					createPath(points, sites[i]);
-				}
-			}
-		}
-	}
+        for (var i = 0, l = sites.length; i < l; i++) {
+            var cell = diagram.cells[sites[i].voronoiId];
+            if (cell) {
+                var halfedges = cell.halfedges,
+                    length = halfedges.length;
+                if (length > 2) {
+                    var points = [];
+                    for (var j = 0; j < length; j++) {
+                        var v = halfedges[j].getEndpoint();
+                        points.push(new Point(v));
+                    }
+                    createPath(points, sites[i]);
+                }
+            }
+        }
+    }
 }
 
-function createPath(points, center) {
-	var path = new Path();
+function createPath(points) {
+    var path = new Path();
     path.fillColor = "#eac086";
     //path.strokeColor = 'black';
     path.closed = true;
 
-	for (var i = 0, l = points.length; i < l; i++) {
-		var point = points[i];
-		var next = points[(i + 1) == points.length ? 0 : i + 1];
-		var vector = (next - point) / 2;
-		path.add({
-			point: point + vector,
-			handleIn: -vector,
-			handleOut: vector
-		});
+    for (var i = 0, l = points.length; i < l; i++) {
+        var point = points[i];
+        var next = points[(i + 1) == points.length ? 0 : i + 1];
+        var vector = (next - point) / 2;
+        path.add({
+            point: point + vector,
+            handleIn: -vector,
+            handleOut: vector
+        });
     }
-	path.scale(0.95);
-	removeSmallBits(path);
-	return path;
+    path.scale(0.95);
+    removeSmallBits(path);
+    return path;
 }
 
 function removeSmallBits(path) {
-	var averageLength = path.length / path.segments.length;
-	var min = path.length / 50;
-	for(var i = path.segments.length - 1; i >= 0; i--) {
-		var segment = path.segments[i];
-		var cur = segment.point;
-		var nextSegment = segment.next;
-		var next = nextSegment.point + nextSegment.handleIn;
-		if (cur.getDistance(next) < min) {
-			segment.remove();
-		}
-	}
+    var min = path.length / 50;
+    for(var i = path.segments.length - 1; i >= 0; i--) {
+        var segment = path.segments[i];
+        var cur = segment.point;
+        var nextSegment = segment.next;
+        var next = nextSegment.point + nextSegment.handleIn;
+        if (cur.getDistance(next) < min) {
+            segment.remove();
+        }
+    }
 }
 
 document.addEventListener('drop', onDocumentDrop, false);
