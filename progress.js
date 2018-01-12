@@ -7,6 +7,9 @@
 console.log("starting draw-path.js");
 
 var numberOfDataSets = 0;
+var sites;
+var bbox;
+var voronoi = new Voronoi();
 
 function onDocumentDrag(event) {
 	event.preventDefault();
@@ -31,6 +34,12 @@ function onDocumentDrop(e) {
 
         complete: function (results) {
             numberOfDataSets++;
+            
+            // Turn data into array of paperjs `Points`
+            var points = [];
+            results.data.forEach(function (row) {
+                points.push(new Point(row))
+            })
 
             // Find x_max and y_max
             function slice2D(col, arr) {
@@ -40,32 +49,56 @@ function onDocumentDrop(e) {
             var ys = slice2D(1, results.data);
             var x_max = Math.max.apply(null, xs);
             var y_max = Math.max.apply(null, ys);
-
-            results.data.forEach(function (row) {
-                // Display data as table
-                var tr = document.createElement('tr');
-                row.forEach(function (crd) {
-                    var td = document.createElement('td');
-                    td.innerText = Math.round(crd);
-                    tr.appendChild(td);
-                });
-                table.appendChild(tr);
-
-                // Plot data in canvas
-                var x = row[0];
-                var y = row[1];
-                new Path.Circle({
-                    center: [x, y],
-                    radius: 2,
-                    fillColor: (numberOfDataSets === 1) ? '#009900': '#FF0000',
-                    opacity: 1
-                });
-            });
             
             // Resize canvas to fit data
             view.viewSize.width  = Math.max(x_max, view.viewSize.width);
             view.viewSize.height = Math.max(y_max, view.viewSize.height);
             view.center = new Point(view.size.width / 2, view.size.height / 2);
+
+            bbox = {
+                xl: 0,
+                xr: view.bounds.width,
+                yt: 0,
+                yb: view.bounds.height
+            };
+            
+            // Plot first data set as path
+            if (numberOfDataSets !== 1) {
+                var outline = new Path({
+                    segments: points,
+                    //strokeColor: 'black',
+                    //fillColor: 'blue',
+                    strokeWidth: 3
+                });
+                var box = Path.Rectangle(outline.bounds);
+                console.log(box);
+                var cover = box.subtract(outline);
+                cover.fillColor = 'white';
+            }
+            else {
+                sites = points;
+                renderDiagram();
+            }
+
+            points.forEach(function (point) {
+                // Display data as table
+                var tr = document.createElement('tr');
+                var tdx = document.createElement('td');
+                var tdy = document.createElement('td');
+                tdx.innerText = Math.round(point.x);
+                tdy.innerText = Math.round(point.y);
+                tr.appendChild(tdx);
+                tr.appendChild(tdy);
+                table.appendChild(tr);
+
+                /* // Plot data in canvas
+                new Path.Circle({
+                    center: point,
+                    radius: 4,
+                    fillColor: (numberOfDataSets === 1) ? '#009900': '#FF0000',
+                    opacity: 1
+                }); */
+            });
             
             // Actually update the canvas
             view.update();
@@ -73,6 +106,62 @@ function onDocumentDrop(e) {
     });
 }
 
+
+function renderDiagram() {
+    var diagram = voronoi.compute(sites, bbox);
+    if (diagram) {
+		for (var i = 0, l = sites.length; i < l; i++) {
+			var cell = diagram.cells[sites[i].voronoiId];
+			if (cell) {
+				var halfedges = cell.halfedges,
+					length = halfedges.length;
+				if (length > 2) {
+					var points = [];
+					for (var j = 0; j < length; j++) {
+						v = halfedges[j].getEndpoint();
+						points.push(new Point(v));
+					}
+					createPath(points, sites[i]);
+				}
+			}
+		}
+	}
+}
+
+function createPath(points, center) {
+	var path = new Path();
+    path.fillColor = "#eac086";
+    //path.strokeColor = 'black';
+    path.closed = true;
+
+	for (var i = 0, l = points.length; i < l; i++) {
+		var point = points[i];
+		var next = points[(i + 1) == points.length ? 0 : i + 1];
+		var vector = (next - point) / 2;
+		path.add({
+			point: point + vector,
+			handleIn: -vector,
+			handleOut: vector
+		});
+    }
+	path.scale(0.95);
+	removeSmallBits(path);
+	return path;
+}
+
+function removeSmallBits(path) {
+	var averageLength = path.length / path.segments.length;
+	var min = path.length / 50;
+	for(var i = path.segments.length - 1; i >= 0; i--) {
+		var segment = path.segments[i];
+		var cur = segment.point;
+		var nextSegment = segment.next;
+		var next = nextSegment.point + nextSegment.handleIn;
+		if (cur.getDistance(next) < min) {
+			segment.remove();
+		}
+	}
+}
 
 document.addEventListener('drop', onDocumentDrop, false);
 document.addEventListener('dragover', onDocumentDrag, false);
