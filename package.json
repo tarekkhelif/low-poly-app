@@ -1,24 +1,32 @@
 {
-  "name": "low-poly-app",
-  "version": "1.0.0",
-  "description": "Quickly prototype a low-poly graphic from a raster image",
-  "main": "progress.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tarekkhelif/paperjs-sandbox.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/tarekkhelif/paperjs-sandbox/issues"
-  },
-  "homepage": "https://github.com/tarekkhelif/paperjs-sandbox#readme",
-  "dependencies": {
-    "papaparse": "^4.3.6",
-    "paper": "^0.11.5",
-    "voronoi": "^1.0.0"
-  }
+    "name": "low-poly-app",
+    "version": "1.0.0",
+    "description": "Quickly prototype a low-poly graphic from a raster image",
+    "main": "progress.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint **/*.js --quiet",
+        "format": "prettier --write **/*.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/tarekkhelif/paperjs-sandbox.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/tarekkhelif/paperjs-sandbox/issues"
+    },
+    "homepage": "https://github.com/tarekkhelif/paperjs-sandbox#readme",
+    "dependencies": {
+        "papaparse": "^4.3.6",
+        "paper": "^0.11.5",
+        "voronoi": "^1.0.0"
+    },
+    "devDependencies": {
+        "eslint": "^4.9.0",
+        "eslint-config-airbnb-base": "^12.1.0",
+        "eslint-plugin-import": "^2.7.0",
+        "prettier-eslint": "^8.7.4"
+    }
 }

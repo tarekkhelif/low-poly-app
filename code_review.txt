@@ -1,0 +1,21 @@
+gulp?
+
+
+Ultimate goal:
+
+- Write everything is ESNext
+- Lint with Flow and ESLint
+- Format with Prettier and ESLint
+- Transpile paperscript files to ES5 with Babel
+
+Steps:
+(1)
+- Write everything in ES5
+- Lint and format with ESLint and Prettier
+(2)
+- Convert to ESNext
+- Transpile to ES5 with Babel
+(3)
+- Lint and format ESNext with Prettier and eslint
+(4)
+- Add Flow to linting
