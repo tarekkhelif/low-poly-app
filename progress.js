@@ -1,10 +1,10 @@
-/* 
+/*
     TODO: Validate `.csv` data before plotting/displaying
-          - Currently I'm assuming all data is in the positive quadrant, ie 
+          - Currently I'm assuming all data is in the positive quadrant, ie
             I'm displaying x: (0, x_max)
                            y: (0, y_max)
 */
-
+// eslint-disable-next-line no-console
 console.log("starting draw-path.js");
 
 var numberOfDataSets = 0;
@@ -29,33 +29,34 @@ function onDocumentDrop(event) {
         dynamicTyping: true, // Recognize as numbers
         skipEmptyLines: true, // My `.csv` files end in an empty line, which screws some things up
 
-        error: function(err, file) {
+        error: function (err, file) {
+            // eslint-disable-next-line no-console
             console.log("ERROR:", err, file);
         },
 
-        complete: function(results) {
-            numberOfDataSets++;
+        complete: function (results) {
+            numberOfDataSets += 1;
 
             // Turn data into array of paperjs `Points`
             var points = [];
-            results.data.forEach(function(row) {
+            results.data.forEach(function (row) {
                 points.push(new Point(row));
             });
 
             // Find x_max and y_max
             function slice2D(col, arr) {
-                return arr.map(function(row) {
+                return arr.map(function (row) {
                     return row[col];
                 });
             }
             var xs = slice2D(0, results.data);
             var ys = slice2D(1, results.data);
-            var x_max = Math.max.apply(null, xs);
-            var y_max = Math.max.apply(null, ys);
+            var xMax = Math.max.apply(null, xs);
+            var yMax = Math.max.apply(null, ys);
 
             // Resize canvas to fit data
-            view.viewSize.width = Math.max(x_max, view.viewSize.width);
-            view.viewSize.height = Math.max(y_max, view.viewSize.height);
+            view.viewSize.width = Math.max(xMax, view.viewSize.width);
+            view.viewSize.height = Math.max(yMax, view.viewSize.height);
             view.center = new Point(view.size.width / 2, view.size.height / 2);
 
             bbox = {
@@ -69,11 +70,12 @@ function onDocumentDrop(event) {
             if (numberOfDataSets !== 1) {
                 var outline = new Path({
                     segments: points,
-                    //strokeColor: 'black',
-                    //fillColor: 'blue',
+                    // strokeColor: 'black',
+                    // fillColor: 'blue',
                     strokeWidth: 3
                 });
                 var box = Path.Rectangle(outline.bounds);
+                // eslint-disable-next-line no-console
                 console.log(box);
                 var cover = box.subtract(outline);
                 cover.fillColor = "white";
@@ -82,7 +84,7 @@ function onDocumentDrop(event) {
                 renderDiagram();
             }
 
-            points.forEach(function(point) {
+            points.forEach(function (point) {
                 // Display data as table
                 var tr = document.createElement("tr");
                 var tdx = document.createElement("td");
@@ -114,8 +116,8 @@ function renderDiagram() {
         for (var i = 0, l = sites.length; i < l; i++) {
             var cell = diagram.cells[sites[i].voronoiId];
             if (cell) {
-                var halfedges = cell.halfedges,
-                    length = halfedges.length;
+                var halfedges = cell.halfedges;
+                var length = halfedges.length;
                 if (length > 2) {
                     var points = [];
                     for (var j = 0; j < length; j++) {
@@ -132,12 +134,12 @@ function renderDiagram() {
 function createPath(points) {
     var path = new Path();
     path.fillColor = "#eac086";
-    //path.strokeColor = 'black';
+    // path.strokeColor = 'black';
     path.closed = true;
 
     for (var i = 0, l = points.length; i < l; i++) {
         var point = points[i];
-        var next = points[i + 1 == points.length ? 0 : i + 1];
+        var next = points[i + 1 === points.length ? 0 : i + 1];
         var vector = (next - point) / 2;
         path.add({
             point: point + vector,

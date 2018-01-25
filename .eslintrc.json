@@ -2,7 +2,7 @@
     "env": {
         "browser": true
     },
-    "extends": "eslint:recommended",
+    "extends": "airbnb-base/legacy",
     "globals": {
         "Papa": false,
         "Voronoi": false,
@@ -13,18 +13,12 @@
         "project": false
     },
     "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-console": 0
+        "indent": ["error", 4],
+        "linebreak-style": ["error", "windows"],
+        "quotes": ["error", "double"],
+        "vars-on-top": 0,
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-use-before-define": ["error", { "functions": false }],
+        "func-names": 0
     }
 }
