@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <script src="node_modules/paper/dist/paper-full.js"></script>
+        <script src="node_modules/voronoi/rhill-voronoi-core.js"></script>
+        <script src="node_modules/papaparse/papaparse.js"></script>
+
+        <!-- Define inlined PaperScript associate it with myCanvas -->
+        <script type="text/paperscript" src="progress.js" canvas="myCanvas"></script>
+        <script>
+            console.log(Paper);
+        </script>
+    </head>
+
+    <body>
+        <h1>Canvas:</h1>
+        <canvas id="myCanvas"></canvas>
+
+        <h1>Table:</h1>
+        <table id="table"></table>
+
+    </body>

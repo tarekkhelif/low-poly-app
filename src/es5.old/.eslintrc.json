@@ -1,0 +1,24 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": "airbnb-base/legacy",
+    "globals": {
+        "Papa": false,
+        "Voronoi": false,
+        "Point": false,
+        "Path": false,
+        "Color": false,
+        "view": false,
+        "project": false
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "linebreak-style": ["error", "windows"],
+        "quotes": ["error", "double"],
+        "vars-on-top": 0,
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-use-before-define": ["error", { "functions": false }],
+        "func-names": 0
+    }
+}

@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint **/*.js --quiet",
-        "format": "prettier --write **/*.js"
+        "format": "prettier --write **/*.js",
+        "beefy": "beefy"
     },
     "repository": {
         "type": "git",
@@ -24,9 +25,11 @@
         "voronoi": "^1.0.0"
     },
     "devDependencies": {
+        "beefy": "^2.1.8",
         "eslint": "^4.9.0",
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.7.0",
-        "prettier-eslint": "^8.7.4"
+        "prettier-eslint": "^8.7.4",
+        "watchify": "^3.9.0"
     }
 }
