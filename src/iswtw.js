@@ -64,7 +64,7 @@ Paper.view.on({
     // Click to add to outline
     mousedown: addToOutline,
     // Close path and generate Voronoi
-    keypressC: doTheMagic
+    keyup: handleTheMagic
 });
 function previewAdditionalPoint(e) {
     nextSegment.point = e.point;
@@ -126,17 +126,25 @@ function randInteriorPoint(path) {
     return pointInPath;
 }
 
+// Move from "Create outline" stage to "Create tesselation" stage
 let sites = [];
 let siteMarkers = [];
+// Keypress to switch stages
+function handleTheMagic(e) {
+    if (e.key === "c") doTheMagic();
+}
 function doTheMagic() {
     // Disable ability to add nodes to outline
-    Paper.view.off({
-        mousemove: previewAdditionalPoint,
-        mousedown: addToOutline
-    });
+    // // Remove references to what would have been the next node
     outline.removeSegment(outline.segments.indexOf(nextSegment));
     nextSegment.remove();
     nextMarker.remove();
+    // // Remove listeners
+    Paper.view.off({
+        mousemove: previewAdditionalPoint,
+        mousedown: addToOutline,
+        keyup: handleTheMagic
+    });
 
     // Close outline
     outline.closed = true;
