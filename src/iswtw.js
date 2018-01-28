@@ -44,30 +44,32 @@ raster.on("load", () => {
     // Paper.view.on("mousemove", averageDots);
 });
 
+// Initialize outline
 let nextSegment = new Paper.Segment();
+const outline = new Paper.Path({
+    segments: [nextSegment],
+    strokeColor: "red",
+    selected: false
+});
 let nextMarker = new Paper.Path.Circle({
     center: nextSegment.point,
     radius: 5,
     strokeColor: "red",
-    fillColor: "pink",
+    fillColor: "pink"
 });
 
-// Initialize outline
-const outline = new Paper.Path({
-    segments: [nextSegment],
-    strokeColor: "red",
-    selected: false,
-});
-
-// Click to add to outline
 Paper.view.on({
-    keypressC: doTheMagic,
+    // Preview outline with a new point at current mouse position
+    mousemove: previewAdditionalPoint,
+    // Click to add to outline
     mousedown: addToOutline,
-    mousemove: (e) => {
-        nextSegment.point = e.point;
-        nextMarker.position = nextSegment.point;
-    },
+    // Close path and generate Voronoi
+    keypressC: doTheMagic
 });
+function previewAdditionalPoint(e) {
+    nextSegment.point = e.point;
+    nextMarker.position = nextSegment.point;
+}
 function addToOutline(e) {
     // Replace the now-finalized point with fresh point
     const finalizedSegment = nextSegment;
@@ -77,7 +79,7 @@ function addToOutline(e) {
         center: finalizedSegment.point,
         radius: 5,
         strokeColor: "red",
-        fillColor: "pink",
+        fillColor: "pink"
     });
     outline.add(nextSegment);
 
@@ -109,7 +111,7 @@ function addToOutline(e) {
 function averageDots(event) {
     const dot = new Paper.Path.Circle({
         center: event.point,
-        radius: 15,
+        radius: 15
     });
     dot.fillColor = raster.getAverageColor(dot);
 }
@@ -127,10 +129,20 @@ function randInteriorPoint(path) {
 let sites = [];
 let siteMarkers = [];
 function doTheMagic() {
+    // Disable ability to add nodes to outline
+    Paper.view.off({
+        mousemove: previewAdditionalPoint,
+        mousedown: addToOutline
+    });
+    outline.removeSegment(outline.segments.indexOf(nextSegment));
+    nextSegment.remove();
+    nextMarker.remove();
+
+    // Close outline
     outline.closed = true;
 
     // Generate Voronoi sites
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 15; i++) {
         sites = sites.concat([randInteriorPoint(outline)]);
     }
 
@@ -140,7 +152,7 @@ function doTheMagic() {
             center: site,
             radius: 5,
             strokeColor: "green",
-            fillColor: "#70cc70",
+            fillColor: "#70cc70"
         });
         siteMarkers = siteMarkers.concat([siteMarker]);
     });
