@@ -1,0 +1,15 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": "airbnb-base",
+    "rules": {
+        "indent": ["error", 4],
+        "linebreak-style": ["error", "windows"],
+        // "quotes": ["error", "double"],
+        // "vars-on-top": 0,
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-use-before-define": ["error", { "functions": false }],
+        "comma-dangle": 0
+    }
+}
