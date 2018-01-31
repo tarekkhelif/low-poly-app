@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<?xml-stylesheet type="text/css" href="../dist/style.css" ?> 
 <svg id="drawing" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" >
   <script type="text/javascript" xlink:href="../node_modules/svg.js/dist/svg.js"></script>
+  <script type="text/javascript" xlink:href="../node_modules/svg.draw.js/dist/svg.draw.js"></script>
+  <script type="text/javascript" xlink:href="../node_modules/svg.draggable.js/dist/svg.draggable.js"></script>
+  <script type="text/javascript" xlink:href="../node_modules/svg.select.js/dist/svg.select.js"></script>
   <script type="text/javascript" xlink:href="svg_sandbox.js"></script>
 </svg>

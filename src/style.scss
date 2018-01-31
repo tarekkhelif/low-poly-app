@@ -1,0 +1,9 @@
+.outlineNode {
+    fill: #afa;
+    stroke: green;
+
+    &.selected {
+        fill: #d5d;
+        stroke: purple;
+    }
+}

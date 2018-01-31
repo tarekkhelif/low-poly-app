@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build_style": "sass -w ./src:./dist"
     },
     "author": "",
     "license": "ISC",
@@ -12,9 +13,14 @@
         "eslint": "^4.9.0",
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.7.0",
-        "prettier-eslint": "^8.8.1"
+        "prettier-eslint": "^8.8.1",
+        "stylelint": "^8.3.0",
+        "stylelint-config-standard": "^18.0.0"
     },
     "dependencies": {
-        "svg.js": "^2.6.3"
+        "svg.draggable.js": "^2.2.1",
+        "svg.draw.js": "^2.0.3",
+        "svg.js": "^2.6.3",
+        "svg.select.js": "^2.1.2"
     }
 }

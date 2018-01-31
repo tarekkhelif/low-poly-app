@@ -1,32 +1,68 @@
 // import SVG from "svg.js";
 /* global SVG: false */
 
-// Confirm that the "imports" are working
-// eslint-disable-next-line no-console
-console.log(SVG);
-
 // Use svg.js within the element with id `#drawing`
 const drawing = SVG("drawing").size(300, 300);
 
-// // Draw some things
-// const rect = drawing.rect(100, 100).attr({ fill: "#dd6" });
-// drawing
-//     .rect(100, 100)
-//     .animate()
-//     .fill("#f03")
-//     .move(100, 100);
+// Set up empty outline
+const outline = drawing
+    .polyline()
+    /* TODO: Style with CSS */
+    .stroke("green")
+    .fill("#00000000");
 
-const bkgd = drawing.rect(300, 300).fill("#00000000");
-bkgd.on("mousedown", placeDot);
+// Install handler for starting the outline
+drawing.on("mousedown", doStartOutlining);
 
-function placeDot(e) {
-    const marker = drawing
-        .circle(10)
-        .fill("#69f")
-        .stroke("#339")
-        .center(e.offsetX, e.offsetY);
+// Handler for starting the outline
+function doStartOutlining(e) {
+    // Initialize outline with first point
+    const point = [e.offsetX, e.offsetY];
+    addToOutline(outline, [], point);
 
-    marker.on("mousedown", (e) => {
-        marker.fill("#c22").stroke("#f00");
-    });
+    // Replace handler
+    drawing.off("mousedown", doStartOutlining);
+    drawing.on("mousedown", doAddClickToOutline);
 }
+
+// Handler for adding to the outline
+function doAddClickToOutline(e) {
+    /* TODO: Implement a class for outline nodes, and check if the event
+     * target matches that, rather than `"circle"`
+     */
+    // Don't add if an existing node was clicked
+    if (e.target.nodeName !== "circle") {
+        const point = [e.offsetX, e.offsetY];
+        const existingPoints = outline.array().value;
+
+        addToOutline(outline, existingPoints, point);
+    }
+}
+
+/* TODO: Use Flow to indicate `existingPoints` should be an `Array`
+ * TODO: Make an `Outline` class that contains this as a method.
+ * For now, I'm passing `thisOutline` as the first argument to the function,
+ * because that immitates what would happen if there were an `Outline` class.
+ */
+function addToOutline(thisOutline, existingPoints, newPoint) {
+    const marker = drawing
+        .circle()
+        .radius(5)
+        .center(...newPoint)
+        .addClass("outlineNode");
+
+    marker.on("mousedown", toToggleSelected);
+
+    outline.plot(existingPoints.concat([newPoint]));
+}
+
+function toToggleSelected(e) {
+    e.target.classList.toggle("selected");
+}
+
+/* class outlineNode extends SVG.Circle {
+    constructor(diameter) {
+        super(diameter);
+        this.on("mousedown", toggleSelected);
+    }
+} */

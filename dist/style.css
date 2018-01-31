@@ -1,0 +1,8 @@
+.outlineNode {
+  fill: #afa;
+  stroke: green; }
+  .outlineNode.selected {
+    fill: #d5d;
+    stroke: purple; }
+
+/*# sourceMappingURL=style.css.map */
