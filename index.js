@@ -1,25 +1,37 @@
 /* eslint-disable no-param-reassign */
+// import d3 from "d3";
 /* global d3: false */
 
+const outlineFilePath = "./nw_outline.svg_outline_2018.01.08-19.18.50.csv";
+const sitesFilePath =
+    "nw_outline.svg_points-inside_100_2018.01.08-19.19.31.csv";
+
+// Get sites from file
+let holder;
+d3.text(sitesFilePath, (text) => {
+    // Parse data, cast to array of numbers
+    const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
+
+    holder = data; // For playing with in debug console
+    displayTheStuff(data);
+});
+
+// Get references from DOM
 const svg = d3.select("svg");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
+/*
+// Create random sites
 const sites = d3
     .range(100)
     .map(() => [Math.random() * width, Math.random() * height]);
 
 displayTheStuff(sites);
+ */
 
 function displayTheStuff(sites) {
-    // const svg = d3.select("svg")
     svg.on("touchmove mousemove", moved);
-    // const width = +svg.attr("width");
-    // const height = +svg.attr("height");
-
-    // var sites = d3
-    //     .range(100)
-    //     .map(d => [Math.random() * width, Math.random() * height]);
 
     const voronoi = d3.voronoi().extent([[-1, -1], [width + 1, height + 1]]);
 
@@ -69,18 +81,18 @@ function displayTheStuff(sites) {
     }
 
     function redrawPolygon(polygon) {
-        polygon.attr("d", d => (d ? `M${d.join("L")}Z` : null));
+        polygon.attr("d", (d) => (d ? `M${d.join("L")}Z` : null));
     }
 
     function redrawLink(link) {
         link
-            .attr("x1", d => d.source[0])
-            .attr("y1", d => d.source[1])
-            .attr("x2", d => d.target[0])
-            .attr("y2", d => d.target[1]);
+            .attr("x1", (d) => d.source[0])
+            .attr("y1", (d) => d.source[1])
+            .attr("x2", (d) => d.target[0])
+            .attr("y2", (d) => d.target[1]);
     }
 
     function redrawSite(site) {
-        site.attr("cx", d => d[0]).attr("cy", d => d[1]);
+        site.attr("cx", (d) => d[0]).attr("cy", (d) => d[1]);
     }
 }

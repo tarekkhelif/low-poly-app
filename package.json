@@ -11,5 +11,8 @@
     "prettier-stylelint": "^0.4.2",
     "stylelint": "^8.3.0",
     "stylelint-config-standard": "^18.0.0"
+  },
+  "dependencies": {
+    "d3": "^4.13.0"
   }
 }
