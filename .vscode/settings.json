@@ -5,6 +5,8 @@
     "javascript.format.enable": false,
     // Use 'prettier-eslint' instead of 'prettier'. Other settings will only be fallbacks in case they could not be inferred from eslint rules.
     "prettier.eslintIntegration": true,
+    // Use 'prettier-stylelint instead of prettier'.
+    "prettier.stylelintIntegration": true,
     // Don't link transpiled CSS
     "stylelint.configOverrides": {
         "ignoreFiles": "./dist/*.css"

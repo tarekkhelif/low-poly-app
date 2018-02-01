@@ -14,10 +14,12 @@
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.7.0",
         "prettier-eslint": "^8.8.1",
+        "prettier-stylelint": "^0.4.2",
         "stylelint": "^8.3.0",
         "stylelint-config-standard": "^18.0.0"
     },
     "dependencies": {
+        "postcss-sass": "^0.3.0",
         "svg.draggable.js": "^2.2.1",
         "svg.draw.js": "^2.0.3",
         "svg.js": "^2.6.3",

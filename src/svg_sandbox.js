@@ -56,8 +56,11 @@ function addToOutline(thisOutline, existingPoints, newPoint) {
     outline.plot(existingPoints.concat([newPoint]));
 }
 
+// Toggle select with ctrl + left-click
 function toToggleSelected(e) {
-    e.target.classList.toggle("selected");
+    if (e.ctrlKey && e.button === 0) {
+        e.target.classList.toggle("selected");
+    }
 }
 
 /* class outlineNode extends SVG.Circle {
