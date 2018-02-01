@@ -1,21 +1,18 @@
 .links {
-    stroke: none;
-}
+  stroke: none; }
 
 .polygons {
-    fill: #ffe0bd;
-    stroke: #caa273;
-}
+  fill: #ffe0bd;
+  stroke: #caa273; }
 
 .polygons :first-child {
-    fill: #f3c5a1;
-}
+  fill: #f3c5a1; }
 
 .sites {
-    fill: #c7545467;
-    stroke: none;
-}
+  fill: #c7545467;
+  stroke: none; }
 
 .sites :first-child {
-    fill: #c75454;
-}
+  fill: #c75454; }
+
+/*# sourceMappingURL=style.css.map */
