@@ -1,22 +1,21 @@
 .links {
-    stroke: #000;
-    stroke-opacity: 0.2;
+    stroke: none;
 }
 
 .polygons {
-    fill: none;
-    stroke: #000;
+    fill: #ffe0bd;
+    stroke: #caa273;
 }
 
 .polygons :first-child {
-    fill: #f00;
+    fill: #f3c5a1;
 }
 
 .sites {
-    fill: #000;
-    stroke: #fff;
+    fill: #c7545467;
+    stroke: none;
 }
 
 .sites :first-child {
-    fill: #fff;
+    fill: #c75454;
 }
