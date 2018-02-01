@@ -2,34 +2,35 @@
 // import d3 from "d3";
 /* global d3: false */
 
-const outlineFilePath = "./nw_outline.svg_outline_2018.01.08-19.18.50.csv";
-const sitesFilePath =
-    "nw_outline.svg_points-inside_100_2018.01.08-19.19.31.csv";
-
-// Get sites from file
-let holder;
-d3.text(sitesFilePath, (text) => {
-    // Parse data, cast to array of numbers
-    const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
-
-    holder = data; // For playing with in debug console
-    displayTheStuff(data);
-});
-
 // Get references from DOM
 const svg = d3.select("svg");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
-/*
-// Create random sites
-const sites = d3
-    .range(100)
-    .map(() => [Math.random() * width, Math.random() * height]);
+const outlineFilePath = "./nw_outline.svg_outline_2018.01.08-19.18.50.csv";
+const sitesFilePath =
+    "nw_outline.svg_points-inside_100_2018.01.08-19.19.31.csv";
 
-displayTheStuff(sites);
- */
+// Get sites from file
+let sitesHolder;
+d3.text(sitesFilePath, (text) => {
+    // Parse data, cast to array of numbers
+    const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
 
+    sitesHolder = data; // For playing with in debug console
+    displayTheStuff(data);
+});
+
+// Get outline coords from file
+let outlineHolder;
+d3.text(outlineFilePath, (text) => {
+    const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
+
+    outlineHolder = data; // For playing with in debug console
+    displayPoly(data);
+});
+
+// Create interactive Voronoi diagram based on `sites`
 function displayTheStuff(sites) {
     svg.on("touchmove mousemove", moved);
 
@@ -95,4 +96,11 @@ function displayTheStuff(sites) {
     function redrawSite(site) {
         site.attr("cx", (d) => d[0]).attr("cy", (d) => d[1]);
     }
+}
+
+function displayPoly(polyCoords) {
+    const outline = svg
+        .append("polyline")
+        .attr("class", "outline")
+        .attr("points", polyCoords);
 }
