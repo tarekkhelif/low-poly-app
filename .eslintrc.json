@@ -11,6 +11,7 @@
         // "vars-on-top": 0,
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
         "no-use-before-define": ["error", { "functions": false }],
-        "comma-dangle": 0
+        "comma-dangle": 0,
+        "no-shadow": 0
     }
 }
