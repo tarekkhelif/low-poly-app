@@ -1,0 +1,15 @@
+{
+  "name": "tarek-d3-voronoi",
+  "version": "",
+  "description": "An interactive demonstration of [d3-voronoi](https://github.com/d3/d3-voronoi) rendered to SVG. [Compare to Canvas.](/mbostock/6675193)",
+  "devDependencies": {
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "postcss-sass": "^0.3.0",
+    "prettier-eslint": "^8.8.1",
+    "prettier-stylelint": "^0.4.2",
+    "stylelint": "^8.3.0",
+    "stylelint-config-standard": "^18.0.0"
+  }
+}
