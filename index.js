@@ -15,7 +15,9 @@ const height = +svg.attr("height");
  */
 const canvas = document.createElement("canvas");
 canvas.id = "canvas";
+document.body.appendChild(canvas);
 paper.setup(canvas);
+paper.view.viewSize = new paper.Size(width, height);
 
 const outlineFilePath = "./nw_outline.svg_outline_2018.01.08-19.18.50.csv";
 const sitesFilePath =
@@ -24,30 +26,32 @@ const sitesFilePath =
 // Get sites from file
 d3.text(sitesFilePath, (text) => {
     // Parse data, cast to array of numbers
-    const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
+    const sitesData = d3
+        .csvParseRows(text)
+        .map((row) => row.map((value) => +value));
 
-    displayTheStuff(data);
-    drawOutline();
+    const polygons = displayInteractiveVoronoi(sitesData);
+    dealWithOutline(polygons);
 });
 
 // Get outline coords from file
-function drawOutline() {
+function dealWithOutline(polygons) {
     d3.text(outlineFilePath, (text) => {
-        const data = d3
+        const outlineData = d3
             .csvParseRows(text)
             .map((row) => row.map((value) => +value));
 
-        displayPoly(data);
+        trimVoronoi(outlineData, polygons);
     });
 }
 
 // Create interactive Voronoi diagram based on `sites`
-function displayTheStuff(sites) {
+function displayInteractiveVoronoi(sites) {
     svg.on("touchmove mousemove", moved);
 
     const voronoi = d3.voronoi().extent([[-1, -1], [width + 1, height + 1]]);
 
-    let polygon = svg
+    let polygons = svg
         .append("g")
         .attr("class", "polygons")
         .selectAll("path")
@@ -82,7 +86,7 @@ function displayTheStuff(sites) {
 
     function redraw() {
         const diagram = voronoi(sites);
-        polygon = polygon.data(diagram.polygons()).call(redrawPolygon);
+        polygons = polygons.data(diagram.polygons()).call(redrawPolygon);
         link = (link.data(diagram.links()), link.exit().remove());
         link = link
             .enter()
@@ -107,31 +111,53 @@ function displayTheStuff(sites) {
     function redrawSite(site) {
         site.attr("cx", (d) => d[0]).attr("cy", (d) => d[1]);
     }
+
+    return polygons;
 }
 
-function displayPoly(polyCoords) {
-    const outline = svg
-        .append("polyline")
-        .attr("class", "outline")
-        .attr("points", polyCoords);
+function trimVoronoi(outlineCoords, polygons) {
+    // const outline = svg
+    //     .append("polyline")
+    //     .attr("class", "outline")
+    //     .attr("points", polyCoords);
 
     // Make paper.js rectangle to punch the outline out of
     const pjsPoint = new paper.Point(0, 0);
     const pjsSize = new paper.Size(width, height);
-    const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
 
     // Make paper.js version of outline
     const pjsOutline = new paper.Path({
-        segments: polyCoords,
+        segments: outlineCoords,
         closed: true
     });
 
-    // Punch outline out of rectangle
-    const pjsCover = pjsRect.subtract(pjsOutline);
+    // Trim polygons
+    polygons
+        .selectAll("path")
+        .data((d) => {
+            // Make paper.js version of each polygon
+            const pjsPolygon = new paper.Path(d);
+            pjsPolygon.closed = true;
 
-    // Convert paper.js path to d3 svg
-    const cover = svg
-        .append("path")
-        .attr("class", "cover")
-        .attr("d", pjsCover.pathData);
+            // Trim parts of polygon that are outside the outline
+            const pjsTrimmedPoly = pjsPolygon.intersect(pjsOutline);
+            pjsTrimmedPoly.strokeColor = "blue";
+            pjsTrimmedPoly.fillColor = "red";
+
+            // return pjsTrimmedPoly.pathData;
+            return d;
+        })
+        .attr("class", "trimmed");
+
+    // const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
+    // pjsRect.fillColor = "green";
+
+    // // Punch outline out of rectangle
+    // const pjsCover = pjsRect.subtract(pjsOutline);
+
+    // // Convert paper.js path to d3 svg
+    // const cover = svg
+    //     .append("path")
+    //     .attr("class", "cover")
+    //     .attr("d", pjsCover.pathData);
 }
