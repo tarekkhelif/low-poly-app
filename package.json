@@ -1,8 +1,7 @@
 {
     "name": "tarek-d3-voronoi",
     "version": "",
-    "description":
-        "An interactive demonstration of [d3-voronoi](https://github.com/d3/d3-voronoi) rendered to SVG. [Compare to Canvas.](/mbostock/6675193)",
+    "description": "An interactive demonstration of [d3-voronoi](https://github.com/d3/d3-voronoi) rendered to SVG. [Compare to Canvas.](/mbostock/6675193)",
     "scripts": {
         "build_style": "sass -w ./:./"
     },
@@ -17,6 +16,7 @@
         "stylelint-config-standard": "^18.0.0"
     },
     "dependencies": {
-        "d3": "^4.13.0"
+        "d3": "^4.13.0",
+        "paper": "^0.11.5"
     }
 }

@@ -1,34 +1,45 @@
 /* eslint-disable no-param-reassign */
 // import d3 from "d3";
-/* global d3: false */
+// import paper from "paper";
+/* global d3: false, paper: false */
+// const Paper = paper;
 
 // Get references from DOM
 const svg = d3.select("svg");
 const width = +svg.attr("width");
 const height = +svg.attr("height");
 
+// Create canvas and associate it with `Paper`
+/* (Don't add canvas to DOM, since it's only used for calculating stuff with
+ * paper.js)
+ */
+const canvas = document.createElement("canvas");
+canvas.id = "canvas";
+paper.setup(canvas);
+
 const outlineFilePath = "./nw_outline.svg_outline_2018.01.08-19.18.50.csv";
 const sitesFilePath =
     "nw_outline.svg_points-inside_100_2018.01.08-19.19.31.csv";
 
 // Get sites from file
-let sitesHolder;
 d3.text(sitesFilePath, (text) => {
     // Parse data, cast to array of numbers
     const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
 
-    sitesHolder = data; // For playing with in debug console
     displayTheStuff(data);
+    drawOutline();
 });
 
 // Get outline coords from file
-let outlineHolder;
-d3.text(outlineFilePath, (text) => {
-    const data = d3.csvParseRows(text).map((row) => row.map((value) => +value));
+function drawOutline() {
+    d3.text(outlineFilePath, (text) => {
+        const data = d3
+            .csvParseRows(text)
+            .map((row) => row.map((value) => +value));
 
-    outlineHolder = data; // For playing with in debug console
-    displayPoly(data);
-});
+        displayPoly(data);
+    });
+}
 
 // Create interactive Voronoi diagram based on `sites`
 function displayTheStuff(sites) {
@@ -103,4 +114,21 @@ function displayPoly(polyCoords) {
         .append("polyline")
         .attr("class", "outline")
         .attr("points", polyCoords);
+
+    // Make paper.js rectangle to punch the outline out of
+    const pjsPoint = new paper.Point(0, 0);
+    const pjsSize = new paper.Size(width, height);
+    const pjsCover = new paper.Path.Rectangle(pjsPoint, pjsSize);
+
+    // Convert paper.js path to d3 svg
+    const cover = svg
+        .append("path")
+        .attr("class", "cover")
+        .attr("d", pjsCover.pathData);
+
+    // paper.js version of outline
+    const pjsOutline = new paper.Path({
+        segments: polyCoords,
+        closed: true
+    });
 }
