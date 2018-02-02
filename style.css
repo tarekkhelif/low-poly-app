@@ -17,9 +17,10 @@
 
 .outline {
   fill: none;
-  stroke: black; }
+  stroke: none; }
 
 .cover {
-  fill: #ff00ff80; }
+  fill: #e6e6e6;
+  stroke: #caa273; }
 
 /*# sourceMappingURL=style.css.map */

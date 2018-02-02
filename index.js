@@ -118,17 +118,20 @@ function displayPoly(polyCoords) {
     // Make paper.js rectangle to punch the outline out of
     const pjsPoint = new paper.Point(0, 0);
     const pjsSize = new paper.Size(width, height);
-    const pjsCover = new paper.Path.Rectangle(pjsPoint, pjsSize);
+    const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
+
+    // Make paper.js version of outline
+    const pjsOutline = new paper.Path({
+        segments: polyCoords,
+        closed: true
+    });
+
+    // Punch outline out of rectangle
+    const pjsCover = pjsRect.subtract(pjsOutline);
 
     // Convert paper.js path to d3 svg
     const cover = svg
         .append("path")
         .attr("class", "cover")
         .attr("d", pjsCover.pathData);
-
-    // paper.js version of outline
-    const pjsOutline = new paper.Path({
-        segments: polyCoords,
-        closed: true
-    });
 }
