@@ -19,20 +19,39 @@ document.body.appendChild(canvas);
 paper.setup(canvas);
 paper.view.viewSize = new paper.Size(width, height);
 
-const outlineFilePath = "./nw_outline.svg_outline_2018.01.08-19.18.50.csv";
+// Create a raster
+const raster = new paper.Raster("./nile.jpg");
+
+// Wait for raster to load
+raster.on("load", () => {
+    // Scale raster
+    const maxBox = new paper.Rectangle(paper.view.viewSize);
+    if (!maxBox.contains(raster.size)) {
+        raster.fitBounds(maxBox);
+    }
+
+    // Move the raster to the center of the Paper.view
+    // raster.position = paper.view.center;
+
+    dealWithSites();
+});
+
+const outlineFilePath = "./nw-outline.svg_outline_2018.02.02-23.21.10.csv";
 const sitesFilePath =
-    "nw_outline.svg_points-inside_100_2018.01.08-19.19.31.csv";
+    "./nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv";
 
 // Get sites from file
-d3.text(sitesFilePath, (text) => {
-    // Parse data, cast to array of numbers
-    const sitesData = d3
-        .csvParseRows(text)
-        .map((row) => row.map((value) => +value));
+function dealWithSites() {
+    d3.text(sitesFilePath, (text) => {
+        // Parse data, cast to array of numbers
+        const sitesData = d3
+            .csvParseRows(text)
+            .map((row) => row.map((value) => +value));
 
-    const polygons = displayInteractiveVoronoi(sitesData);
-    dealWithOutline(polygons);
-});
+        const polygons = displayInteractiveVoronoi(sitesData);
+        dealWithOutline(polygons);
+    });
+}
 
 // Get outline coords from file
 function dealWithOutline(polygons) {
@@ -132,32 +151,29 @@ function trimVoronoi(outlineCoords, polygons) {
     });
 
     // Trim polygons
-    polygons
-        .selectAll("path")
-        .data((d) => {
-            // Make paper.js version of each polygon
-            const pjsPolygon = new paper.Path(d);
-            pjsPolygon.closed = true;
+    polygons.selectAll("path").data((d) => {
+        // Make paper.js version of each polygon
+        const pjsPolygon = new paper.Path(d);
+        pjsPolygon.closed = true;
 
-            // Trim parts of polygon that are outside the outline
-            const pjsTrimmedPoly = pjsPolygon.intersect(pjsOutline);
-            pjsTrimmedPoly.strokeColor = "blue";
-            pjsTrimmedPoly.fillColor = "red";
+        // Trim parts of polygon that are outside the outline
+        const pjsTrimmedPoly = pjsPolygon.intersect(pjsOutline);
+        // pjsTrimmedPoly.strokeColor = "blue";
+        pjsTrimmedPoly.fillColor = raster.getAverageColor(pjsTrimmedPoly);
 
-            // return pjsTrimmedPoly.pathData;
-            return d;
-        })
-        .attr("class", "trimmed");
+        // return [pjsTrimmedPoly.pathData];
+        return d;
+    });
 
-    // const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
+    const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
     // pjsRect.fillColor = "green";
 
-    // // Punch outline out of rectangle
-    // const pjsCover = pjsRect.subtract(pjsOutline);
+    // Punch outline out of rectangle
+    const pjsCover = pjsRect.subtract(pjsOutline);
 
-    // // Convert paper.js path to d3 svg
-    // const cover = svg
-    //     .append("path")
-    //     .attr("class", "cover")
-    //     .attr("d", pjsCover.pathData);
+    // Convert paper.js path to d3 svg
+    const cover = svg
+        .append("path")
+        .attr("class", "cover")
+        .attr("d", pjsCover.pathData);
 }
