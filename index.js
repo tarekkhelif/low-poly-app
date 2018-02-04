@@ -66,7 +66,7 @@ function dealWithOutline(polygons) {
 
 // Create interactive Voronoi diagram based on `sites`
 function displayInteractiveVoronoi(sites) {
-    svg.on("touchmove mousemove", moved);
+    // svg.on("touchmove mousemove", moved);
 
     const voronoi = d3.voronoi().extent([[-1, -1], [width + 1, height + 1]]);
 
@@ -154,7 +154,7 @@ function trimVoronoi(outlineCoords, polygons) {
     d3
         .select(".polygons")
         .selectAll("path")
-        .style("fill", (d) => {
+        .datum((d) => {
             // Make paper.js version of each polygon
             const pjsPolygon = new paper.Path(d);
             pjsPolygon.closed = true;
@@ -164,14 +164,18 @@ function trimVoronoi(outlineCoords, polygons) {
             // pjsTrimmedPoly.strokeColor = "blue";
             pjsTrimmedPoly.fillColor = raster.getAverageColor(pjsTrimmedPoly);
 
-            return pjsTrimmedPoly.fillColor.toCSS(true);
-            // return {
-            //     data: pjsTrimmedPoly.pathData,
-            //     fill: pjsTrimmedPoly.fillColor
-            // };
+            // return pjsTrimmedPoly.fillColor.toCSS(true);
+            const fruitsOfPjs = {
+                data: pjsTrimmedPoly.pathData,
+                fill: pjsTrimmedPoly.fillColor.toCSS(true)
+            };
+            return fruitsOfPjs;
             // return d;
-        });
-    // .attr("d", "napkin");
+        })
+        .attr("d", (d) => d.data)
+        .style("fill", (d) => d.fill);
+    // .attr("d", (d) => d.data)
+    // .style("fill", (d) => d.fill);
 
     const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
     // pjsRect.fillColor = "green";
