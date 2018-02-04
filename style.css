@@ -21,6 +21,7 @@
 
 .cover {
   fill: #e6e6e6;
-  stroke: #caa273; }
+  stroke: #caa273;
+  visibility: visible; }
 
 /*# sourceMappingURL=style.css.map */

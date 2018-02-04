@@ -151,19 +151,27 @@ function trimVoronoi(outlineCoords, polygons) {
     });
 
     // Trim polygons
-    polygons.selectAll("path").data((d) => {
-        // Make paper.js version of each polygon
-        const pjsPolygon = new paper.Path(d);
-        pjsPolygon.closed = true;
+    d3
+        .select(".polygons")
+        .selectAll("path")
+        .style("fill", (d) => {
+            // Make paper.js version of each polygon
+            const pjsPolygon = new paper.Path(d);
+            pjsPolygon.closed = true;
 
-        // Trim parts of polygon that are outside the outline
-        const pjsTrimmedPoly = pjsPolygon.intersect(pjsOutline);
-        // pjsTrimmedPoly.strokeColor = "blue";
-        pjsTrimmedPoly.fillColor = raster.getAverageColor(pjsTrimmedPoly);
+            // Trim parts of polygon that are outside the outline
+            const pjsTrimmedPoly = pjsPolygon.intersect(pjsOutline);
+            // pjsTrimmedPoly.strokeColor = "blue";
+            pjsTrimmedPoly.fillColor = raster.getAverageColor(pjsTrimmedPoly);
 
-        // return [pjsTrimmedPoly.pathData];
-        return d;
-    });
+            return pjsTrimmedPoly.fillColor.toCSS(true);
+            // return {
+            //     data: pjsTrimmedPoly.pathData,
+            //     fill: pjsTrimmedPoly.fillColor
+            // };
+            // return d;
+        });
+    // .attr("d", "napkin");
 
     const pjsRect = new paper.Path.Rectangle(pjsPoint, pjsSize);
     // pjsRect.fillColor = "green";
