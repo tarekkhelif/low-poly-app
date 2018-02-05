@@ -24,15 +24,22 @@ document.body.appendChild(canvas);
 paper.setup(canvas);
 paper.view.viewSize = new paper.Size(width, height);
 
-// Create a raster
-const raster = new paper.Raster(rasterPath);
+// Put raster in D3 SVG
+svg
+    .append("image")
+    .attr("xlink:href", rasterPath)
+    .attr("width", width)
+    .attr("height", height);
+
+// Create paper.js raster
+const pjsRaster = new paper.Raster(rasterPath);
 
 // Wait for raster to load
-raster.on("load", () => {
+pjsRaster.on("load", () => {
     // Scale raster
     const maxBox = new paper.Rectangle(paper.view.viewSize);
-    if (!maxBox.contains(raster.size)) {
-        raster.fitBounds(maxBox);
+    if (!maxBox.contains(pjsRaster.size)) {
+        pjsRaster.fitBounds(maxBox);
     }
 
     dealWithSites();
@@ -101,7 +108,8 @@ function trimPolygons(pjsOutline, polygons) {
 
             // Trim parts of polygon that are outside the outline
             const pjsTrimmedPoly = pjsPolygon.intersect(pjsOutline);
-            pjsTrimmedPoly.fillColor = raster.getAverageColor(pjsTrimmedPoly);
+            const avgColor = pjsRaster.getAverageColor(pjsTrimmedPoly);
+            pjsTrimmedPoly.fillColor = avgColor;
 
             // Store stuff calculated with paper.js as D3 data on each element
             const fruitsOfPjs = {
