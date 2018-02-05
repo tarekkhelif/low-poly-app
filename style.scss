@@ -1,33 +1,9 @@
-.links {
-    stroke: none;
-}
-
 .polygons {
-    fill: #ffe0bd;
-    stroke: #caa273;
-}
-
-.polygons :first-child {
-    fill: #f3c5a1;
+    // fill: #ffe0bd;
+    // stroke: #caa273;
 }
 
 .sites {
     fill: #c7545467;
     stroke: none;
-}
-
-.sites :first-child {
-    fill: #c75454;
-}
-
-.outline {
-    fill: none;
-    stroke: none;
-    // stroke-width: 10px;
-}
-
-.cover {
-    fill: #e6e6e6;
-    stroke: #caa273;
-    visibility: hidden;
 }
