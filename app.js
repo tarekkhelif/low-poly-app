@@ -2,19 +2,25 @@
 // import paper from "paper";
 /* global d3: false, paper: false */
 
-// Set up blank workspace
+// SET UP BLANK WORKSPACE
+// ************************************************************************** //
 
-// UI: Load raster
+// UI: LOAD RASTER
+// ************************************************************************** //
 
-// UI: Outline raster
+// UI: OUTLINE RASTER
+// ************************************************************************** //
 
-// Generate sites for initial Voronoi tesselation
+// GENERATE SITES FOR INITIAL VORONOI TESSELATION
+// ************************************************************************** //
 
-// UI: move/add/delete sites
+// UI: MOVE/ADD/DELETE SITES
+// ************************************************************************** //
 
-// Perform Voronoi tesselation and color based on raster
+// PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
+// ************************************************************************** //
 
-// UI: Edit tesselation
+// UI: EDIT TESSELATION
 /* TODO
  * - move/add/delete vertices
  * - add/delete links
@@ -22,8 +28,10 @@
  * - optionally lock color so it isn't recalculated
  * - choose custom color
  */
+// ************************************************************************** //
 
-// UI: Download SVG to local machine
+// UI: DOWNLOAD SVG TO LOCAL MACHINE
 /* TODO
  * - download finished svg
  */
+// ************************************************************************** //
