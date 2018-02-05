@@ -2,7 +2,7 @@
 // import paper from "paper";
 /* global d3: false, paper: false */
 
-// Set up  blank canvas
+// Set up blank workspace
 
 // UI: Load raster
 
