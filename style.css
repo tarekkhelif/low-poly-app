@@ -1,5 +1,10 @@
-.sites {
+.outline {
+  fill: none;
+  stroke: black; }
+
+.site {
   fill: #c7545467;
-  stroke: none; }
+  stroke: none;
+  r: 10px; }
 
 /*# sourceMappingURL=style.css.map */

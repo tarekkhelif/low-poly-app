@@ -1,10 +1,11 @@
-// import d3 from "./node_modules/d3/build/d3.js";
+// import d3 from "./node_modules/d3/dist/d3.js";
 // import paper from "./node_modules/paper/dist/paper-core.js";
 /* global d3: false, paper */
 
 import { setUpWorkspace } from "./example/setUpWorkspace.js";
 import { getRaster } from "./example/getRaster.js";
 import { outlineRaster } from "./example/outlineRaster.js";
+import { generateSites } from "./example/generateSites.js";
 
 app();
 async function app() {
@@ -13,10 +14,11 @@ async function app() {
     function defineExampleData() {
         // Define example data
         const exampleData = {
-            rasterPath: "./nile.jpg",
-            outlineFilePath: "./nw-outline.svg_outline_2018.02.02-23.21.10.csv",
+            rasterPath: "../nile.jpg",
+            outlineFilePath:
+                "../nw-outline.svg_outline_2018.02.02-23.21.10.csv",
             sitesFilePath:
-                "./nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv",
+                "../nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv",
             width: 906.54926,
             height: 604.36615
         };
@@ -25,17 +27,27 @@ async function app() {
     }
     // endregion
 
-    // SET UP BLANK WORKSPACE
+    // region // SET UP BLANK WORKSPACE
     let svg;
     ({ svg, paper } = setUpWorkspace());
+    // endregion
 
-    // UI: GET RASTER
+    // region // UI: GET RASTER
     ({ svg, paper } = await getRaster(svg, paper, exampleData));
+    // endregion
 
-    // UI: OUTLINE RASTER
-    ({ svg, paper } = await outlineRaster(svg, paper, exampleData));
+    // region // UI: OUTLINE RASTER
+    let outlineData;
+    ({ svg, paper, outlineData } = await outlineRaster(
+        svg,
+        paper,
+        exampleData
+    ));
+    // endregion
 
     // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
+    let sites;
+    ({ svg, paper, sites } = generateSites(svg, paper, outlineData, 100));
     // endregion
 
     // region // UI: MOVE/ADD/DELETE SITES

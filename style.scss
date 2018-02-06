@@ -1,9 +1,15 @@
+.outline {
+    fill: none;
+    stroke: black;
+}
+
+.site {
+    fill: #c7545467;
+    stroke: none;
+    r: 10px;
+}
+
 .polygons {
     // fill: #ffe0bd;
     // stroke: #caa273;
-}
-
-.sites {
-    fill: #c7545467;
-    stroke: none;
 }
