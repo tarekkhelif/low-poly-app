@@ -46,8 +46,8 @@ async function app() {
     // endregion
 
     // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
-    let sites;
-    ({ svg, paper, sites } = generateSites(svg, paper, outlineData, 100));
+    let sitesData;
+    ({ svg, paper, sitesData } = generateSites(svg, paper, outlineData, 100));
     // endregion
 
     // region // UI: MOVE/ADD/DELETE SITES

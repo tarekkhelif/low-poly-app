@@ -20,5 +20,14 @@ export function generateSites(svg, paper, outlineData, n) {
         .attr("cx", (d) => d[0])
         .attr("cy", (d) => d[1]);
 
-    return { svg, paper, sites };
+    // Add the points to paper.js canvas
+    randSites.forEach((site) => {
+        const circle = new paper.Path.Circle({
+            center: new paper.Point(site),
+            radius: 10,
+            fillColor: new paper.Color("rgba(198, 81, 81, 0.404)")
+        });
+    });
+
+    return { svg, paper, randSites };
 }
