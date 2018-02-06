@@ -1,9 +1,10 @@
-// import d3 from "../node_modules/d3/build/d3.js";
+// import d3 from "../node_modules/d3/dist/d3.js";
 // import paper from "../node_modules/paper/dist/paper-core.js";
 /* global d3: false */
 
 export async function getRaster(svg, paper, exampleData) {
     // REAL // Get raster location from user
+    // MOCK // Get raster location from example data
     const rasterPath = await exampleData.rasterPath;
 
     // Load the raster in an `svg:image` element
@@ -16,11 +17,12 @@ export async function getRaster(svg, paper, exampleData) {
                 resolve(this);
             })
             .attr("onerror", () =>
-                reject(new Error(`D3 failed to load the image at 
+                reject(new Error(`D3 failed to load the image at
                     ${rasterPath}`)));
     });
 
     // REAL // Calculate appropriate scaling
+    // MOCK // Set dimensions using exampleDatay
     const { width, height } = calcRasterScale(svgRaster);
     // eslint-disable-next-line no-unused-vars
     function calcRasterScale(svgImageNode) {

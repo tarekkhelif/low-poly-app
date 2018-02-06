@@ -1,4 +1,4 @@
-// import "./node_modules/d3/build/d3.js";
+// import "./node_modules/d3/dist/d3.js";
 // import paper from "paper";
 /* global d3: false, paper */
 
