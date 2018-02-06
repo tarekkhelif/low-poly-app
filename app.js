@@ -1,11 +1,11 @@
 /* eslint-disable prefer-destructuring, no-global-assign, no-param-reassign */
-// import d3 from "D3";
+// import "./node_modules/d3/build/d3.js";
 // import paper from "paper";
 /* global d3: false, paper */
 
 app();
 async function app() {
-    // DEFINE EXAMPLE DATA
+    // region // DEFINE EXAMPLE DATA
     const { exampleData } = defineExampleData();
     function defineExampleData() {
         // Define example data
@@ -20,8 +20,9 @@ async function app() {
 
         return { exampleData };
     }
+    // endregion
 
-    // SET UP BLANK WORKSPACE
+    // region // SET UP BLANK WORKSPACE
     let svg;
     ({ svg, paper } = setUpWorkspace());
     function setUpWorkspace() {
@@ -36,8 +37,9 @@ async function app() {
 
         return { svg, paper };
     }
+    // endregion
 
-    // UI: LOAD RASTER
+    // region // UI: LOAD RASTER
     ({ svg, paper } = await loadRaster(svg, paper));
     async function loadRaster(svg, paper) {
         // REAL // Get raster location from user
@@ -96,30 +98,37 @@ async function app() {
 
         return { svg, paper };
     }
+    // endregion
 
-    // UI: OUTLINE RASTER
+    // region // UI: OUTLINE RASTER
     ({ svg, paper } = await outlineRaster(svg, paper));
     async function outlineRaster(svg, paper) {
         return { svg, paper };
     }
+    // endregion
 
-    // GENERATE SITES FOR INITIAL VORONOI TESSELATION
+    // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
+    // endregion
 
-    // UI: MOVE/ADD/DELETE SITES
+    // region // UI: MOVE/ADD/DELETE SITES
+    // endregion
 
-    // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
+    // region // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
+    // endregion
 
-    // UI: EDIT TESSELATION
+    // region // UI: EDIT TESSELATION
     /* TODO
- * - move/add/delete vertices
- * - add/delete links
- * - default to recalculating color
- * - optionally lock color so it isn't recalculated
- * - choose custom color
- */
+     * - move/add/delete vertices
+     * - add/delete links
+     * - default to recalculating color
+     * - optionally lock color so it isn't recalculated
+     * - choose custom color
+    */
+    // endregion
 
-    // UI: DOWNLOAD SVG TO LOCAL MACHINE
+    // region // UI: DOWNLOAD SVG TO LOCAL MACHINE
     /* TODO
- * - download finished svg
- */
+     * - download finished svg
+    */
+    // endregion
 }
