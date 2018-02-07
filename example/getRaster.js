@@ -3,9 +3,6 @@
 /* global d3: false, paper: false */
 
 export async function getRaster(d3Project, pjsProject, data, exampleData) {
-    const { svg } = d3Project;
-    const { view } = pjsProject;
-
     // REAL // Get raster location from user
     // MOCK // Get raster location from example data
     const rasterPath = await exampleData.rasterPath;
@@ -38,12 +35,12 @@ export async function getRaster(d3Project, pjsProject, data, exampleData) {
     }
 
     // Set dimensions of SVG and canvas to the same size as the raster
-    svg.attr("width", width).attr("height", height);
-    view.viewSize = new paper.Size(width, height);
+    d3Project.svg.attr("width", width).attr("height", height);
+    pjsProject.view.viewSize = new paper.Size(width, height);
 
     // Append raster to SVG and set dimensions
     // (i.e. append the `svg:image` element created above to the SVG)
-    svg
+    d3Project.svg
         .append(() => svgRaster)
         .attr("width", width)
         .attr("height", height);
@@ -57,11 +54,12 @@ export async function getRaster(d3Project, pjsProject, data, exampleData) {
                 ${rasterPath}`));
     });
     // Set dimensions of Paper.js raster
-    const maxBox = new paper.Rectangle(view.viewSize);
+    const maxBox = new paper.Rectangle(pjsProject.view.viewSize);
     if (!maxBox.contains(pjsRaster.size)) {
         pjsRaster.fitBounds(maxBox);
     }
 
+    // Save useful stuff to project objects
     Object.assign(d3Project, {});
     Object.assign(pjsProject, { pjsRaster });
     Object.assign(data, {});

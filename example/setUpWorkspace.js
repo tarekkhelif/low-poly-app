@@ -6,12 +6,13 @@ export function setUpWorkspace(d3Project, pjsProject, data, exampleData) {
     // Create SVG for D3
     const svg = d3.select("body").append("svg");
 
-    // Create canvas and associate it with `Paper`
+    // Create canvas and associate it with `paper`
     const canvas = document.createElement("canvas");
     canvas.id = "canvas";
     document.body.appendChild(canvas);
     paper.setup(canvas);
 
+    // Save useful stuff to project objects
     Object.assign(d3Project, { svg });
     Object.assign(pjsProject, { view: paper.view });
     Object.assign(data, {});

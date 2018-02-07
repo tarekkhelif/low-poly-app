@@ -1,6 +1,13 @@
+/**
+ * @file Runs an example/prototype of a web app that helps users to quickly
+ *     create low-poly graphics from a preexisting raster image.
+ *     This prototype uses example data from file, and doesn't have any user
+ *     interaction features.
+ * @author Tarek Khelif
+ */
+
 // import d3 from "./node_modules/d3/dist/d3.js";
 // import paper from "./node_modules/paper/dist/paper-core.js";
-/* global d3: false, paper */
 
 import { setUpWorkspace } from "./example/setUpWorkspace.js";
 import { getRaster } from "./example/getRaster.js";
@@ -10,11 +17,14 @@ import { generateVoronoi } from "./example/generateVoronoi.js";
 
 app();
 async function app() {
+    // Initialize containers for usefull information, categorized by whether
+    //   they're the generic data that defines the project, or specific pieces
+    //   of either the D3 or Paper.js rendering of the project
     const d3Project = {};
     const pjsProject = {};
     const data = {};
 
-    // region // DEFINE EXAMPLE DATA
+    // Define example data
     const exampleData = {
         rasterPath: "../nile.jpg",
         outlineFilePath: "../nw-outline.svg_outline_2018.02.02-23.21.10.csv",
@@ -23,36 +33,25 @@ async function app() {
         width: 906.54926,
         height: 604.36615
     };
-    // endregion
 
-    // region // SET UP BLANK WORKSPACE
+    // Set up blank workspace
     setUpWorkspace(d3Project, pjsProject, data, exampleData);
-    // endregion
 
-    // region // UI: GET RASTER
+    // UI: Get raster
     await getRaster(d3Project, pjsProject, data, exampleData);
-    // endregion
 
-    // region // UI: OUTLINE RASTER
+    // UI: Outline raster
     await outlineRaster(d3Project, pjsProject, data, exampleData);
-    // endregion
 
-    // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
+    // Generate sites for initial Voronoi tesselation
     generateSites(d3Project, pjsProject, data, exampleData, 100);
-    // endregion
 
-    // region // UI: MOVE/ADD/DELETE SITES
-    // endregion
+    // UI: Move/add/delete sites
 
-    const { svg } = d3Project;
-    const { pjsRaster, pjsOutline } = pjsProject;
-    const { sitesData } = data;
-
-    // region // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
+    // Perform Voronoi tesselation and color based on raster
     generateVoronoi(d3Project, pjsProject, data, exampleData);
-    // endregion
 
-    // region // UI: EDIT TESSELATION
+    // UI: Edit tesselation
     /* TODO
      * - move/add/delete vertices
      * - add/delete links
@@ -60,11 +59,9 @@ async function app() {
      * - optionally lock color so it isn't recalculated
      * - choose custom color
     */
-    // endregion
 
-    // region // UI: DOWNLOAD SVG TO LOCAL MACHINE
+    // UI: Download svg to local machine
     /* TODO
      * - download finished svg
     */
-    // endregion
 }

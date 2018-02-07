@@ -3,6 +3,7 @@
  * @author Tarek Khelif
  */
 
+/* global d3: false */
 import { zip } from "./arrayTools.js";
 
 /** Calculates the bounding box of an array of points in any number of
@@ -46,6 +47,8 @@ export function randPtInBox(box) {
 export function randPtInPoly(polygon) {
     const bbox = getBBox(polygon);
 
+    // Recursively generates random points in the polygon's bbox until one is
+    //   found that's within the polygon
     function validPoint(polygon, bbox) {
         const candidate = randPtInBox(bbox);
         const winner = d3.polygonContains(polygon, candidate)

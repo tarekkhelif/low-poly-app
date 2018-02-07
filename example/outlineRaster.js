@@ -3,8 +3,6 @@
 /* global d3: false, paper: false */
 
 export async function outlineRaster(d3Project, pjsProject, data, exampleData) {
-    const { svg } = d3Project;
-
     // REAL // UI for drawing outline
     // MOCK // Load outline data from file
     const rawOutlineData = await d3.text(exampleData.outlineFilePath);
@@ -12,7 +10,7 @@ export async function outlineRaster(d3Project, pjsProject, data, exampleData) {
         row.map((value) => +value));
 
     // Make d3 version of outline
-    const d3Outline = svg
+    const d3Outline = d3Project.svg
         .append("g")
         .classed("outline", true)
         .append("path")
@@ -25,6 +23,7 @@ export async function outlineRaster(d3Project, pjsProject, data, exampleData) {
         strokeColor: "black"
     });
 
+    // Save useful stuff to project objects
     Object.assign(d3Project, {});
     Object.assign(pjsProject, { pjsOutline });
     Object.assign(data, { outlineData });
