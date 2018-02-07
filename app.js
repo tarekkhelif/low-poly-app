@@ -44,19 +44,12 @@ async function app() {
     // region // UI: MOVE/ADD/DELETE SITES
     // endregion
 
-    let { svg } = d3Project;
+    const { svg } = d3Project;
     const { pjsRaster, pjsOutline } = pjsProject;
     const { sitesData } = data;
 
     // region // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
-    let polygonData;
-    ({ svg, paper, polygonData } = generateVoronoi(
-        svg,
-        paper,
-        sitesData,
-        pjsRaster,
-        pjsOutline
-    ));
+    generateVoronoi(d3Project, pjsProject, data, exampleData);
     // endregion
 
     // region // UI: EDIT TESSELATION
