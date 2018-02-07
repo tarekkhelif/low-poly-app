@@ -7,4 +7,13 @@
   stroke: none;
   r: 10px; }
 
+.polygon {
+  fill: none;
+  stroke: black; }
+
+/* .polygons {
+    // fill: #ffe0bd;
+    // stroke: #caa273;
+} */
+
 /*# sourceMappingURL=style.css.map */

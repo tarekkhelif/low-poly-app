@@ -6,6 +6,7 @@ import { setUpWorkspace } from "./example/setUpWorkspace.js";
 import { getRaster } from "./example/getRaster.js";
 import { outlineRaster } from "./example/outlineRaster.js";
 import { generateSites } from "./example/generateSites.js";
+import { generateVoronoi } from "./example/generateVoronoi.js";
 
 app();
 async function app() {
@@ -47,7 +48,12 @@ async function app() {
 
     // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
     let sitesData;
-    ({ svg, paper, sitesData } = generateSites(svg, paper, outlineData, 100));
+    ({ svg, paper, randSites: sitesData } = generateSites(
+        svg,
+        paper,
+        outlineData,
+        100
+    ));
     // endregion
 
     // region // UI: MOVE/ADD/DELETE SITES
@@ -55,6 +61,13 @@ async function app() {
 
     // region // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
     // endregion
+    let voronoiPolys;
+    ({ svg, paper, voronoiPolys } = generateVoronoi(
+        svg,
+        paper,
+        sitesData,
+        outlineData
+    ));
 
     // region // UI: EDIT TESSELATION
     /* TODO

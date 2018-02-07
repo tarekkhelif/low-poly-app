@@ -9,7 +9,7 @@ export function generateSites(svg, paper, outlineData, n) {
     const randSites = d3.range(n).map(() => randPtInPoly(outlineData));
 
     // Add the points to the svg
-    const sites = svg
+    const d3Sites = svg
         .append("g")
         .attr("id", "sites")
         .selectAll("*")
@@ -21,13 +21,12 @@ export function generateSites(svg, paper, outlineData, n) {
         .attr("cy", (d) => d[1]);
 
     // Add the points to paper.js canvas
-    randSites.forEach((site) => {
-        const circle = new paper.Path.Circle({
+    const pjsSites = randSites.map((site) =>
+        new paper.Path.Circle({
             center: new paper.Point(site),
             radius: 10,
             fillColor: new paper.Color("rgba(198, 81, 81, 0.404)")
-        });
-    });
+        }));
 
     return { svg, paper, randSites };
 }
