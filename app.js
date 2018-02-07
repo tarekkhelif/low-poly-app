@@ -37,22 +37,16 @@ async function app() {
     await outlineRaster(d3Project, pjsProject, data, exampleData);
     // endregion
 
-    let { svg } = d3Project;
-    const { pjsRaster, pjsOutline } = pjsProject;
-    const { outlineData } = data;
-
     // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
-    let sitesData;
-    ({ svg, paper, randSites: sitesData } = generateSites(
-        svg,
-        paper,
-        outlineData,
-        100
-    ));
+    generateSites(d3Project, pjsProject, data, exampleData, 100);
     // endregion
 
     // region // UI: MOVE/ADD/DELETE SITES
     // endregion
+
+    let { svg } = d3Project;
+    const { pjsRaster, pjsOutline } = pjsProject;
+    const { sitesData } = data;
 
     // region // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
     let polygonData;

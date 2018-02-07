@@ -1,12 +1,14 @@
 // import d3 from "../node_modules/d3/dist/d3.js";
 // import paper from "../node_modules/paper/dist/paper-core.js";
-/* global d3: false */
+/* global d3: false, paper: false */
 
 import { randPtInPoly } from "./util/geometry.js";
 
-export function generateSites(svg, paper, outlineData, n) {
+export function generateSites(d3Project, pjsProject, data, exampleData, n) {
+    const { svg } = d3Project;
+
     // Generate `n` random points
-    const randSites = d3.range(n).map(() => randPtInPoly(outlineData));
+    const randSites = d3.range(n).map(() => randPtInPoly(data.outlineData));
 
     // Add the points to the svg
     const d3Sites = svg
@@ -28,5 +30,7 @@ export function generateSites(svg, paper, outlineData, n) {
             fillColor: new paper.Color("rgba(198, 81, 81, 0.404)")
         }));
 
-    return { svg, paper, randSites };
+    Object.assign(d3Project, {});
+    Object.assign(pjsProject, {});
+    Object.assign(data, { sitesData: randSites });
 }
