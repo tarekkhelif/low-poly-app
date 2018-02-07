@@ -33,20 +33,13 @@ async function app() {
     await getRaster(d3Project, pjsProject, data, exampleData);
     // endregion
 
-    let { svg } = d3Project;
-    const { pjsRaster } = pjsProject;
-
     // region // UI: OUTLINE RASTER
-    let outlineData;
-    let pjsOutline;
-    ({
-        svg, paper, outlineData, pjsOutline
-    } = await outlineRaster(
-        svg,
-        paper,
-        exampleData
-    ));
+    await outlineRaster(d3Project, pjsProject, data, exampleData);
     // endregion
+
+    let { svg } = d3Project;
+    const { pjsRaster, pjsOutline } = pjsProject;
+    const { outlineData } = data;
 
     // region // GENERATE SITES FOR INITIAL VORONOI TESSELATION
     let sitesData;

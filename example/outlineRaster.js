@@ -1,8 +1,10 @@
 // import d3 from "../node_modules/d3/dist/d3.js";
 // import paper from "../node_modules/paper/dist/paper-core.js";
-/* global d3: false */
+/* global d3: false, paper: false */
 
-export async function outlineRaster(svg, paper, exampleData) {
+export async function outlineRaster(d3Project, pjsProject, data, exampleData) {
+    const { svg } = d3Project;
+
     // REAL // UI for drawing outline
     // MOCK // Load outline data from file
     const rawOutlineData = await d3.text(exampleData.outlineFilePath);
@@ -23,10 +25,7 @@ export async function outlineRaster(svg, paper, exampleData) {
         strokeColor: "black"
     });
 
-    return {
-        svg,
-        paper,
-        outlineData,
-        pjsOutline
-    };
+    Object.assign(d3Project, {});
+    Object.assign(pjsProject, { pjsOutline });
+    Object.assign(data, { outlineData });
 }
