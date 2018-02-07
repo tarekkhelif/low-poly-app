@@ -2,7 +2,7 @@
 // import paper from "../node_modules/paper/dist/paper-core.js";
 /* global d3: false */
 
-export function generateVoronoi(svg, paper, sitesData, pjsRaster, outlineData) {
+export function generateVoronoi(svg, paper, sitesData, pjsRaster, pjsOutline) {
     // Get dimensions of SVG
     const width = +svg.attr("width");
     const height = +svg.attr("height");
@@ -18,16 +18,18 @@ export function generateVoronoi(svg, paper, sitesData, pjsRaster, outlineData) {
     const polygonData = voronoiPolys.map((polyCrds) => {
         const poly = new paper.Path({
             segments: polyCrds,
-            closed: true,
-            strokeColor: "black"
+            closed: true
         });
 
-        pjsPolys.push(poly);
+        const trimmedPoly = poly.intersect(pjsOutline);
 
-        const color = pjsRaster.getAverageColor(poly);
-        poly.fillColor = color;
+        pjsPolys.push(trimmedPoly);
 
-        return { coordinates: polyCrds, color: color.toCSS() };
+        const color = pjsRaster.getAverageColor(trimmedPoly);
+        trimmedPoly.fillColor = color;
+        trimmedPoly.strokeColor = color;
+
+        return { pathData: trimmedPoly.pathData, color: color.toCSS() };
     });
 
     // Draw Voronoi tesselation in SVG
@@ -39,8 +41,9 @@ export function generateVoronoi(svg, paper, sitesData, pjsRaster, outlineData) {
         .enter()
         .append("path")
         .classed("polygon", true)
-        .attr("d", (d) => `M${d.coordinates.join(",")}Z`)
-        .style("fill", (d) => d.color);
+        .attr("d", (d) => d.pathData)
+        .style("fill", (d) => d.color)
+        .style("stroke", (d) => d.color);
 
-    return { svg, paper, voronoiPolys };
+    return { svg, paper, polygonData };
 }

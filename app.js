@@ -40,7 +40,10 @@ async function app() {
 
     // region // UI: OUTLINE RASTER
     let outlineData;
-    ({ svg, paper, outlineData } = await outlineRaster(
+    let pjsOutline;
+    ({
+        svg, paper, outlineData, pjsOutline
+    } = await outlineRaster(
         svg,
         paper,
         exampleData
@@ -61,15 +64,15 @@ async function app() {
     // endregion
 
     // region // PERFORM VORONOI TESSELATION AND COLOR BASED ON RASTER
-    // endregion
-    let voronoiPolys;
-    ({ svg, paper, voronoiPolys } = generateVoronoi(
+    let polygonData;
+    ({ svg, paper, polygonData } = generateVoronoi(
         svg,
         paper,
         sitesData,
         pjsRaster,
-        outlineData
+        pjsOutline
     ));
+    // endregion
 
     // region // UI: EDIT TESSELATION
     /* TODO

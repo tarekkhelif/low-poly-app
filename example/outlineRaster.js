@@ -26,6 +26,7 @@ export async function outlineRaster(svg, paper, exampleData) {
     return {
         svg,
         paper,
-        outlineData
+        outlineData,
+        pjsOutline
     };
 }
