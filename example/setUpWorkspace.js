@@ -2,7 +2,7 @@
 // import paper from "paper";
 /* global d3: false, paper */
 
-export function setUpWorkspace() {
+export function setUpWorkspace(d3Project, pjsProject, data, exampleData) {
     // Create SVG for D3
     const svg = d3.select("body").append("svg");
 
@@ -12,5 +12,7 @@ export function setUpWorkspace() {
     document.body.appendChild(canvas);
     paper.setup(canvas);
 
-    return { svg, paper };
+    Object.assign(d3Project, { svg });
+    Object.assign(pjsProject, { view: paper.view });
+    Object.assign(data, {});
 }

@@ -1,8 +1,11 @@
 // import d3 from "../node_modules/d3/dist/d3.js";
 // import paper from "../node_modules/paper/dist/paper-core.js";
-/* global d3: false */
+/* global d3: false, paper: false */
 
-export async function getRaster(svg, paper, exampleData) {
+export async function getRaster(d3Project, pjsProject, data, exampleData) {
+    const { svg } = d3Project;
+    const { view } = pjsProject;
+
     // REAL // Get raster location from user
     // MOCK // Get raster location from example data
     const rasterPath = await exampleData.rasterPath;
@@ -36,7 +39,7 @@ export async function getRaster(svg, paper, exampleData) {
 
     // Set dimensions of SVG and canvas to the same size as the raster
     svg.attr("width", width).attr("height", height);
-    paper.view.viewSize = new paper.Size(width, height);
+    view.viewSize = new paper.Size(width, height);
 
     // Append raster to SVG and set dimensions
     // (i.e. append the `svg:image` element created above to the SVG)
@@ -54,10 +57,12 @@ export async function getRaster(svg, paper, exampleData) {
                 ${rasterPath}`));
     });
     // Set dimensions of Paper.js raster
-    const maxBox = new paper.Rectangle(paper.view.viewSize);
+    const maxBox = new paper.Rectangle(view.viewSize);
     if (!maxBox.contains(pjsRaster.size)) {
         pjsRaster.fitBounds(maxBox);
     }
 
-    return { svg, paper, pjsRaster };
+    Object.assign(d3Project, {});
+    Object.assign(pjsProject, { pjsRaster });
+    Object.assign(data, {});
 }

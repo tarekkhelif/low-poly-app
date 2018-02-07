@@ -10,33 +10,31 @@ import { generateVoronoi } from "./example/generateVoronoi.js";
 
 app();
 async function app() {
-    // region // DEFINE EXAMPLE DATA
-    const { exampleData } = defineExampleData();
-    function defineExampleData() {
-        // Define example data
-        const exampleData = {
-            rasterPath: "../nile.jpg",
-            outlineFilePath:
-                "../nw-outline.svg_outline_2018.02.02-23.21.10.csv",
-            sitesFilePath:
-                "../nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv",
-            width: 906.54926,
-            height: 604.36615
-        };
+    const d3Project = {};
+    const pjsProject = {};
+    const data = {};
 
-        return { exampleData };
-    }
+    // region // DEFINE EXAMPLE DATA
+    const exampleData = {
+        rasterPath: "../nile.jpg",
+        outlineFilePath: "../nw-outline.svg_outline_2018.02.02-23.21.10.csv",
+        sitesFilePath:
+            "../nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv",
+        width: 906.54926,
+        height: 604.36615
+    };
     // endregion
 
     // region // SET UP BLANK WORKSPACE
-    let svg;
-    ({ svg, paper } = setUpWorkspace());
+    setUpWorkspace(d3Project, pjsProject, data, exampleData);
     // endregion
 
     // region // UI: GET RASTER
-    let pjsRaster;
-    ({ svg, paper, pjsRaster } = await getRaster(svg, paper, exampleData));
+    await getRaster(d3Project, pjsProject, data, exampleData);
     // endregion
+
+    let { svg } = d3Project;
+    const { pjsRaster } = pjsProject;
 
     // region // UI: OUTLINE RASTER
     let outlineData;
