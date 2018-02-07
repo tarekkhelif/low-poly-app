@@ -67,6 +67,7 @@ async function app() {
         svg,
         paper,
         sitesData,
+        pjsRaster,
         outlineData
     ));
 
