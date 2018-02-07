@@ -2,7 +2,7 @@
 // import paper from "../node_modules/paper/dist/paper-core.js";
 /* global d3: false */
 
-export function generateVoronoi(svg, paper, sitesData, outlineData) {
+export function generateVoronoi(svg, paper, sitesData, pjsRaster, outlineData) {
     // Get dimensions of SVG
     const width = +svg.attr("width");
     const height = +svg.attr("height");
@@ -11,6 +11,14 @@ export function generateVoronoi(svg, paper, sitesData, outlineData) {
     const voronoi = d3.voronoi();
     voronoi.size([width, height]);
     const voronoiPolys = voronoi(sitesData).polygons();
+
+    // Calculate the average color of each polygon
+    const pjsPolys = voronoiPolys.map((polyCrds) =>
+        new paper.Path({
+            segments: polyCrds,
+            closed: true,
+            strokeColor: "black"
+        }));
 
     // Draw Voronoi tesselation in SVG
     const d3Polygons = svg

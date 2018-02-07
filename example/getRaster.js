@@ -59,5 +59,5 @@ export async function getRaster(svg, paper, exampleData) {
         pjsRaster.fitBounds(maxBox);
     }
 
-    return { svg, paper };
+    return { svg, paper, pjsRaster };
 }

@@ -34,7 +34,8 @@ async function app() {
     // endregion
 
     // region // UI: GET RASTER
-    ({ svg, paper } = await getRaster(svg, paper, exampleData));
+    let pjsRaster;
+    ({ svg, paper, pjsRaster } = await getRaster(svg, paper, exampleData));
     // endregion
 
     // region // UI: OUTLINE RASTER
