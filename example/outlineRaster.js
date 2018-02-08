@@ -2,15 +2,15 @@
 // import paper from "../node_modules/paper/dist/paper-core.js";
 /* global d3: false, paper: false */
 
-export async function outlineRaster(d3Project, pjsProject, data, exampleData) {
+export async function outlineRaster() {
     // REAL // UI for drawing outline
-    // MOCK // Load outline data from file
-    const rawOutlineData = await d3.text(exampleData.outlineFilePath);
+    // MOCK // Load outline this.data from file
+    const rawOutlineData = await d3.text(this.exampleData.outlineFilePath);
     const outlineData = d3.csvParseRows(rawOutlineData, (row) =>
         row.map((value) => +value));
 
     // Make d3 version of outline
-    const d3Outline = d3Project.svg
+    const d3Outline = this.d3Project.svg
         .append("g")
         .classed("outline", true)
         .append("path")
@@ -24,7 +24,7 @@ export async function outlineRaster(d3Project, pjsProject, data, exampleData) {
     });
 
     // Save useful stuff to project objects
-    Object.assign(d3Project, {});
-    Object.assign(pjsProject, { pjsOutline });
-    Object.assign(data, { outlineData });
+    Object.assign(this.d3Project, {});
+    Object.assign(this.pjsProject, { pjsOutline });
+    Object.assign(this.data, { outlineData });
 }

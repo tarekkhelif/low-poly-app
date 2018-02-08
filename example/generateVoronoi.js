@@ -2,19 +2,19 @@
 // import paper from "../node_modules/paper/dist/paper-core.js";
 /* global d3: false, paper: false */
 
-export function generateVoronoi(d3Project, pjsProject, data, exampleData) {
+export function generateVoronoi() {
     // Get dimensions of SVG
-    const width = +d3Project.svg.attr("width");
-    const height = +d3Project.svg.attr("height");
+    const width = +this.d3Project.svg.attr("width");
+    const height = +this.d3Project.svg.attr("height");
 
     // D3 | Calculate Voronoi diagram
     const voronoi = d3.voronoi();
     voronoi.size([width, height]);
-    const voronoiPolys = voronoi(data.sitesData).polygons();
+    const voronoiPolys = voronoi(this.data.sitesData).polygons();
 
     // Calculate the average color of each polygon
     const pjsPolys = []; // Save references to paperjs polys, for UI later
-    // Save polygon data. Format is `{ pathString, color }`.
+    // Save polygon this.data. Format is `{ pathString, color }`.
     const polygonData = voronoiPolys.map((polyCrds) => {
         // Create paperjs version of the polygon
         const poly = new paper.Path({
@@ -23,13 +23,13 @@ export function generateVoronoi(d3Project, pjsProject, data, exampleData) {
         });
 
         // Paper.js | Cut off the parts of the polygon outside the outline
-        const trimmedPoly = poly.intersect(pjsProject.pjsOutline);
+        const trimmedPoly = poly.intersect(this.pjsProject.pjsOutline);
 
         pjsPolys.push(trimmedPoly);
 
         // Paper.js | Calculate the average color of the part of the raster
         //              under the polygon
-        const color = pjsProject.pjsRaster.getAverageColor(trimmedPoly);
+        const color = this.pjsProject.pjsRaster.getAverageColor(trimmedPoly);
         trimmedPoly.fillColor = color;
         trimmedPoly.strokeColor = color;
 
@@ -37,11 +37,11 @@ export function generateVoronoi(d3Project, pjsProject, data, exampleData) {
     });
 
     // Draw Voronoi tesselation in SVG
-    const d3Polygons = d3Project.svg
+    const d3Polygons = this.d3Project.svg
         .append("g") // ................. Create a group for the polygons
         .attr("id", "polygons")
         .selectAll("*")
-        .data(polygonData) // ........... Associate data with group's children
+        .data(polygonData) // ........... Associate this.data with group's children
         .enter()
         .append("path") // .............. Add polygons to SVG
         .classed("polygon", true)
@@ -50,7 +50,7 @@ export function generateVoronoi(d3Project, pjsProject, data, exampleData) {
         .style("stroke", (d) => d.color);
 
     // Save useful stuff to project objects
-    Object.assign(d3Project, {});
-    Object.assign(pjsProject, {});
-    Object.assign(data, { polygonData });
+    Object.assign(this.d3Project, {});
+    Object.assign(this.pjsProject, {});
+    Object.assign(this.data, { polygonData });
 }

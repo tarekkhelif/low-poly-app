@@ -4,16 +4,18 @@
 
 import { randPtInPoly } from "./util/geometry.js";
 
-export function generateSites(d3Project, pjsProject, data, exampleData, n) {
+export function generateSites(n) {
     // Generate `n` random points
-    const randSites = d3.range(n).map(() => randPtInPoly(data.outlineData));
+    const randSites = d3
+        .range(n)
+        .map(() => randPtInPoly(this.data.outlineData));
 
     // Add the points to the svg
-    const d3Sites = d3Project.svg
+    const d3Sites = this.d3Project.svg
         .append("g") // ............. Create group for sites (seed points for
         .attr("id", "sites") // .....   Voronoi diagram)
         .selectAll("*")
-        .data(randSites) // ......... Associate data with group's children
+        .data(randSites) // ......... Associate this.data with group's children
         .enter()
         .append("circle") // ........ Add sites to SVG
         .classed("site", true)
@@ -29,7 +31,7 @@ export function generateSites(d3Project, pjsProject, data, exampleData, n) {
         }));
 
     // Save useful stuff to project objects
-    Object.assign(d3Project, {});
-    Object.assign(pjsProject, {});
-    Object.assign(data, { sitesData: randSites });
+    Object.assign(this.d3Project, {});
+    Object.assign(this.pjsProject, {});
+    Object.assign(this.data, { sitesData: randSites });
 }

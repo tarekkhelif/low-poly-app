@@ -5,6 +5,7 @@
  *     interaction features.
  * @author Tarek Khelif
  */
+
 import { LowPolyProject } from "./example/app.js";
 
 const app = new LowPolyProject();

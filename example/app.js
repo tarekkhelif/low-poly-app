@@ -6,19 +6,17 @@
  * @author Tarek Khelif
  */
 
-// import d3 from "./node_modules/d3/dist/d3.js";
-// import paper from "./node_modules/paper/dist/paper-core.js";
-
-import { setUpWorkspace as $setUpWorkspace } from "./setUpWorkspace.js";
-import { getRaster as $getRaster } from "./getRaster.js";
-import { outlineRaster as $outlineRaster } from "./outlineRaster.js";
-import { generateSites as $generateSites } from "./generateSites.js";
-import { generateVoronoi as $generateVoronoi } from "./generateVoronoi.js";
+import { setUpWorkspace } from "./setUpWorkspace.js";
+import { getRaster } from "./getRaster.js";
+import { outlineRaster } from "./outlineRaster.js";
+import { generateSites } from "./generateSites.js";
+import { generateVoronoi } from "./generateVoronoi.js";
 
 export class LowPolyProject {
-    // Initialize data bags for the fundamental data of the project, stuff
-    //   rendered with D3, stuff rendered with Paper.js, and example data.
+    // Initialize holders for data
     constructor() {
+        // Initialize data bags for the fundamental data of the project, stuff
+        //   rendered with D3, stuff rendered with Paper.js, and example data.
         this.d3Project = {};
         this.pjsProject = {};
         this.data = {};
@@ -37,77 +35,43 @@ export class LowPolyProject {
 
     // Run app
     async run() {
+        // Set up blank workspace
         this.setUpWorkspace();
+
+        // UI: Get raster
         await this.getRaster();
+
+        // UI: Outline raster
         await this.outlineRaster();
+
+        // Generate sites for initial Voronoi tesselation
         this.generateSites(100);
+
+        // Perform Voronoi tesselation and color based on raster
         this.generateVoronoi();
+
+        /* UI: Edit tesselation
+         * TODO:
+         * - move/add/delete vertices
+         * - add/delete links
+         * - default to recalculating color
+         * - optionally lock color so it isn't recalculated
+         * - choose custom color
+         */
+
+        /* UI: Download svg to local machine
+         * TODO:
+         * - download finished svg
+         */
     }
-
-    // Set up blank workspace
-    setUpWorkspace() {
-        $setUpWorkspace(
-            this.d3Project,
-            this.pjsProject,
-            this.data,
-            this.exampleData
-        );
-    }
-
-    // UI: Get raster
-    async getRaster() {
-        await $getRaster(
-            this.d3Project,
-            this.pjsProject,
-            this.data,
-            this.exampleData
-        );
-    }
-
-    // UI: Outline raster
-    async outlineRaster() {
-        await $outlineRaster(
-            this.d3Project,
-            this.pjsProject,
-            this.data,
-            this.exampleData
-        );
-    }
-
-    // Generate sites for initial Voronoi tesselation
-    generateSites(n) {
-        $generateSites(
-            this.d3Project,
-            this.pjsProject,
-            this.data,
-            this.exampleData,
-            n
-        );
-    }
-
-    // UI: Move/add/delete sites
-
-    // Perform Voronoi tesselation and color based on raster
-    generateVoronoi() {
-        $generateVoronoi(
-            this.d3Project,
-            this.pjsProject,
-            this.data,
-            this.exampleData
-        );
-    }
-
-    // UI: Edit tesselation
-    /* TODO
-     * - move/add/delete vertices
-     * - add/delete links
-     * - default to recalculating color
-     * - optionally lock color so it isn't recalculated
-     * - choose custom color
-    */
-
-    // UI: Download svg to local machine
-    /* TODO
-     * - download finished svg
-    */
 }
+
+// Assign the methods that are imported other files
+// Each of these functions represents one phase of the app
+Object.assign(LowPolyProject.prototype, {
+    setUpWorkspace,
+    getRaster,
+    outlineRaster,
+    generateSites,
+    generateVoronoi
+});
