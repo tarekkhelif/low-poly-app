@@ -12,62 +12,28 @@ import { outlineRaster } from "./outlineRaster.js";
 import { generateSites } from "./generateSites.js";
 import { generateVoronoi } from "./generateVoronoi.js";
 
-export class LowPolyProject {
-    // Initialize holders for data
-    constructor() {
-        // Initialize data bags for the fundamental data of the project, stuff
-        //   rendered with D3, stuff rendered with Paper.js, and example data.
-        this.d3Project = {};
-        this.pjsProject = {};
-        this.data = {};
+// Constructor
+function LowPolyProject() {
+    // Initialize data bags for the fundamental data of the project, stuff
+    //   rendered with D3, stuff rendered with Paper.js, and example data.
+    this.d3Project = {};
+    this.pjsProject = {};
+    this.data = {};
 
-        // Define example data
-        this.exampleData = {
-            rasterPath: "../nile.jpg",
-            outlineFilePath:
-                "../nw-outline.svg_outline_2018.02.02-23.21.10.csv",
-            sitesFilePath:
-                "../nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv",
-            width: 906.54926,
-            height: 604.36615
-        };
-    }
-
-    // Run app
-    async run() {
-        // Set up blank workspace
-        this.setUpWorkspace();
-
-        // UI: Get raster
-        await this.getRaster();
-
-        // UI: Outline raster
-        await this.outlineRaster();
-
-        // Generate sites for initial Voronoi tesselation
-        this.generateSites(100);
-
-        // Perform Voronoi tesselation and color based on raster
-        this.generateVoronoi();
-
-        /* UI: Edit tesselation
-         * TODO:
-         * - move/add/delete vertices
-         * - add/delete links
-         * - default to recalculating color
-         * - optionally lock color so it isn't recalculated
-         * - choose custom color
-         */
-
-        /* UI: Download svg to local machine
-         * TODO:
-         * - download finished svg
-         */
-    }
+    // Define example data
+    this.exampleData = {
+        rasterPath: "../nile.jpg",
+        outlineFilePath: "../nw-outline.svg_outline_2018.02.02-23.21.10.csv",
+        sitesFilePath:
+            "../nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv",
+        width: 906.54926,
+        height: 604.36615
+    };
 }
 
-// Assign the methods that are imported other files
-// Each of these functions represents one phase of the app
+// Assign methods to the object that `LowPolyProject`s delegate to
+//   Assign the methods imported from other files to the prototype
+//   Each of these functions represents one phase of the app
 Object.assign(LowPolyProject.prototype, {
     setUpWorkspace,
     getRaster,
@@ -75,3 +41,36 @@ Object.assign(LowPolyProject.prototype, {
     generateSites,
     generateVoronoi
 });
+//   Assign run method
+LowPolyProject.prototype.run = async function run() {
+    // Set up blank workspace
+    this.setUpWorkspace();
+
+    // UI: Get raster
+    await this.getRaster();
+
+    // UI: Outline raster
+    await this.outlineRaster();
+
+    // Generate sites for initial Voronoi tesselation
+    this.generateSites(100);
+
+    // Perform Voronoi tesselation and color based on raster
+    this.generateVoronoi();
+
+    /* UI: Edit tesselation
+     * TODO:
+     * - move/add/delete vertices
+     * - add/delete links
+     * - default to recalculating color
+     * - optionally lock color so it isn't recalculated
+     * - choose custom color
+     */
+
+    /* UI: Download svg to local machine
+     * TODO:
+     * - download finished svg
+     */
+};
+
+export { LowPolyProject };
