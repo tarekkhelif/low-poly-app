@@ -50,7 +50,7 @@ export function generateVoronoi() {
         .style("stroke", (d) => d.color);
 
     // Save useful stuff to project objects
-    Object.assign(this.d3Project, {});
+    Object.assign(this.d3Project, { d3Polygons });
     Object.assign(this.pjsProject, {});
     Object.assign(this.data, { polygonData });
 }

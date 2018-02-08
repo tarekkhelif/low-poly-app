@@ -11,6 +11,7 @@ import { getRaster } from "./getRaster.js";
 import { outlineRaster } from "./outlineRaster.js";
 import { generateSites } from "./generateSites.js";
 import { generateVoronoi } from "./generateVoronoi.js";
+import { editTesselation } from "./editTesselation.js";
 
 export class LowPolyProject {
     // Initialize holders for data
@@ -58,6 +59,7 @@ export class LowPolyProject {
          * - optionally lock color so it isn't recalculated
          * - choose custom color
          */
+        this.editTesselation();
 
         /* UI: Download svg to local machine
          * TODO:
@@ -73,5 +75,6 @@ Object.assign(LowPolyProject.prototype, {
     getRaster,
     outlineRaster,
     generateSites,
-    generateVoronoi
+    generateVoronoi,
+    editTesselation
 });
