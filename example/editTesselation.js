@@ -20,21 +20,22 @@ function myPolygon(datum) {
         .classed("polyNode", true)
         .attr("cx", (d) => d[0])
         .attr("cy", (d) => d[1])
-        .call(dragger);
+        .call(circleDragger);
 }
 
 // UI for dragging an element
 // eslint-disable-next-line func-names
-const dragger = d3.drag().on("drag", function (d) {
-    if (d.translation === undefined) {
-        d.translation = { x: 0, y: 0 };
-    }
-    d.translation.x += d3.event.dx;
-    d.translation.y += d3.event.dy;
-    d3
-        .select(this)
-        .attr("transform", `translate(${d.translation.x}, ${d.translation.y})`);
+const circleDragger = d3.drag().on("drag", function (d) {
+    const selection = d3.select(this);
+
+    // Update app-wide data
+    d[0] += d3.event.dx;
+    d[1] += d3.event.dy;
+
+    // Change the location of the circle in the SVG
+    selection.attr("cx", d[0]).attr("cy", d[1]);
 });
+
 export function editTesselation() {
     // const polygons = this.d3Project.d3Polygons;
 
