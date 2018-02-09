@@ -13,27 +13,48 @@ export function generateVoronoi() {
     const voronoiPolys = voronoi(this.data.sitesData).polygons();
 
     // Calculate the average color of each polygon
+    const polygonData = []; // Save data. Format is `{ coordinates, color }`.
     const pjsPolys = []; // Save references to paperjs polys, for UI later
-    // Save polygon this.data. Format is `{ pathString, color }`.
-    const polygonData = voronoiPolys.map((polyCrds) => {
-        // Create paperjs version of the polygon
-        const poly = new paper.Path({
+    voronoiPolys.forEach((polyCrds) => {
+        // Create paperjs version of the Voronoi polygon
+        const voronoiPoly = new paper.Path({
             segments: polyCrds,
             closed: true
         });
 
-        // Paper.js | Cut off the parts of the polygon outside the outline
-        const trimmedPoly = poly.intersect(this.pjsProject.pjsOutline);
+        // Paper.js | Cut off parts of Voronoi polygon outside the outline
+        const trimmedPoly = voronoiPoly.intersect(this.pjsProject.pjsOutline);
 
-        pjsPolys.push(trimmedPoly);
+        // Make a separate path for each subpath in compound paths
+        const subPaths =
+            trimmedPoly instanceof paper.Path
+                ? [trimmedPoly]
+                : trimmedPoly.children.map((child) =>
+                    new paper.Path({
+                        segments: child.segments,
+                        closed: true
+                    }));
 
-        // Paper.js | Calculate the average color of the part of the raster
-        //              under the polygon
-        const color = this.pjsProject.pjsRaster.getAverageColor(trimmedPoly);
-        trimmedPoly.fillColor = color;
-        trimmedPoly.strokeColor = color;
+        // Calculate color and save data of each sub-path
+        subPaths.forEach((polygon) => {
+            // Paper.js | Calculate the average color of the part of the raster
+            //   under the polygon
+            const color = this.pjsProject.pjsRaster.getAverageColor(polygon);
+            polygon.fillColor = color;
+            polygon.strokeColor = color;
 
-        return { pathData: trimmedPoly.pathData, color: color.toCSS() };
+            // Save paperjs polygons for later
+            pjsPolys.push(polygon);
+
+            // Save data for later
+            polygonData.push({
+                coordiantes: polygon.segments.map((seg) => [
+                    seg.point.x,
+                    seg.point.y
+                ]),
+                color: color.toCSS()
+            });
+        });
     });
 
     // Draw Voronoi tesselation in SVG
@@ -41,11 +62,11 @@ export function generateVoronoi() {
         .append("g") // ................. Create a group for the polygons
         .attr("id", "polygons")
         .selectAll("*")
-        .data(polygonData) // ........... Associate this.data with group's children
+        .data(polygonData) // ........... Associate data with group's children
         .enter()
         .append("path") // .............. Add polygons to SVG
         .classed("polygon", true)
-        .attr("d", (d) => d.pathData)
+        .attr("d", (d) => `M${d.coordiantes.join("L")}Z`)
         .style("fill", (d) => d.color) // Color polygons with color from raster
         .style("stroke", (d) => d.color);
 
