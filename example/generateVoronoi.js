@@ -10,7 +10,8 @@ export function generateVoronoi() {
     // D3 | Calculate Voronoi diagram
     const voronoi = d3.voronoi();
     voronoi.size([width, height]);
-    const voronoiPolys = voronoi(this.data.sitesData).polygons();
+    const diagram = voronoi(this.data.sitesData);
+    const voronoiPolys = diagram.polygons();
 
     // Calculate the average color of each polygon
     const polygonData = []; // Save data. Format is `{ coordinates, color }`.
@@ -39,7 +40,9 @@ export function generateVoronoi() {
         subPaths.forEach((polygon) => {
             // Paper.js | Calculate the average color of the part of the raster
             //   under the polygon
-            const color = this.pjsProject.pjsRaster.getAverageColor(polygon);
+            const color = this.pjsProject.pjsRaster
+                .getAverageColor(polygon)
+                .toCSS();
             polygon.fillColor = color;
             polygon.strokeColor = color;
 
@@ -48,11 +51,11 @@ export function generateVoronoi() {
 
             // Save data for later
             polygonData.push({
-                coordiantes: polygon.segments.map((seg) => [
+                coordinates: polygon.segments.map((seg) => [
                     seg.point.x,
                     seg.point.y
                 ]),
-                color: color.toCSS()
+                color
             });
         });
     });
@@ -66,7 +69,7 @@ export function generateVoronoi() {
         .enter()
         .append("path") // .............. Add polygons to SVG
         .classed("polygon", true)
-        .attr("d", (d) => `M${d.coordiantes.join("L")}Z`)
+        .attr("d", (d) => `M${d.coordinates.join("L")}Z`)
         .style("fill", (d) => d.color) // Color polygons with color from raster
         .style("stroke", (d) => d.color);
 
