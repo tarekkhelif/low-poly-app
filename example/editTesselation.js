@@ -34,6 +34,14 @@ const circleDragger = d3.drag().on("drag", function (d) {
 
     // Change the location of the circle in the SVG
     selection.attr("cx", d[0]).attr("cy", d[1]);
+
+    // Update polygons
+    d3
+        .selectAll(".polygon")
+        .attr("d", (dat) => `M${dat.coordinates.join("L")}Z`)
+        .attr("asdfasdf", true)
+        .style("fill", (dat) => dat.color) // Color polygons with color from raster
+        .style("stroke", (dat) => dat.color);
 });
 
 export function editTesselation() {
