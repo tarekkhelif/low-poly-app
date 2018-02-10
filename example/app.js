@@ -5,6 +5,18 @@
  *     interaction features.
  * @author Tarek Khelif
  */
+/* TODO:
+ * (1)
+ * - Export image
+ * - Enable drawing outline
+ * (2)
+ * - (?) Restrict moving nodes to be within a bounding polygon
+ * - Enable ability to upload a raster
+ * (3)
+ * - Enable ability to add/delete nodes and edges
+ * (4)
+ * - Catch up on pjs version
+ */
 
 import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
