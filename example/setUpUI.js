@@ -7,9 +7,16 @@ export function setUpUI() {
     workspace.id = "workspace";
     document.body.appendChild(workspace);
 
+    // Buttons div
+    const buttons = document.createElement("div");
+    buttons.id = "buttons";
+    document.body.insertBefore(buttons, workspace);
+
+    // Set up workspace
+    this.setUpWorkspace(workspace);
+
     // Make list of stages
     const stages = [
-        { name: "Set Up", function: this.setUpWorkspace.bind(this, workspace) },
         { name: "Get Image", function: this.getRaster.bind(this) },
         { name: "Outline Image", function: this.outlineRaster.bind(this) },
         { name: "Place Seeds", function: this.generateSites.bind(this, 100) },
@@ -22,11 +29,6 @@ export function setUpUI() {
         }
     ];
 
-    // Buttons div
-    const buttons = document.createElement("div");
-    buttons.id = "buttons";
-    document.body.insertBefore(buttons, workspace);
-
     // Add buttons
     stages.forEach((stage, i) => {
         const stageButton = document.createElement("button");
@@ -35,8 +37,9 @@ export function setUpUI() {
         if (i > 0) stageButton.disabled = true;
         stageButton.addEventListener("click", async (e) => {
             await stage.function();
-            buttons.childNodes[i].disabled = true;
+            // Disable current button, enable next button, unless on last stage
             if (i + 1 < buttons.childNodes.length) {
+                buttons.childNodes[i].disabled = true;
                 buttons.childNodes[i + 1].disabled = false;
             }
         });
