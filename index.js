@@ -9,4 +9,5 @@
 import { LowPolyProject } from "./example/app.js";
 
 const app = new LowPolyProject();
-app.run();
+// app.runExample();
+app.setUpUI();

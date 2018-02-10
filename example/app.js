@@ -18,6 +18,7 @@
  * - Catch up on pjs version
  */
 
+import { setUpUI } from "./setUpUI.js";
 import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
 import { outlineRaster } from "./outlineRaster.js";
@@ -47,9 +48,9 @@ export class LowPolyProject {
     }
 
     // Run app
-    async run() {
+    async runExample() {
         // Set up blank workspace
-        this.setUpWorkspace();
+        this.setUpWorkspace(document.body);
 
         // UI: Get raster
         await this.getRaster();
@@ -83,6 +84,7 @@ export class LowPolyProject {
 // Assign the methods that are imported other files
 // Each of these functions represents one phase of the app
 Object.assign(LowPolyProject.prototype, {
+    setUpUI,
     setUpWorkspace,
     getRaster,
     outlineRaster,
