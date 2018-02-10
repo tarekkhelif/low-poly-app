@@ -125,6 +125,9 @@ export function generateVoronoi() {
         .style("fill", (d) => d.color) //  Color polygons with color from raster
         .style("stroke", (d) => d.color);
 
+    // Hide sites
+    d3.select("#sites").attr("visibility", "hidden");
+
     // Save useful stuff to project objects
     Object.assign(this.d3Project, { d3Polygons });
     Object.assign(this.pjsProject, {});

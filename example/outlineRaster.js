@@ -24,7 +24,7 @@ export async function outlineRaster() {
     });
 
     // Save useful stuff to project objects
-    Object.assign(this.d3Project, {});
+    Object.assign(this.d3Project, { d3Outline });
     Object.assign(this.pjsProject, { pjsOutline });
     Object.assign(this.data, { outlineData });
 }

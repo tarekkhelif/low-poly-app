@@ -31,7 +31,7 @@ export function generateSites(n) {
         }));
 
     // Save useful stuff to project objects
-    Object.assign(this.d3Project, {});
+    Object.assign(this.d3Project, { d3Sites });
     Object.assign(this.pjsProject, {});
     Object.assign(this.data, { sitesData: randSites });
 }
