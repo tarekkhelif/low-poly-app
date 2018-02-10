@@ -9,6 +9,7 @@ export function setUpWorkspace() {
     // Create canvas and associate it with `paper`
     const canvas = document.createElement("canvas");
     canvas.id = "canvas";
+    canvas.hidden = true;
     document.body.appendChild(canvas);
     paper.setup(canvas);
 
