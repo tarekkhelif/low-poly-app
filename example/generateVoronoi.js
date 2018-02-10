@@ -40,9 +40,18 @@ export function generateVoronoi() {
         subPaths.forEach((polygon) => {
             // Paper.js | Calculate the average color of the part of the raster
             //   under the polygon
-            const color = this.pjsProject.pjsRaster
-                .getAverageColor(polygon)
-                .toCSS();
+            let color = this.pjsProject.pjsRaster.getAverageColor(polygon);
+
+            // If the cut polygon is skinny or weird in some other way and
+            //   paperjs can't get a color from the raster, then log the error
+            //   and skip to the next polygon
+            try {
+                color = color.toCSS();
+            } catch (error) {
+                console.log(color, polygon);
+                console.log(error);
+                return;
+            }
             polygon.fillColor = color;
             polygon.strokeColor = color;
 
