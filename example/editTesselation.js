@@ -3,7 +3,7 @@
 /* eslint-disable no-use-before-define */
 /* global d3: false, paper: false */
 
-function myPolygon(datum) {
+function nodeInterface(datum) {
     const coords = datum.coordinates;
 
     d3
@@ -39,8 +39,7 @@ const circleDragger = d3.drag().on("drag", function (d) {
     d3
         .selectAll(".polygon")
         .attr("d", (dat) => `M${dat.coordinates.join("L")}Z`)
-        .attr("asdfasdf", true)
-        .style("fill", (dat) => dat.color) // Color polygons with color from raster
+        .style("fill", (dat) => dat.color) // Color polygons
         .style("stroke", (dat) => dat.color);
 });
 
@@ -49,11 +48,15 @@ export function editTesselation() {
 
     this.d3Project.svg
         .append("g")
-        .classed("myPolygons", true)
+        .classed("graphNodes", true)
         .selectAll("*")
-        .data(this.data.polygonData)
+        .data(this.data.tesselationData.nodes)
         .enter()
-        .each(myPolygon);
+        .append("circle")
+        .classed("node", true)
+        .attr("cx", (d) => d[0])
+        .attr("cy", (d) => d[1])
+        .call(circleDragger);
     // .classed("myPolygon", true);
     // .selectAll("*")
     // .append("circle")
