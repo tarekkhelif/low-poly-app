@@ -1,3 +1,14 @@
+$transitionDuration: 0.4s;
+$buttonColorA: orange;
+$buttonColorB: white;
+$bodyPadding: 10px;
+
+body {
+    margin: 0;
+    padding: $bodyPadding;
+    background-color: $buttonColorA;
+}
+
 .outline {
     fill: none;
     stroke: black;
@@ -26,18 +37,19 @@
 }
 
 button {
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-    background-color: orange;
-    border: 2px solid #fff;
-    color: #fff;
+    -webkit-transition-duration: $transitionDuration; /* Safari */
+    transition-duration: $transitionDuration;
+    background-color: $buttonColorA;
+    border: 2px solid $buttonColorB;
+    margin-bottom: 4px;
     padding: 10px;
-    text-align: center;
-    text-decoration: none;
+    width: 100%;
     display: block;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 16px;
-    width: 100%;
+    color: $buttonColorB;
+    text-align: center;
+    text-decoration: none;
 }
 
 $buttonsWidth: 168px;
@@ -47,14 +59,21 @@ $buttonsWidth: 168px;
     float: left;
 }
 
+$workspaceMarginLeft: $buttonsWidth + 8px;
+
 #workspace {
-    margin-left: $buttonsWidth;
+    margin-left: $workspaceMarginLeft;
+}
+
+svg {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
 }
 
 button:enabled:hover {
-    background-color: #fff;
-    border: 2px solid orange;
-    color: orange;
+    background-color: $buttonColorB;
+    color: $buttonColorA;
 }
 
 button:disabled {

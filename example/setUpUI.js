@@ -6,13 +6,13 @@ export function setUpUI() {
     workspace.id = "workspace";
     document.body.appendChild(workspace);
 
-    // Set up workspace
-    this.setUpWorkspace(workspace);
-
     // Buttons div
     const buttons = document.createElement("div");
     buttons.id = "buttons";
     document.body.insertBefore(buttons, workspace);
+
+    // Set up workspace
+    this.setUpWorkspace(workspace);
 
     // Make list of stages
     const stages = [

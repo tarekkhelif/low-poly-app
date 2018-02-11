@@ -35,7 +35,11 @@ export async function getRaster() {
     }
 
     // Set dimensions of SVG and canvas to the same size as the raster
-    this.d3Project.svg.attr("width", width).attr("height", height);
+    this.d3Project.svg
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`);
+
     this.pjsProject.view.viewSize = new paper.Size(width, height);
 
     // Append raster to SVG and set dimensions

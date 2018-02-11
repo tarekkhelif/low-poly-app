@@ -4,11 +4,14 @@
 
 export function setUpWorkspace(workspace) {
     // Create SVG for D3
-    const svg = d3.select(workspace).append("svg");
+    const svg = d3
+        .select(workspace)
+        .append("svg")
+        .attr("id", "svgProject");
 
     // Create canvas and associate it with `paper`
     const canvas = document.createElement("canvas");
-    canvas.id = "canvas";
+    canvas.id = "canvasProject";
     canvas.hidden = true;
     workspace.appendChild(canvas);
     paper.setup(canvas);
