@@ -3,26 +3,6 @@
 /* eslint-disable no-use-before-define */
 /* global d3: false, paper: false */
 
-function nodeInterface(datum) {
-    const coords = datum.coordinates;
-
-    d3
-        .select(this)
-        .append("g")
-        .classed("myThings", true)
-        // .append("path")
-        // .classed("myPolygon")
-        // .attr("d", (d) => `M${d.join("L")}Z`)
-        .selectAll("*")
-        .data(coords)
-        .enter()
-        .append("circle")
-        .classed("polyNode", true)
-        .attr("cx", (d) => d[0])
-        .attr("cy", (d) => d[1])
-        .call(circleDragger);
-}
-
 // UI for dragging an element
 // eslint-disable-next-line func-names
 const circleDragger = d3.drag().on("drag", function (d) {

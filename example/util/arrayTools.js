@@ -5,7 +5,7 @@
 
 /** Works like Python's `zip` function.
  *
- * @param {*} arr Arrays to zip together
+ * @param {...Array} arr Arrays to zip together
  * @return A new array where the i-th element is a list of the i-th elements of
  *     the arrays passed to the function.
  */

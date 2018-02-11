@@ -3,6 +3,11 @@
  * @author Tarek Khelif
  */
 
+/** Maps a whitespace-separated string to camelCase
+ *
+ * @param {String} str A whitespace-separated string
+ * @returns {String} `str` converted to camelCase
+ */
 export function camelize(str) {
     const words = str.split(/\s+/);
     const camel = words
