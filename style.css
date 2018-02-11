@@ -20,4 +20,34 @@
   stroke: black;
   r: 1px; }
 
+button {
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  background-color: orange;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  width: 100%; }
+
+#buttons {
+  width: 168px;
+  float: left; }
+
+#workspace {
+  margin-left: 168px; }
+
+button:enabled:hover {
+  background-color: #fff;
+  border: 2px solid orange;
+  color: orange; }
+
+button:disabled {
+  opacity: 0.4; }
+
 /*# sourceMappingURL=style.css.map */
