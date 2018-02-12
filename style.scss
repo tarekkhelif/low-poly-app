@@ -1,81 +1,92 @@
+$colorA: white;
+$colorB: rgb(49, 90, 224);
 $transitionDuration: 0.4s;
-$buttonColorA: orange;
-$buttonColorB: white;
-$bodyPadding: 10px;
+$fontFamily: Arial, Helvetica, sans-serif;
+$stdPadding: 10px;
+$stdBorder: 2px;
+$buttonsWidth: 168px;
+$nodeSize: 1.5px;
+$fontFamily: Arial, Helvetica, sans-serif;
 
 body {
     margin: 0;
-    padding: $bodyPadding;
-    background-color: $buttonColorA;
-}
-
-.outline {
-    fill: none;
-    stroke: black;
-}
-
-.site {
-    fill: #c7545467;
-    stroke: none;
-    r: 10px;
-}
-
-.polygon {
-    fill: none;
-    stroke: none;
-}
-
-/* .polygons {
-    // fill: #ffe0bd;
-    // stroke: #caa273;
-} */
-
-.node {
-    fill: white;
-    stroke: black;
-    r: 1px;
-}
-
-button {
-    -webkit-transition-duration: $transitionDuration; /* Safari */
-    transition-duration: $transitionDuration;
-    background-color: $buttonColorA;
-    border: 2px solid $buttonColorB;
-    margin-bottom: 4px;
-    padding: 10px;
-    width: 100%;
-    display: block;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    color: $buttonColorB;
+    padding: $stdPadding;
+    background-color: $colorB;
+    font-family: $fontFamily;
     text-align: center;
-    text-decoration: none;
 }
 
-$buttonsWidth: 168px;
+h1 {
+    font-size: 32px;
+    color: $colorA;
+    border-top: $stdBorder solid $colorA;
+    border-bottom: $stdBorder solid $colorA;
+    padding: $stdPadding;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: $buttonsWidth 1fr;
+    grid-gap: $stdPadding;
+}
 
 #buttons {
-    width: $buttonsWidth;
-    float: left;
-}
+    button {
+        -webkit-transition-duration: $transitionDuration; /* Safari */
+        transition-duration: $transitionDuration;
+        background-color: $colorB;
+        border: $stdBorder solid $colorA;
+        margin-bottom: 4px;
+        padding: $stdPadding;
+        width: 100%;
+        display: block;
+        font-size: 16px;
+        color: $colorA;
+        text-align: center;
 
-$workspaceMarginLeft: $buttonsWidth + 8px;
+        &:disabled {
+            opacity: 0.4;
+        }
+
+        &:enabled:hover {
+            background-color: $colorA;
+            color: $colorB;
+        }
+    }
+}
 
 #workspace {
-    margin-left: $workspaceMarginLeft;
-}
+    svg {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
 
-svg {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-}
+        .outline {
+            fill: none;
+            stroke: black;
+        }
 
-button:enabled:hover {
-    background-color: $buttonColorB;
-    color: $buttonColorA;
-}
+        .site {
+            fill: #c7545467;
+            stroke: none;
+            r: 10px;
+        }
 
-button:disabled {
-    opacity: 0.4;
+        .polygon {
+            fill: none;
+            stroke: none;
+        }
+
+        // .polygons {
+        //     fill: #ffe0bd;
+        //     stroke: #caa273;
+        // }
+
+        .node {
+            fill: white;
+            stroke: black;
+            stroke-width: $nodeSize;
+            r: $nodeSize;
+        }
+    }
 }

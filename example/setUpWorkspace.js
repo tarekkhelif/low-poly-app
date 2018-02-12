@@ -12,8 +12,8 @@ export function setUpWorkspace(workspace) {
     // Create canvas and associate it with `paper`
     const canvas = document.createElement("canvas");
     canvas.id = "canvasProject";
-    canvas.hidden = true;
-    workspace.appendChild(canvas);
+    // canvas.hidden = true;
+    // workspace.appendChild(canvas);
     paper.setup(canvas);
 
     // Save useful stuff to project objects

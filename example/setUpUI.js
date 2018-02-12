@@ -1,15 +1,20 @@
 import { camelize } from "./util/stringTools.js";
 
 export function setUpUI() {
+    // Container div
+    const container = document.createElement("div");
+    container.id = "container";
+    document.body.appendChild(container);
+
     // Workspace div
     const workspace = document.createElement("div");
     workspace.id = "workspace";
-    document.body.appendChild(workspace);
+    container.appendChild(workspace);
 
     // Buttons div
     const buttons = document.createElement("div");
     buttons.id = "buttons";
-    document.body.insertBefore(buttons, workspace);
+    container.insertBefore(buttons, workspace);
 
     // Set up workspace
     this.setUpWorkspace(workspace);
