@@ -31,14 +31,14 @@ export function setUpUI() {
 
     // Make list of stages
     const stages = [
-        { name: "Get Image", function: this.getRaster.bind(this) },
-        { name: "Outline Image", function: this.outlineRaster.bind(this) },
-        { name: "Place Seeds", function: this.generateSites.bind(this, 100) },
-        { name: "Draw Tesselation", function: this.generateVoronoi.bind(this) },
-        { name: "Edit Tesselation", function: this.editTesselation.bind(this) },
+        { name: "Get Image", func: this.getRaster.bind(this) },
+        { name: "Outline Image", func: this.outlineRaster.bind(this) },
+        { name: "Place Seeds", func: this.generateSites.bind(this, 100) },
+        { name: "Draw Tesselation", func: this.generateVoronoi.bind(this) },
+        { name: "Edit Tesselation", func: this.editTesselation.bind(this) },
         {
             name: "Export",
-            function: () =>
+            func: () =>
                 // eslint-disable-next-line no-console
                 console.log("Sorry, exporting your art isn't supported yet.")
         }
@@ -51,7 +51,7 @@ export function setUpUI() {
         stageButton.innerHTML = stage.name;
         if (i > 0) stageButton.disabled = true;
         stageButton.addEventListener("click", async () => {
-            await stage.function();
+            await stage.func();
             // Disable current button, enable next button, unless on last stage
             if (i + 1 < stageSelector.childNodes.length) {
                 stageSelector.childNodes[i].disabled = true;
