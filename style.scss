@@ -30,7 +30,7 @@ h1 {
     grid-gap: $stdPadding;
 }
 
-#buttons {
+#controlPane {
     button {
         -webkit-transition-duration: $transitionDuration; /* Safari */
         transition-duration: $transitionDuration;

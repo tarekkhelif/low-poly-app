@@ -12,9 +12,19 @@ export function setUpUI() {
     container.appendChild(workspace);
 
     // Buttons div
-    const buttons = document.createElement("div");
-    buttons.id = "buttons";
-    container.insertBefore(buttons, workspace);
+    const controlPane = document.createElement("div");
+    controlPane.id = "controlPane";
+    container.insertBefore(controlPane, workspace);
+
+    // Stage selector div
+    const stageSelector = document.createElement("div");
+    stageSelector.id = "stageSelector";
+    controlPane.appendChild(stageSelector);
+
+    // Stage tools div
+    const stageTools = document.createElement("div");
+    stageTools.id = "stageTools";
+    controlPane.appendChild(stageTools);
 
     // Set up workspace
     this.setUpWorkspace(workspace);
@@ -43,11 +53,11 @@ export function setUpUI() {
         stageButton.addEventListener("click", async () => {
             await stage.function();
             // Disable current button, enable next button, unless on last stage
-            if (i + 1 < buttons.childNodes.length) {
-                buttons.childNodes[i].disabled = true;
-                buttons.childNodes[i + 1].disabled = false;
+            if (i + 1 < stageSelector.childNodes.length) {
+                stageSelector.childNodes[i].disabled = true;
+                stageSelector.childNodes[i + 1].disabled = false;
             }
         });
-        buttons.appendChild(stageButton);
+        stageSelector.appendChild(stageButton);
     });
 }

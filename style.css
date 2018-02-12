@@ -17,7 +17,7 @@ h1 {
   grid-template-columns: 168px 1fr;
   grid-gap: 10px; }
 
-#buttons button {
+#controlPane button {
   -webkit-transition-duration: 0.4s;
   /* Safari */
   transition-duration: 0.4s;
@@ -30,9 +30,9 @@ h1 {
   font-size: 16px;
   color: white;
   text-align: center; }
-  #buttons button:disabled {
+  #controlPane button:disabled {
     opacity: 0.4; }
-  #buttons button:enabled:hover {
+  #controlPane button:enabled:hover {
     background-color: white;
     color: #315ae0; }
 
