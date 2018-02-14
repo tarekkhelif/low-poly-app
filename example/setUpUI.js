@@ -33,7 +33,7 @@ export function setUpUI() {
     const stages = [
         { name: "Get Image", func: this.getRaster.bind(this) },
         { name: "Outline Image", func: this.outlineRaster.bind(this) },
-        { name: "Place Seeds", func: this.generateSites.bind(this, 100) },
+        { name: "Place Seeds", func: this.chooseSites.bind(this, 100) },
         { name: "Draw Tesselation", func: this.generateVoronoi.bind(this) },
         { name: "Edit Tesselation", func: this.editTesselation.bind(this) },
         {

@@ -3,9 +3,9 @@
 /* eslint-disable no-use-before-define */
 /* global d3: false, paper: false */
 
-// UI for dragging an element
+// UI for dragging a node
 // eslint-disable-next-line func-names
-const circleDragger = d3.drag().on("drag", function (d) {
+const circleDragger = d3.drag().on("drag.node", function (d) {
     const selection = d3.select(this);
 
     // Update app-wide data
@@ -24,8 +24,6 @@ const circleDragger = d3.drag().on("drag", function (d) {
 });
 
 export function editTesselation() {
-    // const polygons = this.d3Project.d3Polygons;
-
     this.d3Project.svg
         .append("g")
         .classed("graphNodes", true)
@@ -37,9 +35,4 @@ export function editTesselation() {
         .attr("cx", (d) => d[0])
         .attr("cy", (d) => d[1])
         .call(circleDragger);
-    // .classed("myPolygon", true);
-    // .selectAll("*")
-    // .append("circle")
-    // .append("path")
-    // .attr("d", (d) => `M${d.coordinates.join("L")}Z`);
 }

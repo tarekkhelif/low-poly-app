@@ -22,7 +22,8 @@ import { setUpUI } from "./setUpUI.js";
 import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
 import { outlineRaster } from "./outlineRaster.js";
-import { generateSites } from "./generateSites.js";
+import { chooseSites } from "./generateSites.js";
+// import { exampleSites as chooseSites } from "./generateSites.js";
 import { generateVoronoi } from "./generateVoronoi.js";
 import { editTesselation } from "./editTesselation.js";
 
@@ -59,7 +60,7 @@ export class LowPolyProject {
         await this.outlineRaster();
 
         // Generate sites for initial Voronoi tesselation
-        this.generateSites(100);
+        this.chooseSites(100);
 
         // Perform Voronoi tesselation and color based on raster
         this.generateVoronoi();
@@ -88,7 +89,7 @@ Object.assign(LowPolyProject.prototype, {
     setUpWorkspace,
     getRaster,
     outlineRaster,
-    generateSites,
+    chooseSites,
     generateVoronoi,
     editTesselation
 });

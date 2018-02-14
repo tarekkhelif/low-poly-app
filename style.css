@@ -44,9 +44,9 @@ h1 {
     fill: none;
     stroke: black; }
   #workspace svg .site {
-    fill: #c7545467;
-    stroke: none;
-    r: 10px; }
+    fill: white;
+    stroke: black;
+    r: 5px; }
   #workspace svg .polygon {
     fill: none;
     stroke: none; }
