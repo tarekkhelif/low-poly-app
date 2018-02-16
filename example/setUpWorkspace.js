@@ -20,4 +20,5 @@ export function setUpWorkspace(workspace) {
     Object.assign(this.d3Project, { svg });
     Object.assign(this.pjsProject, { view: paper.view });
     Object.assign(this.data, {});
+    Object.assign(this.view, { document });
 }

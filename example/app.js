@@ -31,10 +31,12 @@ export class LowPolyProject {
     // Initialize holders for data
     constructor() {
         // Initialize data bags for the fundamental data of the project, stuff
-        //   rendered with D3, stuff rendered with Paper.js, and example data.
+        //   rendered with D3, stuff rendered with Paper.js, the html document,
+        //   and example data.
         this.d3Project = {};
         this.pjsProject = {};
         this.data = {};
+        this.view = {};
 
         // Define example data
         this.exampleData = {
@@ -60,7 +62,7 @@ export class LowPolyProject {
         await this.outlineRaster();
 
         // Generate sites for initial Voronoi tesselation
-        this.chooseSites(100);
+        this.siteChooser(100);
 
         // Perform Voronoi tesselation and color based on raster
         this.generateVoronoi();
