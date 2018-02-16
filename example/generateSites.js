@@ -3,19 +3,19 @@
 /* global d3: false, paper: false */
 
 import { randPtInPoly } from "./util/geometry.js";
-import { IncrementalId as idGenerator } from "./util/id.js";
+import { IncrementalId } from "./util/id.js";
 
 // Actions
 const ADD = "ADD_SITES";
 const DELETE = "DELETE_SITES";
 const MOVE = "MOVE_SITE";
 
-function siteElement() {
+function siteElement(d) {
     const site = d3
         .select("svg") // Seems to be impossible to create a detached element
         .append("circle")
         .classed("site", true)
-        // .attr("id", (d) => d.id)
+        .attr("id", d.id)
         .call((selection) =>
             siteElement.handlers.forEach(({ eventType, handlerCallback }) =>
                 selection.on(eventType, handlerCallback)));
@@ -28,7 +28,7 @@ siteElement.on = (eventType, handlerCallback) => {
 };
 
 function updateSitesView(sitesView, state) {
-    const existing = sitesView.selectAll("*").data(state);
+    const existing = sitesView.selectAll("*").data(state, (d) => d.id);
 
     const entering = existing.enter().append(siteElement);
 
@@ -42,6 +42,13 @@ function updateSitesView(sitesView, state) {
     existing.exit().remove();
 }
 
+function addSiteClick(outlineElement, addSites) {
+    outlineElement.on("mousedown", outlineMouseDowned);
+    function outlineMouseDowned() {
+        addSites(d3.mouse(this));
+    }
+}
+
 function deleteSiteClick(siteElement, deleteSites) {
     siteElement.on("mousedown", siteMouseDowned);
     function siteMouseDowned(d) {
@@ -49,12 +56,7 @@ function deleteSiteClick(siteElement, deleteSites) {
     }
 }
 
-function addSiteClick(outlineElement, addSites) {
-    outlineElement.on("mousedown", outlineMouseDowned);
-    function outlineMouseDowned() {
-        addSites(d3.mouse(this));
-    }
-}
+function moveSiteDrag(siteElement, moveSite) {}
 
 // Install control pane tool for generating random sites
 function randSitesPaneTool(toolContainer, addRandSites) {
@@ -87,39 +89,52 @@ export class SiteChooser {
     constructor(that) {
         // Reducer
         this.reducer = new function Reducer() {
-            this.state = [];
+            // eslint-disable-next-line no-underscore-dangle
+            const idGenerator = new IncrementalId("site");
+            let state = [];
 
             this.executeAction = (action) => {
-                // const siteIdGenerator = new idGenerator("site");
-                let newState;
+                const newState = new Proxy([], {
+                    set(target, key, value) {
+                        if (
+                            !Number.isNaN(Number(key)) &&
+                            key !== "" &&
+                            !value.id
+                        ) {
+                            value.id = idGenerator.newId();
+                        }
+                        target[key] = value;
+                        return true;
+                    }
+                });
                 switch (action.type) {
                     case ADD:
-                        newState = [...this.state, ...action.sites];
+                        newState.push(...state, ...action.sites);
                         break;
                     case DELETE:
-                        newState = this.state.filter((site) => {
+                        newState.push(...state.filter((site) => {
                             const keep = action.sites.indexOf(site) === -1;
                             return keep;
-                        });
+                        }));
                         break;
                     case MOVE:
                         {
-                            const i = this.state.indexOf(action.oldLocation);
-                            newState = [
-                                ...this.state.slice(0, i),
+                            const i = state.indexOf(action.oldLocation);
+                            newState.push(
+                                ...state.slice(0, i),
                                 action.newLocation,
-                                ...this.state.slice(i + 1)
-                            ];
+                                ...state.slice(i + 1)
+                            );
                         }
                         break;
                     default:
                         // eslint-disable-next-line no-console
                         console.log("Default action taken.");
-                        newState = this.state;
                 }
                 // this.actionHistory.push(action);
-                this.state = newState;
-                this.dispacher.dispach("stateChange", this.state);
+                state = newState;
+
+                this.dispacher.dispach("stateChange", state);
             };
             this.dispacher = new function Dispacher() {
                 this.handlers = { stateChange: [] };
@@ -135,7 +150,7 @@ export class SiteChooser {
             }();
             this.kill = (deliveryPoint) => {
                 Object.freeze(this);
-                deliveryPoint.sitesData = this.state;
+                deliveryPoint.sitesData = state;
             };
         }();
 
