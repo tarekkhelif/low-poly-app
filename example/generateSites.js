@@ -10,8 +10,51 @@ const ADD = "ADD_SITES";
 const DELETE = "DELETE_SITES";
 const MOVE = "MOVE_SITE";
 
-// Install listeners on each .site DOM element
-function installSiteDOMElementListeners(/* selection */) {}
+function siteElement() {
+    const site = d3
+        .select("svg") // Seems to be impossible to create a detached element
+        .append("circle")
+        .classed("site", true)
+        // .attr("id", (d) => d.id)
+        .call((selection) =>
+            siteElement.handlers.forEach(({ eventType, handlerCallback }) =>
+                selection.on(eventType, handlerCallback)));
+
+    return site.node();
+}
+siteElement.handlers = [];
+siteElement.on = (eventType, handlerCallback) => {
+    siteElement.handlers.push({ eventType, handlerCallback });
+};
+
+function updateSitesView(sitesView, state) {
+    const existing = sitesView.selectAll("*").data(state);
+
+    const entering = existing.enter().append(siteElement);
+
+    // Set location of existing and entering .site DOM elements
+    entering
+        .merge(existing)
+        .attr("cx", (d) => d[0])
+        .attr("cy", (d) => d[1]);
+
+    // Remove unneeded DOM elements
+    existing.exit().remove();
+}
+
+function deleteSiteClick(siteElement, deleteSites) {
+    siteElement.on("mousedown", siteMouseDowned);
+    function siteMouseDowned(d) {
+        deleteSites(d);
+    }
+}
+
+function addSiteClick(outlineElement, addSites) {
+    outlineElement.on("mousedown", outlineMouseDowned);
+    function outlineMouseDowned() {
+        addSites(d3.mouse(this));
+    }
+}
 
 // Install control pane tool for generating random sites
 function randSitesPaneTool(toolContainer, addRandSites) {
@@ -55,9 +98,8 @@ export class SiteChooser {
                         break;
                     case DELETE:
                         newState = this.state.filter((site) => {
-                            const shouldDelete =
-                                action.sites.indexOf(site) !== -1;
-                            return shouldDelete;
+                            const keep = action.sites.indexOf(site) === -1;
+                            return keep;
                         });
                         break;
                     case MOVE:
@@ -99,48 +141,31 @@ export class SiteChooser {
 
         this.globalState = that.data;
         this.globalView = d3.select("#svgProject"); // that.d3Project.svg;
-        this.stageTools = that.view.document.querySelector("#stageTools");
+        this.stageToolsElement = that.view.document.querySelector("#stageTools");
         this.outlineData = that.data.outlineData;
     }
 
     run() {
         this.reducer.executeAction({});
         this.setUpView(/* svg */);
-        this.setUpControls(/* stageTools and svg layer containing UI stuff */);
+        this.setUpControls(/* stageToolsElement, svg layer with UI stuff */);
     }
 
     // Initialize stuff for how the data is rendered in the view
+    // i.e. STUFF THAT RESPONDS TO STATE CHANGES
     setUpView() {
-        const view = this.globalView.append("g").classed("sites", true);
+        const sitesView = this.globalView.append("g").classed("sites", true);
 
-        function updateView(state) {
-            const existing = view.selectAll(".sites").data(state);
-
-            const entering = existing
-                .enter()
-                .append("circle")
-                .classed("site", true)
-                // .attr("id", (d) => d.id)
-                .call(installSiteDOMElementListeners);
-
-            // Set location of existing and entering .site DOM elements
-            entering
-                .merge(existing)
-                .attr("cx", (d) => d[0])
-                .attr("cy", (d) => d[1]);
-
-            // Remove unneeded DOM elements
-            existing.exit().remove();
-        }
-
-        this.reducer.dispacher.on("stateChange", updateView);
+        this.reducer.dispacher.on("stateChange", (state) =>
+            updateSitesView(sitesView, state));
     }
 
     // Install all user control components
+    // i.e. STUFF THAT INITIATES STATE CHANGES
     setUpControls() {
         // Aliases for attributes of `this` that are used in controls
         const requestAction = this.reducer.executeAction;
-        const stageTools = this.stageTools;
+        const stageToolsElement = this.stageToolsElement;
         const outlineData = this.outlineData;
         const outlineElement = this.globalView.select(".outline");
 
@@ -151,22 +176,22 @@ export class SiteChooser {
         function deleteSites(...sites) {
             requestAction({ type: DELETE, sites });
         }
-        function moveSite(oldLocation, newLocation) {
-            requestAction({ type: MOVE, oldLocation, newLocation });
-        }
+        // function moveSite(oldLocation, newLocation) {
+        //     requestAction({ type: MOVE, oldLocation, newLocation });
+        // }
         function addRandSites(n) {
             const randSites = d3.range(n).map(() => randPtInPoly(outlineData));
             addSites(...randSites);
         }
 
         // Install listener to the outline for adding sites
-        function outlineMousedowned() {
-            addSites(d3.mouse(this));
-        }
-        outlineElement.on("mousedown", outlineMousedowned);
+        addSiteClick(outlineElement, addSites);
+        // function deleteSiteClick(siteElement, deleteSites)
+        deleteSiteClick(siteElement, deleteSites);
+        // moveSiteDrag(siteElement, moveSite);
 
         // Install control pane tool for adding random sites
-        randSitesPaneTool(stageTools, addRandSites);
+        randSitesPaneTool(stageToolsElement, addRandSites);
     }
 
     // Disables changing this phase's state and records the final state on the
