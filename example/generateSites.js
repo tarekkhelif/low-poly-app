@@ -100,7 +100,7 @@ export class SiteChooser {
         this.globalState = that.data;
         this.globalView = d3.select("#svgProject"); // that.d3Project.svg;
         this.stageTools = that.view.document.querySelector("#stageTools");
-        this.outline = that.data.outlineData;
+        this.outlineData = that.data.outlineData;
     }
 
     run() {
@@ -138,27 +138,32 @@ export class SiteChooser {
 
     // Install all user control components
     setUpControls() {
-        /* Scheme for controls */
-        /* const myControl = {
-            act: () =>
-                this.reducer.executeAction({
-                    type: "ACTION_NAME",
-                    args: "argument"
-                })
-        };
-        myControl.act(); */
-        /* End scheme */
-
         // Aliases for attributes of `this` that are used in controls
         const requestAction = this.reducer.executeAction;
         const stageTools = this.stageTools;
-        const outline = this.outline;
+        const outlineData = this.outlineData;
+        const outlineElement = this.globalView.select(".outline");
 
         // Tool Actions
-        const addRandSites = (n) => {
-            const randSites = d3.range(n).map(() => randPtInPoly(outline));
-            requestAction({ type: ADD, sites: randSites });
-        };
+        function addSites(...sites) {
+            requestAction({ type: ADD, sites });
+        }
+        function deleteSites(...sites) {
+            requestAction({ type: DELETE, sites });
+        }
+        function moveSite(oldLocation, newLocation) {
+            requestAction({ type: MOVE, oldLocation, newLocation });
+        }
+        function addRandSites(n) {
+            const randSites = d3.range(n).map(() => randPtInPoly(outlineData));
+            addSites(...randSites);
+        }
+
+        // Install listener to the outline for adding sites
+        function outlineMousedowned() {
+            addSites(d3.mouse(this));
+        }
+        outlineElement.on("mousedown", outlineMousedowned);
 
         // Install control pane tool for adding random sites
         randSitesPaneTool(stageTools, addRandSites);

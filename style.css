@@ -42,7 +42,8 @@ h1 {
   object-fit: contain; }
   #workspace svg .outline {
     fill: none;
-    stroke: black; }
+    stroke: black;
+    pointer-events: fill; }
   #workspace svg .site {
     fill: white;
     stroke: black;

@@ -64,6 +64,7 @@ h1 {
         .outline {
             fill: none;
             stroke: black;
+            pointer-events: fill;
         }
 
         .site {
