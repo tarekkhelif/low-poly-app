@@ -6,7 +6,7 @@ const webpack = require("webpack");
 const distDir = "./dist";
 
 module.exports = {
-  entry: { main: "./src/index.js" },
+  entry: { reactHotLoader: "react-hot-loader/patch", main: "./src/index.js" },
   plugins: [
     new CleanWebpackPlugin([distDir]),
     new HtmlWebpackPlugin({ title: "Monsterrr" }),
@@ -31,7 +31,8 @@ module.exports = {
   },
   output: {
     filename: "[name].bundle.js",
-    path: path.resolve(__dirname, distDir)
+    path: path.resolve(__dirname, distDir),
+    publicPath: "/"
   },
   devtool: "inline-source-map",
   devServer: {

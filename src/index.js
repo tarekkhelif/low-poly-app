@@ -5,6 +5,8 @@ import "./style.css";
 
 ReactDOM.render(<h1>AM I USING REACT NOW?</h1>, document.body);
 
+module.hot.accept();
+
 const arr = [...Array(20)];
 
 const p = document.createElement("p");
