@@ -43,4 +43,5 @@ body.appendChild(p);
 
 const prom = new Promise((res) => console.log("promiseeeee", res));
 console.log(prom);
-// throw new Error("errorrororororor");
+
+throw new Error("errorrororororor");
