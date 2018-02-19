@@ -4,7 +4,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import "./style.css";
+import "./style.scss";
 
 if (!document.body) {
     throw new Error("This documeny has no body 👀");
