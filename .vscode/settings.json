@@ -1,14 +1,14 @@
 {
-    // Disable default JavaScript validator (For ESLint)
-    "javascript.validate.enable": false,
-    // Disable default JavaScript formatter (For Prettier)
+    // Prettier
     "javascript.format.enable": false,
-    // Use 'prettier-eslint' instead of 'prettier'. Other settings will only be fallbacks in case they could not be inferred from eslint rules.
+    // ESLint
+    "javascript.validate.enable": false,
     "prettier.eslintIntegration": true,
+    // Stylelint
+    "css.validate": false,
+    "scss.validate": false,
+    "prettier.stylelintIntegration": true,
+    // Flow
     "flow.useNPMPackagedFlow": true,
-    "flow.fileExtensions": [".js", ".mjs", ".jsx", ".flow"],
-    "stylelint.enable": true,
-    "css.validate": true,
-    "scss.validate": true,
-    "prettier.stylelintIntegration": true
+    "flow.fileExtensions": [".js", ".mjs", ".jsx", ".flow"]
 }

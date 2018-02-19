@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
 import "./style.scss";
 
 if (!document.body) {
-    throw new Error("This documeny has no body 👀");
+    throw new Error("This document has no body 👀");
 }
 
 const body: HTMLElement = document.body;
@@ -27,6 +27,7 @@ function flowwwy(a: string, b: number) {
     return a + b;
 }
 
+// $FlowFixMe
 flowwwy("asdf", "sdffs");
 
 const arr = [...Array(20)];
@@ -41,7 +42,18 @@ p.innerText = ptext;
 
 body.appendChild(p);
 
+console.log("many Kinds of cheese");
+
 const prom = new Promise((res) => console.log("promiseeeee", res));
 console.log(prom);
 
-throw new Error("errorrororororor");
+class LookAClass {
+    constructor(lemonade: string, bathTowel: Array<number>) {
+        console.log(lemonade, bathTowel);
+    }
+}
+
+const aClass = new LookAClass("banana flavored", [4, 3, 25, 4, 3]);
+console.log(aClass);
+
+// throw new Error("errorrororororor");

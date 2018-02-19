@@ -10,7 +10,7 @@ const distDir = "./dist";
 module.exports = {
     entry: {
         reactHotLoader: "react-hot-loader/patch",
-        main: "./src/index.jsx"
+        main: ["babel-polyfill", "./src/index.jsx"]
     },
     plugins: [
         new CleanWebpackPlugin([distDir]),
@@ -67,6 +67,8 @@ module.exports = {
     devServer: {
         contentBase: distDir,
         port: 3003,
-        hot: true
+        hot: true,
+        open: true,
+        progress: true
     }
 };

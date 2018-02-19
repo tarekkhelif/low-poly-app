@@ -4,7 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "webpack-dev-server --progress --colors",
+        "start": "webpack-dev-server --colors",
+        "build": "webpack",
+        "watch": "webpack --watch",
         "flow": "flow"
     },
     "keywords": [],
@@ -37,6 +39,7 @@
         "webpack-dev-server": "^2.11.1"
     },
     "dependencies": {
+        "babel-polyfill": "^6.26.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0"
     }
