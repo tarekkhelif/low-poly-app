@@ -1,6 +1,18 @@
 # Development Environment for React with JSX
 
-This is my setup for web development with React using VSCode.
+This is my setup for web development with React using VS Code.
+
+## Useage
+
+Clone this repository. Open in VS Code. While developing, run the app on the development server by running `npm start` on the command line in the root director of the app. Also run VS Code's debugger.
+
+Make sure the following VS Code extensions are installed:
+
+* Debugger for Chrome
+* ESLint
+* Flow Language Support
+* Prettier - Code formatter
+* stylelint
 
 ## Overview
 
@@ -8,7 +20,7 @@ There are [linting/formatting tools](#lint) to help write correct & pretty code,
 
 ### <a id="lint"></a>Linting and formatting
 
-* **ESLint** and **Prettier** and set up to work with their corresponding VSCode extensions to _indicate errors_ as you type and to _auto-format_ code on save.
+* **ESLint** and **Prettier** and set up to work with their corresponding VS Code extensions to _indicate errors_ as you type and to _auto-format_ code on save.
 * **Stylelint** and **Prettier** do the _same for CSS/SCSS_.
 * **Flow** checks for _type errors_.
 
@@ -22,7 +34,7 @@ There are [linting/formatting tools](#lint) to help write correct & pretty code,
 ### <a id="dev"></a>Development Tools
 
 * **Webpack**'s dev server _automatically reloads pages_ when code changes and _hot module replacement_ is installed to update certain pieces of a page without refreshing the whole thing.
-* VSCode's **Chrome debugger** allows an app running in Chrome to be _debugged within VSCode_.
+* VS Code's **Chrome debugger** allows an app running in Chrome to be _debugged within VS Code_.
 * **Webpack** generates _source maps_ for the code it transpiles and bundles so the debugger can _reference line numbers in the source code_ rather than the transpiled and bundled code that's actually running.
 
 ### <a id="build"></a>Build Pipeline
