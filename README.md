@@ -4,7 +4,7 @@ This is my setup for web development with React using VS Code.
 
 ## Useage
 
-Clone this repository. Open in VS Code. While developing, run the app on the development server by running `npm start` on the command line in the root director of the app. Also run VS Code's debugger.
+Clone this repository. Open in VS Code. While developing, run the app on the development server by running `npm start` on the command line in the root directory of the app. Also run VS Code's debugger.
 
 Make sure the following VS Code extensions are installed:
 
