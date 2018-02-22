@@ -14,7 +14,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin([distDir]),
-        new HtmlWebpackPlugin({ title: "Monsterrr" }),
+        new HtmlWebpackPlugin({ title: "New Web App" }),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin()
     ],
