@@ -1,7 +1,7 @@
 {
-    "name": "jsx-setup",
+    "name": "jsx-development-environment",
     "version": "1.0.0",
-    "description": "",
+    "description": "Development Environment for React with JSX",
     "main": "index.js",
     "scripts": {
         "start": "webpack-dev-server --colors",
