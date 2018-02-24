@@ -10,6 +10,7 @@ const ADD = "ADD_SITES";
 const DELETE = "DELETE_SITES";
 const MOVE = "MOVE_SITE";
 
+// SITE ELEMENT FACTORY.  TODO: implement with React instead
 function siteElement(d) {
     const site = d3
         .select("svg") // Seems to be impossible to create a detached element
@@ -27,6 +28,7 @@ siteElement.on = (eventType, handlerCallback) => {
     siteElement.handlers.push({ eventType, handlerCallback });
 };
 
+// RESPOND TO STATE CHANGE
 function updateSitesView(sitesView, state) {
     const existing = sitesView.selectAll("*").data(state, (d) => d.id);
 
@@ -42,8 +44,10 @@ function updateSitesView(sitesView, state) {
     existing.exit().remove();
 }
 
+// BUILD CONTROL UI
 function addSiteClick(outlineElement, addSites) {
     outlineElement.on("mousedown", outlineMouseDowned);
+
     function outlineMouseDowned() {
         addSites(d3.mouse(this));
     }
@@ -56,9 +60,10 @@ function deleteSiteClick(siteElement, deleteSites) {
     }
 }
 
-function moveSiteDrag(siteElement, moveSite) {}
+function moveSiteDrag(siteElement, moveSite) {
+    (() => {})(); // placeholder no-op
+}
 
-// Install control pane tool for generating random sites
 function randSitesPaneTool(toolContainer, addRandSites) {
     // numPicker div
     const numPicker = document.createElement("div");
@@ -94,8 +99,7 @@ function sealStagePaneTool(toolContainer, closeStage) {
     const sealStageButton = document.createElement("button");
     sealStageButton.id = "sealStageButton";
     sealStageButton.innerHTML = "Done with Seeds";
-    sealStageButton.addEventListener("click", () =>
-        closeStage());
+    sealStageButton.addEventListener("click", () => closeStage());
     sealStage.appendChild(sealStageButton);
 }
 
@@ -194,48 +198,53 @@ function sealStagePaneTool(toolContainer, closeStage) {
     // i.e. STUFF THAT INITIATES STATE CHANGES
     setUpControls() {
         // Aliases for attributes of `this` that are used in controls
+        const stateDispacher = this.reducer.dispacher;
         const requestAction = this.reducer.executeAction;
         const stageToolsElement = this.stageToolsElement;
         const outlineData = this.outlineData;
         const outlineElement = this.globalView.select(".outline");
 
-        // Install listener to the outline for adding sites
-        addSiteClick(outlineElement, addSites);
-        deleteSiteClick(siteElement, deleteSites);
-        // moveSiteDrag(siteElement, moveSite);
+        // UI components: { UI installer, DOM target, action }
+        //   where UI installer = function(domTarget, action, stateDispacher)
+        const controls = [
+            {
+                // Add a site on click inside the outline
+                installer: addSiteClick,
+                domTarget: outlineElement,
+                action: (...sites) => requestAction({ type: ADD, sites })
+            },
+            {
+                // Delete a site when clicked
+                installer: deleteSiteClick,
+                domTarget: siteElement,
+                action: (...sites) => requestAction({ type: DELETE, sites })
+            },
+            {
+                // Control Pane: eneter number of sites to randomly add
+                installer: randSitesPaneTool,
+                domTarget: stageToolsElement,
+                action: (n) => {
+                    const randSites = d3
+                        .range(n)
+                        .map(() => randPtInPoly(outlineData));
+                    requestAction({ type: ADD, sites: randSites });
+                }
+            },
+            {
+                // Control pane: declare this stage done
+                installer: sealStagePaneTool,
+                domTarget: stageToolsElement,
+                action: () => this.reducer.kill(this.globalState)
+            }
+        ];
 
-        // Install control pane tool for adding random sites
-        randSitesPaneTool(stageToolsElement, addRandSites);
-
-        // Install control pane tool for sealing this stage
-        sealStagePaneTool(stageToolsElement, closeStage.bind(this));
-
-        // Tool Actions
-        function addSites(...sites) {
-            requestAction({ type: ADD, sites });
-        }
-        function deleteSites(...sites) {
-            requestAction({ type: DELETE, sites });
-        }
-        // function moveSite(oldLocation, newLocation) {
-        //     requestAction({ type: MOVE, oldLocation, newLocation });
-        // }
-        function addRandSites(n) {
-            const randSites = d3.range(n).map(() => randPtInPoly(outlineData));
-            addSites(...randSites);
-        }
-
-        // Disables changing this stage's state and records the final state on the
-        //   global state
-        function closeStage() {
-            this.reducer.kill(this.globalState);
-        }
+        controls.forEach(({ installer, domTarget, action }) => {
+            installer(domTarget, action, stateDispacher);
+        });
     }
-
 }
 
-// Runner -- coerce siteChooser to work the old way; like a function
-
+// Coerce siteChooser to work the old way; like a function, not an object
 /* export */ function chooseSites() {
     const miniApp = new SiteChooser(this);
     miniApp.run();
