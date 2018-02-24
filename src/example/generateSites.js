@@ -85,7 +85,7 @@ function randSitesPaneTool(toolContainer, addRandSites) {
 }
 
 // Mini App
-export class SiteChooser {
+/* export */ class SiteChooser {
     constructor(that) {
         // Reducer
         this.reducer = new function Reducer() {
@@ -218,12 +218,12 @@ export class SiteChooser {
 
 // Runner -- coerce siteChooser to work the old way; like a function
 
-export function chooseSites() {
+/* export */ function chooseSites() {
     const miniApp = new SiteChooser(this);
     miniApp.run();
 }
 
-export function exampleSites(n) {
+/* export */ function exampleSites(n) {
     // Generate `n` random points
     const randSites = d3
         .range(n)
@@ -254,3 +254,5 @@ export function exampleSites(n) {
     Object.assign(this.pjsProject, { pjsSites });
     Object.assign(this.data, { sitesData: randSites });
 }
+
+export { exampleSites as chooseSites };
