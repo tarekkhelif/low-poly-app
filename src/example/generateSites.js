@@ -48,23 +48,15 @@ function updateSitesView(sitesView, state) {
 
 // BUILD CONTROL UI
 function addSiteClick(outlineElement, addSites, storeDispacher) {
-    outlineElement.on("mousedown.add", outlineMouseDowned);
+    outlineElement.on("mousedown.add", () => addSites(d3.mouse(this)));
     storeDispacher.on("kill", () => outlineElement.on("mousedown.add", null));
-
-    function outlineMouseDowned() {
-        addSites(d3.mouse(this));
-    }
 }
 
 function deleteSiteClick(siteElement, deleteSites, storeDispacher) {
-    siteElement.on("mousedown.delete", siteMouseDowned);
+    siteElement.on("mousedown.delete", (d) => deleteSites(d));
     // TODO: After reimplementing `siteElement` with React, make them remove
     //         their listeners on kill
     // storeDispacher.on("kill", () => siteElement.on("mousedown.delete", null));
-
-    function siteMouseDowned(d) {
-        deleteSites(d);
-    }
 }
 
 function moveSiteDrag(siteElement, moveSite, storeDispacher) {
@@ -91,23 +83,37 @@ function randSitesPaneTool(toolContainer, addRandSites, storeDispacher) {
     numPickerButton.id = "numPickerButton";
     numPickerButton.innerHTML = "➡";
     // Generate `n` random points onclick
-    numPickerButton.addEventListener("click", () =>
-        addRandSites(numPickerInput.value));
+    const handleClick = () => addRandSites(numPickerInput.value);
+    numPickerButton.addEventListener("click", handleClick);
     numPicker.appendChild(numPickerButton);
+
+    // Deactivate button on kill
+    storeDispacher.on("kill", () => {
+        numPickerButton.removeEventListener("click", handleClick);
+        numPickerButton.disabled = true;
+        numPickerInput.disabled = true;
+    });
 }
 
-function sealStagePaneTool(toolContainer, closeStage, storeDispacher) {
-    // sealStage div
-    const sealStage = document.createElement("div");
-    sealStage.id = "sealStage";
-    toolContainer.appendChild(sealStage);
+function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
+    // endStage div
+    const endStage = document.createElement("div");
+    endStage.id = "endStage";
+    toolContainer.appendChild(endStage);
 
     // Button to execute `closeStage`
-    const sealStageButton = document.createElement("button");
-    sealStageButton.id = "sealStageButton";
-    sealStageButton.innerHTML = "Done with Seeds";
-    sealStageButton.addEventListener("click", () => closeStage());
-    sealStage.appendChild(sealStageButton);
+    const endStageButton = document.createElement("button");
+    endStageButton.id = "endStageButton";
+    endStageButton.innerHTML = "Done with Seeds";
+    const handleClick = () => closeStage();
+    endStageButton.addEventListener("click", handleClick);
+    endStage.appendChild(endStageButton);
+
+    // Deactivate button on kill
+    storeDispacher.on("kill", () => {
+        endStageButton.removeEventListener("click", handleClick);
+        endStageButton.disabled = true;
+    });
 }
 
 // Mini App
@@ -254,7 +260,7 @@ function sealStagePaneTool(toolContainer, closeStage, storeDispacher) {
             },
             {
                 // Control pane: declare this stage done
-                installer: sealStagePaneTool,
+                installer: endStagePaneTool,
                 domTarget: stageToolsElement,
                 action: () => requestAction({ type: KILL }) // this.reducer.kill(this.globalState)
             }
