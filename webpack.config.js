@@ -9,14 +9,16 @@ const distDir = "./dist";
 
 module.exports = {
     entry: {
-        reactHotLoader: "react-hot-loader/patch",
-        main: ["babel-polyfill", "./src/index.jsx"]
+        main: [
+            "babel-polyfill",
+            /* "react-hot-loader/patch", */ "./src/index.jsx"
+        ]
     },
     plugins: [
         new CleanWebpackPlugin([distDir]),
-        new HtmlWebpackPlugin({ title: "Lowgon" }),
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin()
+        new HtmlWebpackPlugin({ title: "Lowgon" })
+        // new webpack.NamedModulesPlugin(),
+        // new webpack.HotModuleReplacementPlugin()
     ],
     module: {
         rules: [
@@ -75,7 +77,7 @@ module.exports = {
     devServer: {
         contentBase: distDir,
         port: 3003,
-        hot: true,
+        // hot: true,
         open: true,
         progress: true
     }

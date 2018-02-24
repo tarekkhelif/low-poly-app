@@ -255,4 +255,4 @@ function randSitesPaneTool(toolContainer, addRandSites) {
     Object.assign(this.data, { sitesData: randSites });
 }
 
-export { exampleSites as chooseSites };
+export { chooseSites };
