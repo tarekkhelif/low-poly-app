@@ -84,6 +84,21 @@ function randSitesPaneTool(toolContainer, addRandSites) {
     numPicker.appendChild(numPickerButton);
 }
 
+function sealStagePaneTool(toolContainer, closeStage) {
+    // sealStage div
+    const sealStage = document.createElement("div");
+    sealStage.id = "sealStage";
+    toolContainer.appendChild(sealStage);
+
+    // Button to execute `closeStage`
+    const sealStageButton = document.createElement("button");
+    sealStageButton.id = "sealStageButton";
+    sealStageButton.innerHTML = "Done with Seeds";
+    sealStageButton.addEventListener("click", () =>
+        closeStage());
+    sealStage.appendChild(sealStageButton);
+}
+
 // Mini App
 /* export */ class SiteChooser {
     constructor(that) {
@@ -184,6 +199,17 @@ function randSitesPaneTool(toolContainer, addRandSites) {
         const outlineData = this.outlineData;
         const outlineElement = this.globalView.select(".outline");
 
+        // Install listener to the outline for adding sites
+        addSiteClick(outlineElement, addSites);
+        deleteSiteClick(siteElement, deleteSites);
+        // moveSiteDrag(siteElement, moveSite);
+
+        // Install control pane tool for adding random sites
+        randSitesPaneTool(stageToolsElement, addRandSites);
+
+        // Install control pane tool for sealing this stage
+        sealStagePaneTool(stageToolsElement, closeStage.bind(this));
+
         // Tool Actions
         function addSites(...sites) {
             requestAction({ type: ADD, sites });
@@ -199,21 +225,13 @@ function randSitesPaneTool(toolContainer, addRandSites) {
             addSites(...randSites);
         }
 
-        // Install listener to the outline for adding sites
-        addSiteClick(outlineElement, addSites);
-        // function deleteSiteClick(siteElement, deleteSites)
-        deleteSiteClick(siteElement, deleteSites);
-        // moveSiteDrag(siteElement, moveSite);
-
-        // Install control pane tool for adding random sites
-        randSitesPaneTool(stageToolsElement, addRandSites);
+        // Disables changing this stage's state and records the final state on the
+        //   global state
+        function closeStage() {
+            this.reducer.kill(this.globalState);
+        }
     }
 
-    // Disables changing this phase's state and records the final state on the
-    //   global state
-    closeStage() {
-        this.reducer.kill(this.globalState);
-    }
 }
 
 // Runner -- coerce siteChooser to work the old way; like a function
