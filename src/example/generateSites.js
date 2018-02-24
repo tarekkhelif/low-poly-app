@@ -4,11 +4,13 @@ const paper = require("paper");
 
 import { randPtInPoly } from "./util/geometry.js";
 import { IncrementalId } from "./util/id.js";
+import { EventEmitter } from "events";
 
 // Actions
 const ADD = "ADD_SITES";
 const DELETE = "DELETE_SITES";
 const MOVE = "MOVE_SITE";
+const KILL = "KILL_STAGE";
 
 // SITE ELEMENT FACTORY.  TODO: implement with React instead
 function siteElement(d) {
@@ -18,14 +20,14 @@ function siteElement(d) {
         .classed("site", true)
         .attr("id", d.id)
         .call((selection) =>
-            siteElement.handlers.forEach(({ eventType, handlerCallback }) =>
-                selection.on(eventType, handlerCallback)));
+            Object.entries(siteElement.handlers).forEach(([type, callback]) =>
+                selection.on(type, callback)));
 
     return site.node();
 }
-siteElement.handlers = [];
+siteElement.handlers = {};
 siteElement.on = (eventType, handlerCallback) => {
-    siteElement.handlers.push({ eventType, handlerCallback });
+    siteElement.handlers[eventType] = handlerCallback;
 };
 
 // RESPOND TO STATE CHANGE
@@ -45,26 +47,31 @@ function updateSitesView(sitesView, state) {
 }
 
 // BUILD CONTROL UI
-function addSiteClick(outlineElement, addSites) {
-    outlineElement.on("mousedown", outlineMouseDowned);
+function addSiteClick(outlineElement, addSites, storeDispacher) {
+    outlineElement.on("mousedown.add", outlineMouseDowned);
+    storeDispacher.on("kill", () => outlineElement.on("mousedown.add", null));
 
     function outlineMouseDowned() {
         addSites(d3.mouse(this));
     }
 }
 
-function deleteSiteClick(siteElement, deleteSites) {
-    siteElement.on("mousedown", siteMouseDowned);
+function deleteSiteClick(siteElement, deleteSites, storeDispacher) {
+    siteElement.on("mousedown.delete", siteMouseDowned);
+    // TODO: After reimplementing `siteElement` with React, make them remove
+    //         their listeners on kill
+    // storeDispacher.on("kill", () => siteElement.on("mousedown.delete", null));
+
     function siteMouseDowned(d) {
         deleteSites(d);
     }
 }
 
-function moveSiteDrag(siteElement, moveSite) {
+function moveSiteDrag(siteElement, moveSite, storeDispacher) {
     (() => {})(); // placeholder no-op
 }
 
-function randSitesPaneTool(toolContainer, addRandSites) {
+function randSitesPaneTool(toolContainer, addRandSites, storeDispacher) {
     // numPicker div
     const numPicker = document.createElement("div");
     numPicker.id = "numPicker";
@@ -89,7 +96,7 @@ function randSitesPaneTool(toolContainer, addRandSites) {
     numPicker.appendChild(numPickerButton);
 }
 
-function sealStagePaneTool(toolContainer, closeStage) {
+function sealStagePaneTool(toolContainer, closeStage, storeDispacher) {
     // sealStage div
     const sealStage = document.createElement("div");
     sealStage.id = "sealStage";
@@ -106,8 +113,13 @@ function sealStagePaneTool(toolContainer, closeStage) {
 // Mini App
 /* export */ class SiteChooser {
     constructor(that) {
+        this.globalState = that.data;
+        this.globalView = d3.select("#svgProject"); // that.d3Project.svg;
+        this.stageToolsElement = that.view.document.querySelector("#stageTools");
+        this.outlineData = that.data.outlineData;
+
         // Reducer
-        this.reducer = new function Reducer() {
+        this.reducer = new function Reducer(globalState) {
             // eslint-disable-next-line no-underscore-dangle
             const idGenerator = new IncrementalId("site");
             let state = [];
@@ -129,12 +141,18 @@ function sealStagePaneTool(toolContainer, closeStage) {
                 switch (action.type) {
                     case ADD:
                         newState.push(...state, ...action.sites);
+
+                        state = newState;
+                        this.dispacher.dispach("stateChange", state);
                         break;
                     case DELETE:
                         newState.push(...state.filter((site) => {
                             const keep = action.sites.indexOf(site) === -1;
                             return keep;
                         }));
+
+                        state = newState;
+                        this.dispacher.dispach("stateChange", state);
                         break;
                     case MOVE:
                         {
@@ -144,19 +162,32 @@ function sealStagePaneTool(toolContainer, closeStage) {
                                 action.newLocation,
                                 ...state.slice(i + 1)
                             );
+
+                            state = newState;
+                            this.dispacher.dispach("stateChange", state);
                         }
+                        break;
+                    case KILL:
+                        // Tell this stage's UI to stop listening user input
+                        this.dispacher.dispach("kill");
+                        // Write this stage's state to global state
+                        Object.freeze(this);
+                        globalState.sitesData = state;
                         break;
                     default:
                         // eslint-disable-next-line no-console
                         console.log("Default action taken.");
                 }
                 // this.actionHistory.push(action);
-                state = newState;
-
-                this.dispacher.dispach("stateChange", state);
             };
+
             this.dispacher = new function Dispacher() {
-                this.handlers = { stateChange: [] };
+                const emmittedEvents = ["stateChange", "kill"];
+                // TODO: throw error for unrecognized event types
+                this.handlers = {};
+                emmittedEvents.forEach((eventType) => {
+                    this.handlers[eventType] = [];
+                });
 
                 this.dispach = (eventType, ...args) => {
                     this.handlers[eventType].forEach((handler) =>
@@ -167,16 +198,7 @@ function sealStagePaneTool(toolContainer, closeStage) {
                     this.handlers[eventType].push(handler);
                 };
             }();
-            this.kill = (deliveryPoint) => {
-                Object.freeze(this);
-                deliveryPoint.sitesData = state;
-            };
-        }();
-
-        this.globalState = that.data;
-        this.globalView = d3.select("#svgProject"); // that.d3Project.svg;
-        this.stageToolsElement = that.view.document.querySelector("#stageTools");
-        this.outlineData = that.data.outlineData;
+        }(this.globalState);
     }
 
     run() {
@@ -198,14 +220,14 @@ function sealStagePaneTool(toolContainer, closeStage) {
     // i.e. STUFF THAT INITIATES STATE CHANGES
     setUpControls() {
         // Aliases for attributes of `this` that are used in controls
-        const stateDispacher = this.reducer.dispacher;
+        const storeDispacher = this.reducer.dispacher;
         const requestAction = this.reducer.executeAction;
         const stageToolsElement = this.stageToolsElement;
         const outlineData = this.outlineData;
         const outlineElement = this.globalView.select(".outline");
 
         // UI components: { UI installer, DOM target, action }
-        //   where UI installer = function(domTarget, action, stateDispacher)
+        //   where UI installer = function(domTarget, action, storeDispacher)
         const controls = [
             {
                 // Add a site on click inside the outline
@@ -234,12 +256,12 @@ function sealStagePaneTool(toolContainer, closeStage) {
                 // Control pane: declare this stage done
                 installer: sealStagePaneTool,
                 domTarget: stageToolsElement,
-                action: () => this.reducer.kill(this.globalState)
+                action: () => requestAction({ type: KILL }) // this.reducer.kill(this.globalState)
             }
         ];
 
         controls.forEach(({ installer, domTarget, action }) => {
-            installer(domTarget, action, stateDispacher);
+            installer(domTarget, action, storeDispacher);
         });
     }
 }
