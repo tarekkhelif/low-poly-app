@@ -1,3 +1,11 @@
+/**
+ * @file Runs an prototype of a web app that helps users to quickly
+ *     create low-poly graphics from a preexisting raster image.
+ *     This prototype uses example data from file, and doesn't have any user
+ *     interaction features.
+ * @author Tarek Khelif
+ */
+
 /* @flow */
 
 import React from "react";
@@ -5,13 +13,8 @@ import ReactDOM from "react-dom";
 
 import "./style.scss";
 
-if (!document.body) {
-    throw new Error("This document has no body 👀");
-}
+import { LowPolyProject } from "./example/app.js";
 
-const body: HTMLElement = document.body;
-
-const myDiv = document.createElement("div");
-body.appendChild(myDiv);
-
-ReactDOM.render(<h1>Hello World!</h1>, myDiv);
+const app = new LowPolyProject();
+// app.runExample();
+app.setUpUI();

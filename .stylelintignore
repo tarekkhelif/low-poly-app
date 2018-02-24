@@ -1,0 +1,8 @@
+# Isn't working.
+# Changing the VSCode setting works though, so I'm doing that instead:
+# {
+#     "stylelint.configOverrides": {
+#         "ignoreFiles": "./dist/"
+#     }
+# }
+./dist/*.css

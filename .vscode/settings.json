@@ -10,5 +10,9 @@
     "prettier.stylelintIntegration": true,
     // Flow
     "flow.useNPMPackagedFlow": true,
-    "flow.fileExtensions": [".js", ".mjs", ".jsx", ".flow"]
+    "flow.fileExtensions": [".js", ".mjs", ".jsx", ".flow"],
+    // Don't link transpiled CSS
+    "stylelint.configOverrides": {
+        "ignoreFiles": "./dist/"
+    }
 }

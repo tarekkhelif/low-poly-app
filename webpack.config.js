@@ -14,7 +14,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin([distDir]),
-        new HtmlWebpackPlugin({ title: "New Web App" }),
+        new HtmlWebpackPlugin({ title: "Lowgon" }),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin()
     ],
@@ -52,7 +52,15 @@ module.exports = {
                         ]
                     }
                 ]
+            },
+            {
+                test: /\.(jpg|csv)$/,
+                use: ["file-loader"]
             }
+            // {
+            //     test: /\.(csv|tsv)$/,
+            //     use: ["csv-loader"]
+            // }
         ]
     },
     resolve: {

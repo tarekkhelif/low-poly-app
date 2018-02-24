@@ -1,7 +1,94 @@
+$colorA: white;
+$colorB: rgb(49, 90, 224);
+$transitionDuration: 0.4s;
+$fontFamily: Arial, Helvetica, sans-serif;
+$stdPadding: 10px;
+$stdBorder: 2px;
+$buttonsWidth: 168px;
+$nodeSize: 1.5px;
+$fontFamily: Arial, Helvetica, sans-serif;
+
 body {
-    div {
-        h1 {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: $stdPadding;
+    background-color: $colorB;
+    font-family: $fontFamily;
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+    color: $colorA;
+    border-top: $stdBorder solid $colorA;
+    border-bottom: $stdBorder solid $colorA;
+    padding: $stdPadding;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: $buttonsWidth 1fr;
+    grid-gap: $stdPadding;
+}
+
+#controlPane {
+    button {
+        -webkit-transition-duration: $transitionDuration; /* Safari */
+        transition-duration: $transitionDuration;
+        background-color: $colorB;
+        border: $stdBorder solid $colorA;
+        margin-bottom: 4px;
+        padding: $stdPadding;
+        width: 100%;
+        display: block;
+        font-size: 16px;
+        color: $colorA;
+        text-align: center;
+
+        &:disabled {
+            opacity: 0.4;
+        }
+
+        &:enabled:hover {
+            background-color: $colorA;
+            color: $colorB;
+        }
+    }
+}
+
+#workspace {
+    svg {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+
+        .outline {
+            fill: none;
+            stroke: black;
+            pointer-events: fill;
+        }
+
+        .site {
+            // fill: #c7545467;
+            fill: white;
+            stroke: black;
+            r: 5px;
+        }
+
+        .polygon {
+            fill: none;
+            stroke: none;
+        }
+
+        // .polygons {
+        //     fill: #ffe0bd;
+        //     stroke: #caa273;
+        // }
+
+        .node {
+            fill: white;
+            stroke: black;
+            stroke-width: $nodeSize;
+            r: $nodeSize;
         }
     }
 }
