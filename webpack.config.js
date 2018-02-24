@@ -16,9 +16,9 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin([distDir]),
-        new HtmlWebpackPlugin({ title: "Lowgon" })
-        // new webpack.NamedModulesPlugin(),
-        // new webpack.HotModuleReplacementPlugin()
+        new HtmlWebpackPlugin({ title: "Lowgon" }),
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ],
     module: {
         rules: [
@@ -77,7 +77,7 @@ module.exports = {
     devServer: {
         contentBase: distDir,
         port: 3003,
-        // hot: true,
+        hot: true,
         open: true,
         progress: true
     }
