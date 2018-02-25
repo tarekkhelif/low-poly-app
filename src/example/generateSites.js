@@ -4,7 +4,6 @@ const paper = require("paper");
 
 import { randPtInPoly } from "./util/geometry.js";
 import { IncrementalId } from "./util/id.js";
-import { EventEmitter } from "events";
 
 // Actions
 const ADD = "ADD_SITES";
@@ -48,7 +47,10 @@ function updateSitesView(sitesView, state) {
 
 // BUILD CONTROL UI
 function addSiteClick(outlineElement, addSites, storeDispacher) {
-    outlineElement.on("mousedown.add", () => addSites(d3.mouse(this)));
+    // eslint-disable-next-line func-names
+    outlineElement.on("mousedown.add", function () {
+        addSites(d3.mouse(this));
+    });
     storeDispacher.on("kill", () => outlineElement.on("mousedown.add", null));
 }
 
