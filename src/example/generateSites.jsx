@@ -1,14 +1,22 @@
+/* eslint-disable react/prop-types */
 import * as d3 from "d3";
 import { paper } from "paper";
+
+import React from "react";
+import ReactDOM from "react-dom";
 
 import { randPtInPoly } from "./util/geometry.js";
 import { IncrementalId } from "./util/id.js";
 
-// Actions
+// ACTIONS
 const ADD = "ADD_SITES";
 const DELETE = "DELETE_SITES";
 const MOVE = "MOVE_SITE";
 const KILL = "KILL_STAGE";
+
+function SiteElem(props) {
+    return (<cirlce className="site" key={props.point.id} cx={props.point[0]} cy={props.point[1]} />);
+}
 
 // SITE ELEMENT FACTORY.  TODO: implement with React instead
 function siteElement(d) {
@@ -210,7 +218,8 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
 
     run() {
         this.reducer.executeAction({});
-        this.setUpView(/* svg */);
+        this.setUpViewReact(/* svg */);
+        // this.setUpView();
         this.setUpControls(/* stageToolsElement, svg layer with UI stuff */);
     }
 
@@ -221,6 +230,16 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
 
         this.reducer.dispacher.on("stateChange", (state) =>
             updateSitesView(sitesView, state));
+    }
+
+    setUpViewReact() {
+        const sitesViewReactContainer = this.globalView.append("g").classed("sitesReactContainer", true);
+        
+        this.reducer.dispacher.on("stateChange", (points) => {
+            const sitesView = <g className="sites">{points.map((point) => <circle className="site" key={point.id} cx={point[0]} cy={point[1]} />)}</g>;
+
+            ReactDOM.render(sitesView, sitesViewReactContainer.node());
+        })
     }
 
     // Install all user control components

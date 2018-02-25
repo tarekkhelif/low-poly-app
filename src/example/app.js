@@ -22,7 +22,7 @@ import { setUpUI } from "./setUpUI.js";
 import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
 import { outlineRaster } from "./outlineRaster.js";
-import { chooseSites } from "./generateSites.js";
+import { chooseSites } from "./generateSites.jsx";
 import { generateVoronoi } from "./generateVoronoi.js";
 import { editTesselation } from "./editTesselation.js";
 
