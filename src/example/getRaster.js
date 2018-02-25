@@ -1,6 +1,5 @@
 import * as d3 from "d3";
-
-const paper = require("paper");
+import { paper } from "paper";
 
 export async function getRaster() {
     // REAL // Get raster location from user

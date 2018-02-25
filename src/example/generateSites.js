@@ -1,6 +1,5 @@
 import * as d3 from "d3";
-
-const paper = require("paper");
+import { paper } from "paper";
 
 import { randPtInPoly } from "./util/geometry.js";
 import { IncrementalId } from "./util/id.js";

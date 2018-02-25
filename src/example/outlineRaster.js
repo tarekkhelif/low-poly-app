@@ -1,6 +1,5 @@
 import * as d3 from "d3";
-
-const paper = require("paper");
+import { paper } from "paper";
 
 export async function outlineRaster() {
     // REAL // UI for drawing outline

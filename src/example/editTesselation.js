@@ -1,8 +1,5 @@
-/* eslint-disable no-use-before-define */
-
 import * as d3 from "d3";
-
-const paper = require("paper");
+import { paper } from "paper";
 
 // UI for dragging a node
 // eslint-disable-next-line func-names

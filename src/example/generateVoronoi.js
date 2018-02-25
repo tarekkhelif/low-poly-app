@@ -1,8 +1,7 @@
-import { addIfUnique, pairs } from "./util/arrayTools.js";
-
 import * as d3 from "d3";
+import { paper } from "paper";
 
-const paper = require("paper");
+import { addIfUnique, pairs } from "./util/arrayTools.js";
 
 export function generateVoronoi() {
     // Get dimensions of SVG
