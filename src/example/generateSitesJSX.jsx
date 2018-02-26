@@ -52,7 +52,7 @@ class StageGroup extends React.Component {
     }
 }
 
-const reducer = (oldState, action) => {
+/* const reducer = (oldState, action) => {
     let nextSites;
     let nextActive;
 
@@ -96,7 +96,7 @@ const reducer = (oldState, action) => {
     const nextState = { sites: nextSites, active: nextActive };
 
     return nextState;
-};
+}; */
 
 class SiteChooser {
     constructor(/* that */) {
@@ -107,31 +107,35 @@ class SiteChooser {
             .node();
         this.stageTools = document.querySelector("#stageTools");
 
-        // this.outlineData = that.data.outlineData;
+        // #region
+        /*
+        this.outlineData = that.data.outlineData;
 
-        // this.store = new function Store() {
-        //     const idGenerator = new IncrementalId("site");
-        //     let state = updateState({});
+        this.store = new function Store() {
+            const idGenerator = new IncrementalId("site");
+            let state = updateState({});
 
-        //     const updateState = (action) => {
-        //         const newState = new Proxy([], {
-        //             set(target, key, value) {
-        //                 const keyIsNumber =
-        //                     !Number.isNaN(Number(key)) && key !== "";
+            const updateState = (action) => {
+                const newState = new Proxy([], {
+                    set(target, key, value) {
+                        const keyIsNumber =
+                            !Number.isNaN(Number(key)) && key !== "";
 
-        //                 if (!value.id && keyIsNumber) {
-        //                     value.id = idGenerator.newId();
-        //                 }
-        //                 target[key] = value;
-        //                 return true;
-        //             }
-        //         });
+                        if (!value.id && keyIsNumber) {
+                            value.id = idGenerator.newId();
+                        }
+                        target[key] = value;
+                        return true;
+                    }
+                });
 
-        //         newState.push(...reducer(state, action));
+                newState.push(...reducer(state, action));
 
-        //         state = newState;
-        //     };
-        // }();
+                state = newState;
+            };
+        }();
+        */
+        // #endregion
     }
 
     run() {

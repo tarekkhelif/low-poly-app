@@ -7,7 +7,16 @@ import React from "react";
 export class Site extends React.Component {
     constructor(props) {
         super(props);
-        this.justExists = "justExists";
+
+        this.handleMouseDown = this.handleMouseDown.bind(this);
+    }
+
+    handleMouseDown() {
+        this.reportAction({ type: "DELETE_SITES", sites: [this.props.point] });
+    }
+
+    reportAction(action) {
+        console.log(action);
     }
 
     render() {
@@ -16,6 +25,7 @@ export class Site extends React.Component {
                 className="site"
                 cx={this.props.point[0]}
                 cy={this.props.point[1]}
+                onMouseDown={this.handleMouseDown}
             />
         );
     }
