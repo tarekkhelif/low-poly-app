@@ -42,40 +42,6 @@ class Site extends React.Component {
 }
 Site.handlers = {};
 
-// SITE ELEMENT FACTORY.  TODO: implement with React instead
-function siteElement(d) {
-    const site = d3
-        .select("svg") // Seems to be impossible to create a detached element
-        .append("circle")
-        .classed("site", true)
-        .attr("id", d.id)
-        .call((selection) =>
-            Object.entries(siteElement.handlers).forEach(([type, callback]) =>
-                selection.on(type, callback)));
-
-    return site.node();
-}
-siteElement.handlers = {};
-siteElement.on = (eventType, handlerCallback) => {
-    siteElement.handlers[eventType] = handlerCallback;
-};
-
-// RESPOND TO STATE CHANGE
-function updateSitesView(sitesView, state) {
-    const existing = sitesView.selectAll("*").data(state, (d) => d.id);
-
-    const entering = existing.enter().append(siteElement);
-
-    // Set location of existing and entering .site DOM elements
-    entering
-        .merge(existing)
-        .attr("cx", (d) => d[0])
-        .attr("cy", (d) => d[1]);
-
-    // Remove unneeded DOM elements
-    existing.exit().remove();
-}
-
 // BUILD CONTROL UI
 function addSiteClick(outlineElement, addSites, storeDispacher) {
     // eslint-disable-next-line func-names
@@ -85,15 +51,9 @@ function addSiteClick(outlineElement, addSites, storeDispacher) {
     storeDispacher.on("kill", () => outlineElement.on("mousedown.add", null));
 }
 
-function deleteSiteClick(siteElement, deleteSites, storeDispacher) {
-    siteElement.on("mousedown.delete", (d) => deleteSites(d));
-    // TODO: After reimplementing `siteElement` with React, make them remove
-    //         their listeners on kill
-    // storeDispacher.on("kill", () => siteElement.on("mousedown.delete", null));
-}
-
-function deleteSiteClickReact(component, deleteSites, storeDispacher) {
-Object.assign(component.handlers, { onMouseDown() { deleteSites(this.props.point); } });
+function deleteSiteClick(component, deleteSites, storeDispacher) {
+    Object.assign(component.handlers, { onMouseDown() { deleteSites(this.props.point); } });
+    storeDispacher.on("kill", () => Object.assign(component.handlers, { onMouseDown: null }));
 }
 
 function moveSiteDrag(siteElement, moveSite, storeDispacher) {
@@ -246,21 +206,13 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
 
     run() {
         this.reducer.executeAction({});
-        this.setUpViewReact(/* svg */);
-        // this.setUpView();
+        this.setUpView(/* svg */);
         this.setUpControls(/* stageToolsElement, svg layer with UI stuff */);
     }
 
     // Initialize stuff for how the data is rendered in the view
     // i.e. STUFF THAT RESPONDS TO STATE CHANGES
     setUpView() {
-        const sitesView = this.globalView.append("g").classed("sites", true);
-
-        this.reducer.dispacher.on("stateChange", (state) =>
-            updateSitesView(sitesView, state));
-    }
-
-    setUpViewReact() {
         const sitesView = this.globalView.append("g").classed("sites", true);
 
         this.reducer.dispacher.on("stateChange", (points) => {
@@ -293,12 +245,6 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
             {
                 // Delete a site when clicked
                 installer: deleteSiteClick,
-                domTarget: siteElement,
-                action: (...sites) => requestAction({ type: DELETE, sites })
-            },
-            {
-                // Delete a site when clicked
-                installer: deleteSiteClickReact,
                 domTarget: Site,
                 action: (...sites) => requestAction({ type: DELETE, sites })
             },
