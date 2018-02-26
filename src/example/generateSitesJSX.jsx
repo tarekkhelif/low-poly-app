@@ -11,7 +11,7 @@ import ReactDOM from "react-dom";
 import { IncrementalId } from "./util/id.js";
 
 import { NumPicker, EndStage } from "./generateSites/paneToolsComponents";
-import { Site } from "./generateSites/stageGroupComponents";
+import { Outline, Sites } from "./generateSites/stageGroupComponents";
 
 // ACTIONS
 const ADD = "ADD_SITES";
@@ -36,7 +36,7 @@ class PaneTools extends React.Component {
     }
 }
 
-class StageGroup extends React.Component {
+class SitesStage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -46,7 +46,11 @@ class StageGroup extends React.Component {
     render() {
         return (
             <React.Fragment>
-                {this.props.sites.map((point) => <Site point={point} />)}
+                <Outline
+                    active={this.props.active}
+                    outlineData={this.props.outlineData}
+                />
+                <Sites active={this.props.active} sites={this.props.sites} />
             </React.Fragment>
         );
     }
@@ -99,18 +103,17 @@ class StageGroup extends React.Component {
 }; */
 
 class SiteChooser {
-    constructor(/* that */) {
+    constructor(that) {
         this.stageGroup = d3
             .select("#svgProject")
             .append("g")
-            .classed("sites", true)
+            .classed("sitesStage", true)
             .node();
         this.stageTools = document.querySelector("#stageTools");
 
-        // #region
-        /*
         this.outlineData = that.data.outlineData;
 
+        /*
         this.store = new function Store() {
             const idGenerator = new IncrementalId("site");
             let state = updateState({});
@@ -135,12 +138,12 @@ class SiteChooser {
             };
         }();
         */
-        // #endregion
     }
 
     run() {
         const state = {
             active: true,
+            outlineData: this.outlineData,
             sites: Array.from(Array(20)).map(() => [
                 Math.random() * 400 + 100,
                 Math.random() * 400 + 100
@@ -148,7 +151,11 @@ class SiteChooser {
         };
         ReactDOM.render(<PaneTools active={state.active} />, this.stageTools);
         ReactDOM.render(
-            <StageGroup active={state.active} sites={state.sites} />,
+            <SitesStage
+                active={state.active}
+                outlineData={state.outlineData}
+                sites={state.sites}
+            />,
             this.stageGroup
         );
     }
