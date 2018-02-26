@@ -18,33 +18,37 @@ export class NumPicker extends React.Component {
     }
 
     handleClick() {
-        this.props.executeAction({ type: "ADD_RAND_SITES", n: this.state.n });
+        this.reportAction({ type: "ADD_RAND_SITES", n: this.state.value });
     }
 
     handleChange(e) {
-        this.setState({ value: e.target.value });
+        this.setState({ value: parseInt(e.target.value) });
+    }
+
+    reportAction(action) {
+        console.log(action);
     }
 
     render() {
-        const input = this.state.value;
-        let n;
-        if (input <= this.min) n = this.min;
-        else if (input >= this.max) n = this.max;
-        else n = input;
+        const value = this.state.value;
+        let renderVal;
+        if (value < this.min) renderVal = this.min;
+        else if (this.min <= value && value <= this.max) renderVal = value;
+        else if (this.max < value) renderVal = this.max;
+        else renderVal = 0;
 
         return (
             <div className="numPicker">
                 <input
                     id="numberPickerInput"
-                    type="number"
-                    value={n}
+                    value={renderVal}
                     disabled={!this.props.active}
                     onChange={this.handleChange}
                 />
                 <button
                     id="numPickerButton"
                     disabled={!this.props.active}
-                    onClick={this.handleChange}
+                    onClick={this.handleClick}
                 >
                     ➡
                 </button>
@@ -60,7 +64,11 @@ export class EndStage extends React.Component {
     }
 
     handleClick() {
-        this.props.executeAction({ type: "KILL_STAGE" });
+        this.reportAction({ type: "KILL_STAGE" });
+    }
+
+    reportAction(action) {
+        console.log(action);
     }
 
     render() {
