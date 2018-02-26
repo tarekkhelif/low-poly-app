@@ -1,4 +1,9 @@
-/* eslint-disable react/prop-types */
+// @flow
+
+/* eslint-disable react/no-multi-comp,
+    react/jsx-indent,
+    react/jsx-indent-props,
+    react/prop-types */
 import * as d3 from "d3";
 import { paper } from "paper";
 
@@ -14,9 +19,28 @@ const DELETE = "DELETE_SITES";
 const MOVE = "MOVE_SITE";
 const KILL = "KILL_STAGE";
 
-function SiteElem(props) {
-    return (<cirlce className="site" key={props.point.id} cx={props.point[0]} cy={props.point[1]} />);
+class Site extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.handlers = {};
+        Object.entries(Site.handlers).forEach(([type, cb]) => {
+            this.handlers[type] = cb.bind(this);
+        });
+        console.log(this.handlers);
+    }
+
+    render() {
+        return (<circle
+            className="site"
+            id={this.props.point.id}
+            cx={this.props.point[0]}
+            cy={this.props.point[1]}
+            {...this.handlers}
+        />);
+    }
 }
+Site.handlers = {};
 
 // SITE ELEMENT FACTORY.  TODO: implement with React instead
 function siteElement(d) {
@@ -66,6 +90,10 @@ function deleteSiteClick(siteElement, deleteSites, storeDispacher) {
     // TODO: After reimplementing `siteElement` with React, make them remove
     //         their listeners on kill
     // storeDispacher.on("kill", () => siteElement.on("mousedown.delete", null));
+}
+
+function deleteSiteClickReact(component, deleteSites, storeDispacher) {
+Object.assign(component.handlers, { onMouseDown() { deleteSites(this.props.point); } });
 }
 
 function moveSiteDrag(siteElement, moveSite, storeDispacher) {
@@ -233,13 +261,14 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
     }
 
     setUpViewReact() {
-        const sitesViewReactContainer = this.globalView.append("g").classed("sitesReactContainer", true);
-        
-        this.reducer.dispacher.on("stateChange", (points) => {
-            const sitesView = <g className="sites">{points.map((point) => <circle className="site" key={point.id} cx={point[0]} cy={point[1]} />)}</g>;
+        const sitesView = this.globalView.append("g").classed("sites", true);
 
-            ReactDOM.render(sitesView, sitesViewReactContainer.node());
-        })
+        this.reducer.dispacher.on("stateChange", (points) => {
+            const sites = points.map((point) => (
+                <Site point={point} key={point.id}/>
+            ));
+            ReactDOM.render(sites, sitesView.node());
+        });
     }
 
     // Install all user control components
@@ -265,6 +294,12 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
                 // Delete a site when clicked
                 installer: deleteSiteClick,
                 domTarget: siteElement,
+                action: (...sites) => requestAction({ type: DELETE, sites })
+            },
+            {
+                // Delete a site when clicked
+                installer: deleteSiteClickReact,
+                domTarget: Site,
                 action: (...sites) => requestAction({ type: DELETE, sites })
             },
             {
