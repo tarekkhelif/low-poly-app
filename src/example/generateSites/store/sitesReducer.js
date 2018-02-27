@@ -20,9 +20,9 @@ function outlineData(state: number[][] = []): number[][] {
 function sites(state: Site[] = [], action): Site[] {
     let returnVal;
     switch (action.type) {
-        // { type: ADD, points}
+        // { type: ADD, payload: { points } }
         case ADD: {
-            const newSites = action.points.map((point) => ({
+            const newSites = action.payload.points.map((point) => ({
                 point,
                 id: idGenerator.newId()
             }));
@@ -30,21 +30,21 @@ function sites(state: Site[] = [], action): Site[] {
             returnVal = [...state, ...newSites];
             break;
         }
-        // { type: DELETE, ids }
+        // { type: DELETE, payload: { ids } }
         case DELETE: {
             returnVal = [
                 ...state.filter((site) => {
-                    const keep = action.ids.indexOf(site.id) === -1;
+                    const keep = action.payload.ids.indexOf(site.id) === -1;
                     return keep;
                 })
             ];
             break;
         }
-        // { type: MOVE, id, newLocation }
+        // { type: MOVE, payload: { id, newLocation } }
         case MOVE: {
             returnVal = state.map((site) =>
-                (site.id === action.id
-                    ? { point: action.newLocation, id: site.id }
+                (site.id === action.payload.id
+                    ? { point: action.payload.newLocation, id: site.id }
                     : site));
             break;
         }
