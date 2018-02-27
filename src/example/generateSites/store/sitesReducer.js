@@ -9,6 +9,10 @@ import type { Site } from "../types/types";
 
 const idGenerator = new IncrementalId("site");
 
+function globalState(state = {}) {
+    return state;
+}
+
 function outlineData(state: number[][] = []): number[][] {
     return state;
 }
@@ -67,4 +71,9 @@ function active(state: boolean = true, action): boolean {
     return returnVal;
 }
 
-export const reducer = combineReducers({ outlineData, sites, active });
+export const reducer = combineReducers({
+    globalState,
+    outlineData,
+    sites,
+    active
+});

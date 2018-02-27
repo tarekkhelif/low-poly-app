@@ -7,13 +7,17 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-import { addSites, deleteSites, moveSite } from "../store/sitesActions";
+import {
+    addSitesAction,
+    deleteSitesAction,
+    moveSiteAction
+} from "../store/sitesActions";
 import type { Site } from "../types/types.js";
 
 class Outline extends React.Component {
     componentDidMount() {
         d3.select(this.outline).on("mousedown.add", () => {
-            this.props.onOutlineMouseDown(d3.mouse(this.outline));
+            this.props.addSites(d3.mouse(this.outline));
         });
     }
 
@@ -34,10 +38,12 @@ class Outline extends React.Component {
 
 export const OutlineContainer = connect(
     (state) => ({ outlineData: state.outlineData }),
-    (dispatch) => ({ onOutlineMouseDown: (point) => dispatch(addSites(point)) })
+    (dispatch) => ({
+        addSites: (point) => dispatch(addSitesAction(point))
+    })
 )(Outline);
 
-const Sites = ({ sites, onSiteMouseDown }) => (
+const Sites = ({ sites, deleteSites }) => (
     <g className="sites">
         {sites.map(({ point, id }) => (
             <circle
@@ -46,7 +52,7 @@ const Sites = ({ sites, onSiteMouseDown }) => (
                 id={id}
                 cx={point[0]}
                 cy={point[1]}
-                onMouseDown={() => onSiteMouseDown(id)}
+                onMouseDown={() => deleteSites(id)}
             />
         ))}
     </g>
@@ -55,6 +61,6 @@ const Sites = ({ sites, onSiteMouseDown }) => (
 export const SitesContainer = connect(
     (state) => ({ sites: state.sites }),
     (dispatch) => ({
-        onSiteMouseDown: (id) => dispatch(deleteSites(id))
+        deleteSites: (id) => dispatch(deleteSitesAction(id))
     })
 )(Sites);

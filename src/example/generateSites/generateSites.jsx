@@ -45,12 +45,8 @@ class SiteChooser {
         this.outlineData = that.data.outlineData;
 
         const initialState = {
-            outlineData: that.data.outlineData,
-            active: true,
-            sites: Array.from(Array(20)).map((_, i) => ({
-                point: [Math.random() * 400 + 100, Math.random() * 400 + 100],
-                id: `initial-site-${i}`
-            }))
+            globalState: that.data,
+            outlineData: that.data.outlineData
         };
 
         this.store = createStore(reducer, initialState);
@@ -58,7 +54,9 @@ class SiteChooser {
 
     run() {
         ReactDOM.render(
-            <PaneTools active={this.store.getState().active} />,
+            <Provider store={this.store}>
+                <PaneTools />
+            </Provider>,
             this.stageTools
         );
         ReactDOM.render(

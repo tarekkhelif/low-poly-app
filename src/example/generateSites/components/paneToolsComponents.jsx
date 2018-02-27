@@ -3,25 +3,16 @@
     react/jsx-indent-props,
     react/prop-types */
 import React from "react";
+import { connect } from "react-redux";
 
-export class PaneTools extends React.Component {
-    constructor(props) {
-        super(props);
+import { randPtInPoly } from "../../util/geometry.js";
 
-        this.justExists = "Just exists";
-    }
+import { addSitesAction, killStageAction } from "../store/sitesActions";
 
-    render() {
-        return (
-            <React.Fragment>
-                <NumPicker active={this.props.active} />
-                <EndStage active={this.props.active} />
-            </React.Fragment>
-        );
-    }
-}
-
-class NumPicker extends React.Component {
+const NumPicker = connect((state) => ({
+    active: state.active,
+    outlineData: state.outlineData
+}))(class extends React.Component {
     constructor(props) {
         super(props);
 
@@ -34,31 +25,32 @@ class NumPicker extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleClick() {
-        this.reportAction({ type: "ADD_RAND_SITES", n: this.state.value });
-    }
-
     handleChange(e) {
-        this.setState({ value: parseInt(e.target.value) });
+        const inputInt = parseInt(e.target.value);
+
+        let value;
+        if (inputInt < this.min) value = this.min;
+        else if (this.min <= inputInt && inputInt <= this.max) {
+            value = inputInt;
+        } else if (this.max < inputInt) value = this.max;
+        else value = 0;
+
+        this.setState({ value });
     }
 
-    reportAction(action) {
-        console.log(action);
+    handleClick() {
+        const randPoints = Array.from(Array(this.state.value)).map(() =>
+            randPtInPoly(this.props.outlineData));
+
+        this.props.dispatch(addSitesAction(...randPoints));
     }
 
     render() {
-        const { value } = this.state;
-        let renderVal;
-        if (value < this.min) renderVal = this.min;
-        else if (this.min <= value && value <= this.max) renderVal = value;
-        else if (this.max < value) renderVal = this.max;
-        else renderVal = 0;
-
         return (
             <div className="numPicker">
                 <input
                     id="numberPickerInput"
-                    value={renderVal}
+                    value={this.state.value}
                     disabled={!this.props.active}
                     onChange={this.handleChange}
                 />
@@ -67,38 +59,40 @@ class NumPicker extends React.Component {
                     disabled={!this.props.active}
                     onClick={this.handleClick}
                 >
-                    ➡
+                        ➡
                 </button>
             </div>
         );
     }
-}
+});
 
-class EndStage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
+const connectEndStage = connect((state) => ({
+    globalState: state.globalState,
+    sites: state.sites,
+    active: state.active
+}));
+const EndStage = connectEndStage(({
+    globalState, sites, active, dispatch
+}) => (
+    <div className="endStage">
+        <button
+            id="endStageButton"
+            disabled={!active}
+            onClick={() => {
+                globalState.sitesData = sites.map(({ point }) => point);
+                dispatch(killStageAction());
+            }}
+        >
+            Done with Seeds
+        </button>
+    </div>
+));
 
-    handleClick() {
-        this.reportAction({ type: "KILL_STAGE" });
-    }
-
-    reportAction(action) {
-        console.log(action);
-    }
-
-    render() {
-        return (
-            <div className="endStage">
-                <button
-                    id="endStageButton"
-                    disabled={!this.props.active}
-                    onClick={this.handleClick}
-                >
-                    Done with Seeds
-                </button>
-            </div>
-        );
-    }
+export function PaneTools() {
+    return (
+        <React.Fragment>
+            <NumPicker />
+            <EndStage />
+        </React.Fragment>
+    );
 }
