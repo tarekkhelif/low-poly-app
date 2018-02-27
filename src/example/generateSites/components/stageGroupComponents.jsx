@@ -7,18 +7,14 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-import { addSites, deleteSites, moveSite } from "./siteActions";
+import { addSites, deleteSites, moveSite } from "../store/sitesActions";
+import type { Site } from "../types/types.js";
 
-export class Outline extends React.Component {
+class Outline extends React.Component {
     componentDidMount() {
         d3.select(this.outline).on("mousedown.add", () => {
-            const action = addSites([d3.mouse(this.outline)]);
-            this.reportAction(action);
+            this.props.onOutlineMouseDown(d3.mouse(this.outline));
         });
-    }
-
-    reportAction(action) {
-        console.log(action);
     }
 
     render() {
@@ -35,6 +31,11 @@ export class Outline extends React.Component {
         );
     }
 }
+
+export const OutlineContainer = connect(
+    (state) => ({ outlineData: state.outlineData }),
+    (dispatch) => ({ onOutlineMouseDown: (point) => dispatch(addSites(point)) })
+)(Outline);
 
 const Sites = ({ sites, onSiteMouseDown }) => (
     <g className="sites">

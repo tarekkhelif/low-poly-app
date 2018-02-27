@@ -1,3 +1,5 @@
+// @flow
+
 /* eslint-disable react/no-multi-comp,
     react/jsx-indent,
     react/jsx-indent-props,
@@ -9,14 +11,18 @@ import { Provider } from "react-redux";
 
 import * as d3 from "d3";
 
-import { reducer } from "./generateSites/sitesReducer";
-import { PaneTools } from "./generateSites/paneToolsComponents";
-import { Outline, SitesContainer } from "./generateSites/stageGroupComponents";
+import { reducer } from "./store/sitesReducer";
+import { PaneTools } from "./components/paneToolsComponents";
+import {
+    OutlineContainer,
+    SitesContainer
+} from "./components/stageGroupComponents";
 
 class SiteChooser {
     stageGroup: Element;
     stageTools: Element;
     outlineData: number[][];
+    store: Object;
 
     constructor(that) {
         const stageGroup = d3
@@ -26,21 +32,20 @@ class SiteChooser {
             .node();
 
         if (stageGroup === null) {
-            throw new Error("stageTools div doesn't exist");
-        } else {
-            this.stageGroup = stageGroup;
+            throw new Error("stageGroup g doesn't exist");
         }
+        this.stageGroup = stageGroup;
 
         const stageTools = document.querySelector("#stageTools");
         if (stageTools === null) {
             throw new Error("stageTools div doesn't exist");
-        } else {
-            this.stageTools = stageTools;
         }
+        this.stageTools = stageTools;
 
         this.outlineData = that.data.outlineData;
 
         const initialState = {
+            outlineData: that.data.outlineData,
             active: true,
             sites: Array.from(Array(20)).map((_, i) => ({
                 point: [Math.random() * 400 + 100, Math.random() * 400 + 100],
@@ -59,7 +64,7 @@ class SiteChooser {
         ReactDOM.render(
             <Provider store={this.store}>
                 <g className="helpProvider">
-                    <Outline outlineData={this.outlineData} />
+                    <OutlineContainer />
                     <SitesContainer />
                 </g>
             </Provider>,

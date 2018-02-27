@@ -15,10 +15,6 @@ import "./style.scss";
 
 import { LowPolyProject } from "./example/app.js";
 
-// import { testThings } from "./example/generateSites/sitesStore.interactiveTesting";
-
-// testThings();
-
 const app = new LowPolyProject();
 // app.runExample();
 app.setUpUI();

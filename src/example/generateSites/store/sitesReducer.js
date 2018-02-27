@@ -1,12 +1,19 @@
+// @flow
+
 import { combineReducers } from "redux";
 
-import { IncrementalId } from "../util/id.js";
+import { IncrementalId } from "../../util/id.js";
 
-import { ADD, DELETE, MOVE, KILL } from "./siteActions";
+import { ADD, DELETE, MOVE, KILL } from "./sitesActions";
+import type { Site } from "../types/types";
 
 const idGenerator = new IncrementalId("site");
 
-function sites(state = [], action: Object) {
+function outlineData(state: number[][] = []): number[][] {
+    return state;
+}
+
+function sites(state: Site[] = [], action): Site[] {
     let returnVal;
     switch (action.type) {
         // { type: ADD, points}
@@ -45,7 +52,7 @@ function sites(state = [], action: Object) {
     return returnVal;
 }
 
-function active(state: boolean = true, action: Object): boolean {
+function active(state: boolean = true, action): boolean {
     let returnVal;
     switch (action.type) {
         // { type: KILL }
@@ -60,4 +67,4 @@ function active(state: boolean = true, action: Object): boolean {
     return returnVal;
 }
 
-export const reducer = combineReducers({ sites, active });
+export const reducer = combineReducers({ outlineData, sites, active });
