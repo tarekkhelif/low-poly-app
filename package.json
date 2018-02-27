@@ -1,7 +1,7 @@
 {
-    "name": "tarek-d3-voronoi",
-    "version": "1.0.0",
-    "description": "An interactive demonstration of [d3-voronoi](https://github.com/d3/d3-voronoi) rendered to SVG. [Compare to Canvas.](/mbostock/6675193)",
+    "name": "low-poly-app",
+    "version": "0.1.0",
+    "description": "My first attempt at a web app. The intention is to make a thing to help you quickly prototype a low-poly graphic from a raster image.",
     "main": "index.jsx",
     "scripts": {
         "start": "webpack-dev-server --colors",
@@ -43,9 +43,11 @@
     },
     "dependencies": {
         "babel-polyfill": "^6.26.0",
+        "d3": "^5.0.0-rc.2",
+        "paper": "^0.11.5",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
-        "d3": "^5.0.0-rc.2",
-        "paper": "^0.11.5"
+        "react-redux": "^5.0.7",
+        "redux": "^3.7.2"
     }
 }

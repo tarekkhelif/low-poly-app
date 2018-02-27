@@ -4,7 +4,24 @@
     react/prop-types */
 import React from "react";
 
-export class NumPicker extends React.Component {
+export class PaneTools extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.justExists = "Just exists";
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <NumPicker active={this.props.active} />
+                <EndStage active={this.props.active} />
+            </React.Fragment>
+        );
+    }
+}
+
+class NumPicker extends React.Component {
     constructor(props) {
         super(props);
 
@@ -30,7 +47,7 @@ export class NumPicker extends React.Component {
     }
 
     render() {
-        const value = this.state.value;
+        const { value } = this.state;
         let renderVal;
         if (value < this.min) renderVal = this.min;
         else if (this.min <= value && value <= this.max) renderVal = value;
@@ -57,7 +74,7 @@ export class NumPicker extends React.Component {
     }
 }
 
-export class EndStage extends React.Component {
+class EndStage extends React.Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);

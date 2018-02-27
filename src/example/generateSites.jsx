@@ -1,5 +1,3 @@
-// @flow
-
 /* eslint-disable react/no-multi-comp,
     react/jsx-indent,
     react/jsx-indent-props,
@@ -20,27 +18,29 @@ const MOVE = "MOVE_SITE";
 const KILL = "KILL_STAGE";
 
 class Site extends React.Component {
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-        this.handlers = {};
-        Object.entries(Site.handlers).forEach(([type, cb]) => {
-            this.handlers[type] = cb.bind(this);
-        });
-        console.log(this.handlers);
-    }
+    //     this.handlers = {};
+    //     Object.entries(Site.handlers).forEach(([type, cb]) => {
+    //         this.handlers[type] = cb.bind(this);
+    //     });
+    //     console.log(this.handlers);
+    // }
 
     render() {
-        return (<circle
-            className="site"
-            id={this.props.point.id}
-            cx={this.props.point[0]}
-            cy={this.props.point[1]}
-            {...this.handlers}
-        />);
+        return (
+            <circle
+                className="site"
+                id={this.props.point.id}
+                cx={this.props.point[0]}
+                cy={this.props.point[1]}
+                {...this.handlers}
+            />
+        );
     }
 }
-Site.handlers = {};
+// Site.handlers = {};
 
 // BUILD CONTROL UI
 function addSiteClick(outlineElement, addSites, storeDispacher) {
@@ -51,14 +51,14 @@ function addSiteClick(outlineElement, addSites, storeDispacher) {
     storeDispacher.on("kill", () => outlineElement.on("mousedown.add", null));
 }
 
-function deleteSiteClick(component, deleteSites, storeDispacher) {
-    Object.assign(component.handlers, { onMouseDown() { deleteSites(this.props.point); } });
-    storeDispacher.on("kill", () => Object.assign(component.handlers, { onMouseDown: null }));
-}
+// function deleteSiteClick(component, deleteSites, storeDispacher) {
+//     Object.assign(component.handlers, { onMouseDown() { deleteSites(this.props.point); } });
+//     storeDispacher.on("kill", () => Object.assign(component.handlers, { onMouseDown: null }));
+// }
 
-function moveSiteDrag(siteElement, moveSite, storeDispacher) {
-    (() => {})(); // placeholder no-op
-}
+// function moveSiteDrag(siteElement, moveSite, storeDispacher) {
+//     (() => {})(); // placeholder no-op
+// }
 
 function randSitesPaneTool(toolContainer, addRandSites, storeDispacher) {
     // numPicker div
@@ -214,11 +214,35 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
     // i.e. STUFF THAT RESPONDS TO STATE CHANGES
     setUpView() {
         const sitesView = this.globalView.append("g").classed("sites", true);
+        const storeDispacher = this.reducer.dispacher;
+        const requestAction = this.reducer.executeAction;
+        let active = true;
 
-        this.reducer.dispacher.on("stateChange", (points) => {
-            const sites = points.map((point) => (
-                <Site point={point} key={point.id}/>
-            ));
+        storeDispacher.on("kill", () => {
+            active = false;
+        });
+
+        storeDispacher.on("stateChange", (points) => {
+            const sites = points.map((point) =>
+                // const handlers = active ? {
+                //     onMouseDown() {
+                //         requestAction({ type: DELETE, sites: [point] });
+                //     }
+                // }
+                //     : {};
+
+                (
+                    <Site
+                        point={point}
+                        key={point.id}
+                        // {...handlers}
+                        onMouseDown={requestAction({
+                            type: DELETE,
+                            sites: [point]
+                        })}
+                    />
+                ));
+
             ReactDOM.render(sites, sitesView.node());
         });
     }
@@ -242,12 +266,12 @@ function endStagePaneTool(toolContainer, closeStage, storeDispacher) {
                 domTarget: outlineElement,
                 action: (...sites) => requestAction({ type: ADD, sites })
             },
-            {
-                // Delete a site when clicked
-                installer: deleteSiteClick,
-                domTarget: Site,
-                action: (...sites) => requestAction({ type: DELETE, sites })
-            },
+            // {
+            //     // Delete a site when clicked
+            //     installer: deleteSiteClick,
+            //     domTarget: Site,
+            //     action: (...sites) => requestAction({ type: DELETE, sites })
+            // },
             {
                 // Control Pane: eneter number of sites to randomly add
                 installer: randSitesPaneTool,

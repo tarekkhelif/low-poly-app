@@ -2,160 +2,67 @@
     react/jsx-indent,
     react/jsx-indent-props,
     react/prop-types */
-import * as d3 from "d3";
-
 import React from "react";
 import ReactDOM from "react-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
 
-// import { randPtInPoly } from "./util/geometry.js";
-import { IncrementalId } from "./util/id.js";
+import * as d3 from "d3";
 
-import { NumPicker, EndStage } from "./generateSites/paneToolsComponents";
-import { Outline, Sites } from "./generateSites/stageGroupComponents";
-
-// ACTIONS
-const ADD = "ADD_SITES";
-const DELETE = "DELETE_SITES";
-const MOVE = "MOVE_SITE";
-const KILL = "KILL_STAGE";
-
-class PaneTools extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.justExists = "Just exists";
-    }
-
-    render() {
-        return (
-            <React.Fragment>
-                <NumPicker active={this.props.active} />
-                <EndStage active={this.props.active} />
-            </React.Fragment>
-        );
-    }
-}
-
-class SitesStage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.justExists = "Just exists";
-    }
-
-    render() {
-        return (
-            <React.Fragment>
-                <Outline
-                    active={this.props.active}
-                    outlineData={this.props.outlineData}
-                />
-                <Sites active={this.props.active} sites={this.props.sites} />
-            </React.Fragment>
-        );
-    }
-}
-
-/* const reducer = (oldState, action) => {
-    let nextSites;
-    let nextActive;
-
-    switch (action.type) {
-        case ADD: {
-            nextSites = [...oldState.sites, ...action.sites];
-            nextActive = true;
-            break;
-        }
-        case DELETE: {
-            nextSites = [
-                ...oldState.sites.filter((point) => {
-                    const keep = action.sites.indexOf(point) === -1;
-                    return keep;
-                })
-            ];
-            nextActive = true;
-            break;
-        }
-        case MOVE: {
-            const i = oldState.sites.indexOf(action.oldLocation);
-            nextSites = [
-                ...oldState.sites.slice(0, i),
-                action.newLocation,
-                ...oldState.sites.slice(i + 1)
-            ];
-            nextActive = true;
-            break;
-        }
-        case KILL: {
-            nextSites = [...oldState.sites];
-            nextActive = false;
-            break;
-        }
-        default: {
-            nextActive = oldState.active;
-            nextSites = [...oldState.sites];
-        }
-    }
-
-    const nextState = { sites: nextSites, active: nextActive };
-
-    return nextState;
-}; */
+import { reducer } from "./generateSites/sitesReducer";
+import { PaneTools } from "./generateSites/paneToolsComponents";
+import { Outline, SitesContainer } from "./generateSites/stageGroupComponents";
 
 class SiteChooser {
+    stageGroup: Element;
+    stageTools: Element;
+    outlineData: number[][];
+
     constructor(that) {
-        this.stageGroup = d3
+        const stageGroup = d3
             .select("#svgProject")
             .append("g")
             .classed("sitesStage", true)
             .node();
-        this.stageTools = document.querySelector("#stageTools");
+
+        if (stageGroup === null) {
+            throw new Error("stageTools div doesn't exist");
+        } else {
+            this.stageGroup = stageGroup;
+        }
+
+        const stageTools = document.querySelector("#stageTools");
+        if (stageTools === null) {
+            throw new Error("stageTools div doesn't exist");
+        } else {
+            this.stageTools = stageTools;
+        }
 
         this.outlineData = that.data.outlineData;
 
-        /*
-        this.store = new function Store() {
-            const idGenerator = new IncrementalId("site");
-            let state = updateState({});
+        const initialState = {
+            active: true,
+            sites: Array.from(Array(20)).map((_, i) => ({
+                point: [Math.random() * 400 + 100, Math.random() * 400 + 100],
+                id: `initial-site-${i}`
+            }))
+        };
 
-            const updateState = (action) => {
-                const newState = new Proxy([], {
-                    set(target, key, value) {
-                        const keyIsNumber =
-                            !Number.isNaN(Number(key)) && key !== "";
-
-                        if (!value.id && keyIsNumber) {
-                            value.id = idGenerator.newId();
-                        }
-                        target[key] = value;
-                        return true;
-                    }
-                });
-
-                newState.push(...reducer(state, action));
-
-                state = newState;
-            };
-        }();
-        */
+        this.store = createStore(reducer, initialState);
     }
 
     run() {
-        const state = {
-            active: true,
-            outlineData: this.outlineData,
-            sites: Array.from(Array(20)).map(() => [
-                Math.random() * 400 + 100,
-                Math.random() * 400 + 100
-            ])
-        };
-        ReactDOM.render(<PaneTools active={state.active} />, this.stageTools);
         ReactDOM.render(
-            <SitesStage
-                active={state.active}
-                outlineData={state.outlineData}
-                sites={state.sites}
-            />,
+            <PaneTools active={this.store.getState().active} />,
+            this.stageTools
+        );
+        ReactDOM.render(
+            <Provider store={this.store}>
+                <g className="helpProvider">
+                    <Outline outlineData={this.outlineData} />
+                    <SitesContainer />
+                </g>
+            </Provider>,
             this.stageGroup
         );
     }

@@ -6,6 +6,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+const r = <Site point={point} key={point.id} {...handlers} />;
+
 class App extends React.Component {
     constructor(props) {
         super(props);

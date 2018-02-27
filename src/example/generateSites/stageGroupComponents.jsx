@@ -3,47 +3,17 @@
     react/jsx-indent-props,
     react/prop-types */
 import React from "react";
+import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-class Site extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.handleMouseDown = this.handleMouseDown.bind(this);
-    }
-
-    handleMouseDown() {
-        this.reportAction({ type: "DELETE_SITES", sites: [this.props.point] });
-    }
-
-    reportAction(action) {
-        console.log(action);
-    }
-
-    render() {
-        return (
-            <circle
-                className="site"
-                cx={this.props.point[0]}
-                cy={this.props.point[1]}
-                onMouseDown={this.handleMouseDown}
-            />
-        );
-    }
-}
+import { addSites, deleteSites, moveSite } from "./siteActions";
 
 export class Outline extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         d3.select(this.outline).on("mousedown.add", () => {
-            this.reportAction({
-                type: "ADD_SITES",
-                sites: [d3.mouse(this.outline)]
-            });
+            const action = addSites([d3.mouse(this.outline)]);
+            this.reportAction(action);
         });
     }
 
@@ -53,7 +23,7 @@ export class Outline extends React.Component {
 
     render() {
         return (
-            <g className="outlines" onMouseDown={this.handleMouseDown}>
+            <g className="outlines">
                 <path
                     className="outline"
                     d={`M${this.props.outlineData.join("L")}Z`}
@@ -66,20 +36,24 @@ export class Outline extends React.Component {
     }
 }
 
-export class Sites extends React.Component {
-    constructor(props) {
-        super(props);
+const Sites = ({ sites, onSiteMouseDown }) => (
+    <g className="sites">
+        {sites.map(({ point, id }) => (
+            <circle
+                className="site"
+                key={id}
+                id={id}
+                cx={point[0]}
+                cy={point[1]}
+                onMouseDown={() => onSiteMouseDown(id)}
+            />
+        ))}
+    </g>
+);
 
-        this.justExists = "justExists";
-    }
-
-    render() {
-        return (
-            <g className="sites">
-                {this.props.sites.map((point) => (
-                    <Site active={this.props.active} point={point} />
-                ))}
-            </g>
-        );
-    }
-}
+export const SitesContainer = connect(
+    (state) => ({ sites: state.sites }),
+    (dispatch) => ({
+        onSiteMouseDown: (id) => dispatch(deleteSites(id))
+    })
+)(Sites);
