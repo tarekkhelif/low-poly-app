@@ -69,7 +69,7 @@ export function arrayEquals(a, b) {
  * @returns {Array} `item`, if an identical version does not already exist in
  *   `container`, otherwise the pre-existing version from `container`
  */
-export function addIfUnique(item, container) {
+export function getUnique(item, container) {
     // Check that `item` is an array
     if (!(item instanceof Array)) {
         throw TypeError("item must be an array");
@@ -82,10 +82,8 @@ export function addIfUnique(item, container) {
     //   existing element of `container`
     let unique;
     switch (duplicates.length) {
-        // Add `item` to `container` if an array identical to `item` does not
-        //   already exist.  Prepare to return `null`.
+        // If no existing array is indential to `item`, prepare to return `item`
         case 0:
-            container.push(item);
             unique = item;
             break;
         // If `item` is identical to an existing array, prepare to return the
@@ -93,7 +91,7 @@ export function addIfUnique(item, container) {
         case 1:
             unique = duplicates[0];
             break;
-        // If `item` don't match zero or one of the existing elements of
+        // If `item` doesn't match zero or one of the existing elements of
         //   `container`, throw an error
         default: {
             /* eslint-disable no-console */

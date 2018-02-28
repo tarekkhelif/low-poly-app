@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import { paper } from "paper";
 
-import { addIfUnique, pairs } from "./util/arrayTools.js";
+import { getUnique, pairs } from "./util/arrayTools.js";
 
 export function generateVoronoi() {
     // Get dimensions of SVG
@@ -83,21 +83,24 @@ export function generateVoronoi() {
                  both polygon arrrays.  This way when a point is updated, all
                  polygons that include that point are updated. */
             const polyCoords = pjsPoly.segments.map((seg) => {
-                /* The unique object for `point`
+                /* Finds the unique object for `point`;
                      An array object with the same coordinates as `point`.
                      Possibly `point` itself, possible a pre-existing version
                      from `tesselationData.nodes` */
-                const uniqueNode = addIfUnique(
-                    [seg.point.x, seg.point.y],
-                    tesselationData.nodes
-                );
+                const node = [seg.point.x, seg.point.y];
+                const uniqueNode = getUnique(node, tesselationData.nodes);
+
+                if (node === uniqueNode) tesselationData.nodes.push(node);
 
                 return uniqueNode;
             });
 
             // Use unique edges for `polyEdges`
             const polyEdges = pairs(polyCoords).map((edge) => {
-                const uniqueEdge = addIfUnique(edge, tesselationData.edges);
+                const uniqueEdge = getUnique(edge, tesselationData.edges);
+
+                if (edge === uniqueEdge) tesselationData.edges.push(edge);
+
                 return uniqueEdge;
             });
 
