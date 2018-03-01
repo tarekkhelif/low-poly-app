@@ -7,12 +7,13 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
+import { Node } from "../../app/components/Node";
+
 import {
     addSitesAction,
     deleteSitesAction,
     moveSiteAction
 } from "../store/sitesActions";
-import type { Site } from "../types/types.js";
 
 class Outline extends React.Component {
     componentDidMount() {
@@ -45,13 +46,12 @@ export const OutlineContainer = connect(
 
 const Sites = ({ sites, deleteSites }) => (
     <g className="sites">
-        {sites.map(({ point, id }) => (
-            <circle
-                className="site"
+        {sites.map(({ id, point }) => (
+            <Node
                 key={id}
                 id={id}
-                cx={point[0]}
-                cy={point[1]}
+                className="site"
+                point={point}
                 onMouseDown={() => deleteSites(id)}
             />
         ))}

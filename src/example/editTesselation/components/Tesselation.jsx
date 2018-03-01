@@ -8,12 +8,12 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Polygons } from "./Polygons";
-import { Nodes } from "./Nodes";
+import { MeshNodes } from "./MeshNodes";
 
 const Tesselation = ({ nodes, polygons }) => (
     <g className="tesselation">
         <Polygons polygons={polygons} />
-        <Nodes nodes={nodes} />
+        <MeshNodes nodes={nodes} />
     </g>
 );
 
@@ -23,8 +23,3 @@ const mapStateToProps = (state) => ({
 });
 
 export const TesselationContainer = connect(mapStateToProps)(Tesselation);
-
-// (dispatch) => ({
-//     moveNode: (node, newLocation) =>
-//         dispatch(moveNodeAction(node.id, newLocation))
-// })
