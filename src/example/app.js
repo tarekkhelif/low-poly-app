@@ -27,8 +27,8 @@ import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
 import { outlineRaster } from "./outlineRaster.js";
 import { chooseSites } from "./generateSites/generateSites.jsx";
-import { generateVoronoi } from "./generateVoronoiNew.js";
-import { editTesselation } from "./editTesselation/editTesselation.js";
+import { generateVoronoi } from "./generateVoronoi.js";
+import { editTesselation } from "./editTesselation/editTesselation.jsx";
 
 import rasterPath from "./example-data/nile.jpg";
 import outlineExampleData from "./example-data/nw-outline.svg_outline_2018.02.02-23.21.10.csv";

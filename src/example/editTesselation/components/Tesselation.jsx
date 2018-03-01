@@ -7,20 +7,22 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Polygons } from "./Polygon";
-import { Nodes } from "./Node";
+import { Polygons } from "./Polygons";
+import { Nodes } from "./Nodes";
 
-const Tesselation = (nodes, polygons) => (
+const Tesselation = ({ nodes, polygons }) => (
     <g className="tesselation">
         <Polygons polygons={polygons} />
         <Nodes nodes={nodes} />
     </g>
 );
 
-export const TesselationConnector = connect((state) => ({
+const mapStateToProps = (state) => ({
     nodes: state.nodes,
     polygons: state.polygons
-}))(Tesselation);
+});
+
+export const TesselationContainer = connect(mapStateToProps)(Tesselation);
 
 // (dispatch) => ({
 //     moveNode: (node, newLocation) =>

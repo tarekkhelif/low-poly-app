@@ -13,7 +13,7 @@ import * as d3 from "d3";
 
 import { ReduxTesselation } from "./types/types";
 import { editTesselationStageReducer } from "./store/tesselationReducer";
-import { Tesselation } from "./components/Tesselation";
+import { TesselationContainer } from "./components/Tesselation";
 
 class TesselationEditor {
     stageGroup: Element;
@@ -32,14 +32,14 @@ class TesselationEditor {
         }
         this.stageGroup = stageGroup;
 
-        const initialState = that.tesslationData;
+        const initialState = that.store.getState().tesselation;
         this.store = createStore(editTesselationStageReducer, initialState);
     }
 
     run() {
         ReactDOM.render(
             <Provider store={this.store}>
-                <Tesselation />
+                <TesselationContainer />
             </Provider>,
             this.stageGroup
         );

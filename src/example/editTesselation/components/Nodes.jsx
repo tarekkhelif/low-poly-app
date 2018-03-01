@@ -8,5 +8,5 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { moveNodeAction } from "../store/tesselationActions";
-import { Polygon } from "./Polygon";
-import { Node } from "./Node";
+
+export const Nodes = () => <g className="nodes" />;
