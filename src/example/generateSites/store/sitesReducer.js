@@ -71,7 +71,7 @@ function active(state: boolean = true, action): boolean {
     return returnVal;
 }
 
-export const reducer = combineReducers({
+export const siteStageReducer = combineReducers({
     globalState,
     outlineData,
     sites,

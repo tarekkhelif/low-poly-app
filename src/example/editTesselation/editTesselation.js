@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { paper } from "paper";
 
 // UI for dragging a node
 // eslint-disable-next-line func-names

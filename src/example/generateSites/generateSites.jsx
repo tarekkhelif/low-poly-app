@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 
 import * as d3 from "d3";
 
-import { reducer } from "./store/sitesReducer";
+import { siteStageReducer } from "./store/sitesReducer";
 import { PaneTools } from "./components/paneToolsComponents";
 import {
     OutlineContainer,
@@ -49,7 +49,7 @@ class SiteChooser {
             outlineData: that.data.outlineData
         };
 
-        this.store = createStore(reducer, initialState);
+        this.store = createStore(siteStageReducer, initialState);
     }
 
     run() {

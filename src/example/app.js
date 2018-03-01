@@ -18,13 +18,17 @@
  * - Catch up on pjs version
  */
 
+import { createStore } from "redux";
+
+import { appReducer } from "./app/store/appReducer";
+
 import { setUpUI } from "./setUpUI.js";
 import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
 import { outlineRaster } from "./outlineRaster.js";
 import { chooseSites } from "./generateSites/generateSites.jsx";
-import { generateVoronoi } from "./generateVoronoi.js";
-import { editTesselation } from "./editTesselation.js";
+import { generateVoronoi } from "./generateVoronoiNew.js";
+import { editTesselation } from "./editTesselation/editTesselation.js";
 
 import rasterPath from "./example-data/nile.jpg";
 import outlineExampleData from "./example-data/nw-outline.svg_outline_2018.02.02-23.21.10.csv";
@@ -49,6 +53,8 @@ export class LowPolyProject {
             width: 906.54926,
             height: 604.36615
         };
+
+        this.store = createStore(appReducer);
     }
 
     // Run app

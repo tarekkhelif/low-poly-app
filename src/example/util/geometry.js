@@ -15,13 +15,13 @@ import { zip } from "./arrayTools.js";
  * @returns {number[][]} An array of [max, min] pairs.
  */
 export function getBBox(points) {
-  const transposed = zip(...points);
-  const box = transposed.map(crdArr => [
-    Math.max(...crdArr),
-    Math.min(...crdArr)
-  ]);
+    const transposed = zip(...points);
+    const box = transposed.map((crdArr) => [
+        Math.max(...crdArr),
+        Math.min(...crdArr)
+    ]);
 
-  return box;
+    return box;
 }
 
 /** Generates a random point within a box.  The box can have any number of
@@ -31,12 +31,12 @@ export function getBBox(points) {
  * @returns {number[]} A point; [x, y].
  */
 export function randPtInBox(box) {
-  const randPt = box.map(([crdMax, crdMin]) => {
-    const randCrd = crdMin + Math.random() * (crdMax - crdMin);
-    return randCrd;
-  });
+    const randPt = box.map(([crdMax, crdMin]) => {
+        const randCrd = crdMin + Math.random() * (crdMax - crdMin);
+        return randCrd;
+    });
 
-  return randPt;
+    return randPt;
 }
 
 /** Generates a random point inside a polygon.
@@ -46,17 +46,17 @@ export function randPtInBox(box) {
  * @returns {number[]} A point; [x, y].
  */
 export function randPtInPoly(polygon) {
-  const bbox = getBBox(polygon);
+    const bbox = getBBox(polygon);
 
-  // Recursively generates random points in the polygon's bbox until one is
-  //   found that's within the polygon
-  function validPoint(polygon, bbox) {
-    const candidate = randPtInBox(bbox);
-    const winner = d3.polygonContains(polygon, candidate)
-      ? candidate
-      : validPoint(polygon, bbox);
-    return winner;
-  }
+    // Recursively generates random points in the polygon's bbox until one is
+    //   found that's within the polygon
+    function validPoint(polygon, bbox) {
+        const candidate = randPtInBox(bbox);
+        const winner = d3.polygonContains(polygon, candidate)
+            ? candidate
+            : validPoint(polygon, bbox);
+        return winner;
+    }
 
-  return validPoint(polygon, bbox);
+    return validPoint(polygon, bbox);
 }
