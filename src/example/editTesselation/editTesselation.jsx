@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 
 import * as d3 from "d3";
 
-import { ReduxTesselation } from "./types/types";
+import type { ReduxTesselation } from "./types/types";
 import { editTesselationStageReducer } from "./store/tesselationReducer";
 import { TesselationContainer } from "./components/Tesselation";
 

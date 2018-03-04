@@ -79,7 +79,7 @@ const EndStage = connectEndStage(({
             id="endStageButton"
             disabled={!active}
             onClick={() => {
-                globalState.sitesData = sites.map(({ point }) => point);
+                globalState.sitesData = Object.values(sites);
                 dispatch(killStageAction());
             }}
         >

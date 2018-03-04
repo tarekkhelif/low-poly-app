@@ -15,7 +15,7 @@ import { siteStageReducer } from "./store/sitesReducer";
 import { PaneTools } from "./components/paneToolsComponents";
 import {
     OutlineContainer,
-    SitesContainer
+    SitesConnector
 } from "./components/stageGroupComponents";
 
 class SiteChooser {
@@ -63,7 +63,7 @@ class SiteChooser {
             <Provider store={this.store}>
                 <g className="helpProvider">
                     <OutlineContainer />
-                    <SitesContainer />
+                    <SitesConnector />
                 </g>
             </Provider>,
             this.stageGroup

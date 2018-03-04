@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-import { Node } from "../../app/components/Node";
+import { Nodes } from "../../app/components/Node";
 
 import {
     addSitesAction,
@@ -44,23 +44,6 @@ export const OutlineContainer = connect(
     })
 )(Outline);
 
-const Sites = ({ sites, deleteSites }) => (
-    <g className="sites">
-        {sites.map(({ id, point }) => (
-            <Node
-                key={id}
-                id={id}
-                className="site"
-                point={point}
-                onMouseDown={() => deleteSites(id)}
-            />
-        ))}
-    </g>
-);
+const Sites = ({ sites }) => <Nodes className="site" nodes={sites} />;
 
-export const SitesContainer = connect(
-    (state) => ({ sites: state.sites }),
-    (dispatch) => ({
-        deleteSites: (id) => dispatch(deleteSitesAction(id))
-    })
-)(Sites);
+export const SitesConnector = connect((state) => ({ sites: state.sites }))(Sites);

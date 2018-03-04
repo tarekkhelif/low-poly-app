@@ -4,7 +4,7 @@ import { combineReducers } from "redux";
 
 import { IncrementalId } from "../../util/id.js";
 
-import { ADD, DELETE, MOVE, KILL } from "./sitesActions";
+import { ADD, DELETE, MOVE, KILL } from "../../app/store/appActions";
 import type { Site } from "../types/types";
 
 const idGenerator = new IncrementalId("site");
@@ -17,43 +17,53 @@ function outlineData(state: number[][] = []): number[][] {
     return state;
 }
 
-function sites(state: Site[] = [], action): Site[] {
-    let returnVal;
+function sites(sites: Object = {}, action): Site[] {
+    let returnValue;
     switch (action.type) {
         // { type: ADD, payload: { points } }
         case ADD: {
-            const newSites = action.payload.points.map((point) => ({
-                point,
-                id: idGenerator.newId()
-            }));
+            const points = action.payload.points;
 
-            returnVal = [...state, ...newSites];
+            const newSites = {};
+            points.forEach((point) => {
+                const id = idGenerator.newId()
+                newSites[id] = point;
+            });
+
+            returnValue = { ...sites, ...newSites };
             break;
         }
         // { type: DELETE, payload: { ids } }
         case DELETE: {
-            returnVal = [
-                ...state.filter((site) => {
-                    const keep = action.payload.ids.indexOf(site.id) === -1;
-                    return keep;
-                })
-            ];
+            const deleteIds = action.payload.ids;
+            const sitesKeys = Object.keys(sites.nodes);
+
+            sitesKeys.forEach((id) => {
+                if (deleteIds.indexOf(id) === -1) {
+                    returnValue[id] = sites[id];
+                }
+            });
+
+
             break;
         }
-        // { type: MOVE, payload: { id, newLocation } }
         case MOVE: {
-            returnVal = state.map((site) =>
-                (site.id === action.payload.id
-                    ? { point: action.payload.newLocation, id: site.id }
-                    : site));
+            const { id: actionId, dx, dy } = action.payload;
+
+            const newNodes = { ...sites };
+
+            const [oldX, oldY] = sites[actionId];
+            newNodes[actionId] = [oldX + dx, oldY + dy];
+
+            returnValue = newNodes;
             break;
         }
         default: {
-            returnVal = state;
+            returnValue = sites;
         }
     }
 
-    return returnVal;
+    return returnValue;
 }
 
 function active(state: boolean = true, action): boolean {

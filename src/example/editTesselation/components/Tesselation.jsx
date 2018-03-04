@@ -8,17 +8,17 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Polygons } from "./Polygons";
-import { MeshNodes } from "./MeshNodes";
+import { Nodes } from "../../app/components/Node";
 
-const Tesselation = ({ nodes, polygons }) => (
+const Tesselation = ({ meshNodes, polygons }) => (
     <g className="tesselation">
         <Polygons polygons={polygons} />
-        <MeshNodes nodes={nodes} />
+        <Nodes className="meshNode" nodes={meshNodes} />
     </g>
 );
 
 const mapStateToProps = (state) => ({
-    nodes: state.nodes,
+    meshNodes: state.nodes,
     polygons: state.polygons
 });
 
