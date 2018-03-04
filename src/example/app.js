@@ -31,8 +31,10 @@ import { generateVoronoi } from "./generateVoronoi.js";
 import { editTesselation } from "./editTesselation/editTesselation.jsx";
 
 import rasterPath from "./example-data/nile.jpg";
-import outlineExampleData from "./example-data/nw-outline.svg_outline_2018.02.02-23.21.10.csv";
-import sitesFilePath from "./example-data/nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv";
+import outlineExampleData from
+    "./example-data/nw-outline.svg_outline_2018.02.02-23.21.10.csv";
+import sitesFilePath from
+    "./example-data/nw-outline.svg_points-inside_100_2018.02.02-23.21.38.csv";
 
 export class LowPolyProject {
     // Initialize holders for data

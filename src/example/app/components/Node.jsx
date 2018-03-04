@@ -15,28 +15,34 @@ import type { Point, ID, NodeProps } from "../types/types.js";
 import { deleteNodesAction, moveNodeAction } from "../store/appActions";
 
 
-class Node extends React.Component<{point: Point, id: ID, ...NodeProps}> {
+class Node extends React.Component<{ point: Point, id: ID, ...NodeProps}> {
     componentDidMount() {
-        const node = this.node;
+        const node = d3.select(this.node);
         const deleteNode = this.props.deleteNode;
         const moveNode = this.props.moveNode;
 
         // MouseDown to delete
         if (deleteNode) {
-            d3.select(node).on("mousedown.add", () => {
-                deleteNode();
+            node.on("mousedown", () => {
+                if (!d3.event.ctrlKey &&
+                    !d3.event.altKey &&
+                    d3.event.shiftKey &&
+                    !d3.event.button) { deleteNode(); }
             });
         }
 
         // Click and drag to move
         if (moveNode) {
-            d3.select(node).call(d3.drag().on("drag.node", () => {
-                moveNode(d3.event.dx, d3.event.dy);
-            }));
+            node.call(d3.drag()
+                .filter(() => (d3.event.ctrlKey &&
+                    !d3.event.altKey &&
+                    !d3.event.shiftKey &&
+                    !d3.event.button))
+                .on("drag", () => { moveNode(d3.event.dx, d3.event.dy); }));
         }
     }
 
-    node: ?Element;
+    node: ? Element;
 
     render() {
         return (<circle
@@ -54,7 +60,7 @@ class Node extends React.Component<{point: Point, id: ID, ...NodeProps}> {
 const NodeContainer = connect(
     null,
     (dispatch, { id }) => ({
-        // deleteNode: () => dispatch(deleteNodesAction(id)),
+        deleteNode: () => dispatch(deleteNodesAction(id)),
         moveNode: (dx, dy) => dispatch(moveNodeAction(id, dx, dy))
     })
 )(Node);

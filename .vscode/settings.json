@@ -1,6 +1,6 @@
 {
     // Prettier
-    "javascript.format.enable": false,
+    "javascript.format.enable": true,
     // ESLint
     "javascript.validate.enable": false,
     "prettier.eslintIntegration": true,

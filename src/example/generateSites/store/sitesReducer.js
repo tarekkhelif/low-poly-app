@@ -17,7 +17,7 @@ function outlineData(state: number[][] = []): number[][] {
     return state;
 }
 
-function sites(sites: Object = {}, action): Site[] {
+function sites(sites: Object = {}, action): Object {
     let returnValue;
     switch (action.type) {
         // { type: ADD, payload: { points } }
@@ -36,8 +36,9 @@ function sites(sites: Object = {}, action): Site[] {
         // { type: DELETE, payload: { ids } }
         case DELETE: {
             const deleteIds = action.payload.ids;
-            const sitesKeys = Object.keys(sites.nodes);
+            const sitesKeys = Object.keys(sites);
 
+            returnValue = {};
             sitesKeys.forEach((id) => {
                 if (deleteIds.indexOf(id) === -1) {
                     returnValue[id] = sites[id];

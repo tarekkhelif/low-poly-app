@@ -2,7 +2,7 @@
 
 import { ReduxTesselation, Point, Node, NodeId } from "../types/types";
 
-import { MOVE } from "../../app/store/appActions";
+import { DELETE, MOVE } from "../../app/store/appActions";
 
 function editTesselationStageReducer(
     state: ReduxTesselation = {},
@@ -10,6 +10,7 @@ function editTesselationStageReducer(
 ): ReduxTesselation {
     let returnValue;
     switch (action.type) {
+        // case DELETE:
         case MOVE: {
             const { id: actionId, dx, dy } = action.payload;
 
