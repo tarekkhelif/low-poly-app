@@ -20,15 +20,15 @@
 
 import { createStore } from "redux";
 
-import { appReducer } from "./app/store/appReducer";
+import { appReducer } from "./store/reducer";
 
 import { setUpUI } from "./setUpUI.js";
 import { setUpWorkspace } from "./setUpWorkspace.js";
 import { getRaster } from "./getRaster.js";
-import { outlineRaster } from "./outlineRaster.js";
-import { chooseSites } from "./generateSites/generateSites.jsx";
+import { outlineRaster } from "./outlineRaster.jsx";
+import { chooseSites } from "./generateSites.jsx";
 import { generateVoronoi } from "./generateVoronoi.js";
-import { editTesselation } from "./editTesselation/editTesselation.jsx";
+import { editTesselation } from "./editTesselation.jsx";
 
 import rasterPath from "./example-data/nile.jpg";
 import outlineExampleData from
@@ -57,39 +57,6 @@ export class LowPolyProject {
         };
 
         this.store = createStore(appReducer);
-    }
-
-    // Run app
-    async runExample() {
-        // Set up blank workspace
-        this.setUpWorkspace(document.body);
-
-        // UI: Get raster
-        await this.getRaster();
-
-        // UI: Outline raster
-        await this.outlineRaster();
-
-        // Generate sites for initial Voronoi tesselation
-        this.siteChooser(100);
-
-        // Perform Voronoi tesselation and color based on raster
-        this.generateVoronoi();
-
-        /* UI: Edit tesselation
-         * TODO:
-         * - move/add/delete vertices
-         * - add/delete links
-         * - default to recalculating color
-         * - optionally lock color so it isn't recalculated
-         * - choose custom color
-         */
-        this.editTesselation();
-
-        /* UI: Download svg to local machine
-         * TODO:
-         * - download finished svg
-         */
     }
 }
 

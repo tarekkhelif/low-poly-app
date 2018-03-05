@@ -10,14 +10,22 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-import type { Point, ID, NodeProps } from "../types/types.js";
+import { PointType, NodeType, IDType, NodeGroupType } from "../types/types.js";
 
-import { deleteNodesAction, moveNodeAction } from "../store/appActions";
+import { deleteNodesAction, moveNodeAction } from "../store/actions";
 
 
-class Node extends React.Component<{ point: Point, id: ID, ...NodeProps}> {
+class Node extends React.Component<{
+    className: NodeGroupType,
+    id: IDType,
+    point: PointType,
+    deleteNode: (id: IDType) => void,
+    moveNode: (id: IDType, newPoint: PointType) => void
+
+}> {
     componentDidMount() {
         const node = d3.select(this.node);
+        // const point = this.props.point;
         const deleteNode = this.props.deleteNode;
         const moveNode = this.props.moveNode;
 
@@ -38,11 +46,15 @@ class Node extends React.Component<{ point: Point, id: ID, ...NodeProps}> {
                     !d3.event.altKey &&
                     !d3.event.shiftKey &&
                     !d3.event.button))
-                .on("drag", () => { moveNode(d3.event.dx, d3.event.dy); }));
+                .on("drag", () => {
+                    const newX = this.props.point[0] + d3.event.dx;
+                    const newY = this.props.point[1] + d3.event.dy;
+                    moveNode([newX, newY]);
+                }));
         }
     }
 
-    node: ? Element;
+    node: ?Element;
 
     render() {
         return (<circle
@@ -59,23 +71,27 @@ class Node extends React.Component<{ point: Point, id: ID, ...NodeProps}> {
 
 const NodeContainer = connect(
     null,
-    (dispatch, { id }) => ({
-        deleteNode: () => dispatch(deleteNodesAction(id)),
-        moveNode: (dx, dy) => dispatch(moveNodeAction(id, dx, dy))
+    (dispatch, { className, id }) => ({
+        deleteNode: () => dispatch(deleteNodesAction(className, id)),
+        moveNode: (newPoint) =>
+            dispatch(moveNodeAction(className, id, newPoint))
     })
 )(Node);
 
 
-export const Nodes = ({ nodes, className }) => (
-    <g className={`${className}s`}>
-        {Object.entries(nodes).map(([id, point]) => (
-            <NodeContainer
-                key={id}
-                id={id}
-                className={className}
-                point={point}
-            />
-        ))}
-    </g>
-);
-
+export const Nodes = ({ className, nodes }: {
+    className: NodeGroupType, nodes: NodeType[]
+}) =>
+    (
+        <g className={`${className}s`}>
+            {/* $FlowFixMe */}
+            {Object.entries(nodes).map(([id, { point }]) => (
+                <NodeContainer
+                    key={id}
+                    id={id}
+                    className={className}
+                    point={point}
+                />
+            ))}
+        </g>
+    );

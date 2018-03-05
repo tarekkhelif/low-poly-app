@@ -7,19 +7,22 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Polygons } from "./Polygons";
-import { Nodes } from "../../app/components/Node";
+import { MESH_NODE, MESH_POLY } from "../store/actions";
 
-const Tesselation = ({ meshNodes, polygons }) => (
+import { Polygons } from "./Polygons";
+import { Nodes } from "./Node";
+
+const Tesselation = ({ meshNodes, meshPolygons }) => (
     <g className="tesselation">
-        <Polygons polygons={polygons} />
-        <Nodes className="meshNode" nodes={meshNodes} />
+        <Polygons polygons={meshPolygons} />
+        <Nodes className={MESH_NODE} nodes={meshNodes} />
     </g>
 );
 
 const mapStateToProps = (state) => ({
-    meshNodes: state.nodes,
-    polygons: state.polygons
+    meshNodes: state[MESH_NODE],
+    meshPolygons: state[MESH_POLY]
 });
 
+// $FlowFixMe
 export const TesselationContainer = connect(mapStateToProps)(Tesselation);

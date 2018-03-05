@@ -5,13 +5,17 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { randPtInPoly } from "../../util/geometry.js";
+import { randPtInPoly } from "../util/geometry.js";
 
-import { addSitesAction, killStageAction } from "../store/sitesActions";
+import {
+    SEED,
+    OUTLINE,
+    addNodesAction,
+} from "../store/actions";
 
-const NumPicker = connect((state) => ({
+export const NumPicker = connect((state) => ({
     active: state.active,
-    outlineData: state.outlineData
+    outlinePoints: Object.values(state[OUTLINE]).map(({ point }) => point)
 }))(class extends React.Component {
     constructor(props) {
         super(props);
@@ -40,9 +44,10 @@ const NumPicker = connect((state) => ({
 
     handleClick() {
         const randPoints = Array.from(Array(this.state.value)).map(() =>
-            randPtInPoly(this.props.outlineData));
+            randPtInPoly(this.props.outlinePoints));
 
-        this.props.dispatch(addSitesAction(...randPoints));
+        const action = addNodesAction(SEED, ...randPoints);
+        this.props.dispatch(action);
     }
 
     render() {
@@ -59,40 +64,9 @@ const NumPicker = connect((state) => ({
                     disabled={!this.props.active}
                     onClick={this.handleClick}
                 >
-                        ➡
+                    ➡
                 </button>
             </div>
         );
     }
 });
-
-const connectEndStage = connect((state) => ({
-    globalState: state.globalState,
-    sites: state.sites,
-    active: state.active
-}));
-const EndStage = connectEndStage(({
-    globalState, sites, active, dispatch
-}) => (
-    <div className="endStage">
-        <button
-            id="endStageButton"
-            disabled={!active}
-            onClick={() => {
-                globalState.sitesData = Object.values(sites);
-                dispatch(killStageAction());
-            }}
-        >
-            Done with Seeds
-        </button>
-    </div>
-));
-
-export function PaneTools() {
-    return (
-        <React.Fragment>
-            <NumPicker />
-            <EndStage />
-        </React.Fragment>
-    );
-}

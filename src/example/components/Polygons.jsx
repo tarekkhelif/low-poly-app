@@ -7,37 +7,34 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import type {
-    Point,
-    NodeId,
-    // Polygon,
-    PolygonId,
-    ColorString
-} from "../types/types";
+import { PointType, NodeIdType, PolygonIdType, ColorStringType } from
+    "../types/types";
 
 const PolygonComponent = ({
     id,
     points,
     color
 }: {
-    id: PolygonId,
-    points: Point[],
-    color: ColorString
-}) => (
-    <path
-        className="polygon"
-        id={id}
-        d={`M${points.join("L")}Z`}
-        style={{ fill: color, stroke: color }}
-    />
-);
+        id: PolygonIdType,
+        points: PointType[],
+        color: ColorStringType
+    }) =>
+    (
+        <path
+            className="polygon"
+            id={id}
+            d={`M${points.join("L")}Z`}
+            style={{ fill: color, stroke: color }}
+        />
+    );
 
 // Wrap the `PolygonComponent` in a container component
-// The container component maps the `NodeId`s that define the polygon to
-//   the actually coordinates the `NodeId` corresponds to
+// The container component maps the `NodeIdType`s that define the polygon to
+//   the actually coordinates the `NodeIdType` corresponds to
 const mapStateToProps = (state, { nodes: nodeIds }) => ({
-    points: nodeIds.map((nodeId: NodeId): Point => state.nodes[nodeId])
+    points: nodeIds.map((nodeId: NodeIdType): PointType => state.nodes[nodeId])
 });
+// $FlowFixMe
 const PolygonContainer = connect(mapStateToProps)(PolygonComponent);
 
 export const Polygons = ({ polygons }: Object) => (

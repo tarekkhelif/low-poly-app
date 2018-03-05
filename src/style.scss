@@ -67,22 +67,17 @@ h1 {
             pointer-events: fill;
         }
 
-        .site {
+        .seed {
             // fill: #c7545467;
             fill: white;
             stroke: black;
             r: 5px;
         }
 
-        .polygon {
+        .meshPoly {
             fill: none;
             stroke: none;
         }
-
-        // .polygons {
-        //     fill: #ffe0bd;
-        //     stroke: #caa273;
-        // }
 
         .meshNode {
             fill: white;

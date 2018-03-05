@@ -4,24 +4,22 @@
     react/jsx-indent,
     react/jsx-indent-props,
     react/prop-types */
-import React from "react";
+import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
-import { createStore } from "redux";
 import { Provider } from "react-redux";
 
 import * as d3 from "d3";
 
-import { siteStageReducer } from "./store/sitesReducer";
-import { PaneTools } from "./components/paneToolsComponents";
-import {
-    OutlineContainer,
-    SitesConnector
-} from "./components/stageGroupComponents";
+import type { CoordinatesType } from "./types/types.js";
+
+import { NumPicker } from "./components/NumPicker";
+import { EndStage } from "./components/EndStage";
+import { SitesConnector } from "./components/Sites";
 
 class SiteChooser {
     stageGroup: Element;
     stageTools: Element;
-    outlineData: number[][];
+    outlineData: CoordinatesType;
     store: Object;
 
     constructor(that) {
@@ -42,29 +40,22 @@ class SiteChooser {
         }
         this.stageTools = stageTools;
 
-        this.outlineData = that.data.outlineData;
-
-        const initialState = {
-            globalState: that.data,
-            outlineData: that.data.outlineData
-        };
-
-        this.store = createStore(siteStageReducer, initialState);
+        this.store = that.store;
     }
 
     run() {
         ReactDOM.render(
             <Provider store={this.store}>
-                <PaneTools />
+                <Fragment>
+                    <NumPicker />
+                    <EndStage />
+                </Fragment>
             </Provider>,
             this.stageTools
         );
         ReactDOM.render(
             <Provider store={this.store}>
-                <g className="helpProvider">
-                    <OutlineContainer />
-                    <SitesConnector />
-                </g>
+                <SitesConnector />
             </Provider>,
             this.stageGroup
         );

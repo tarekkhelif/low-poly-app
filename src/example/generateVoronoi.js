@@ -5,18 +5,12 @@ import { paper } from "paper";
 
 import { arrayEquals } from "./util/arrayTools";
 import { getBBox } from "./util/geometry";
-import { IncrementalId } from "./util/id";
 
-import type {
-    Point,
-    Coordinates,
-    NodeId,
-    PolygonId,
-    ReduxTesselation
-} from "./editTesselation/types/types";
+import { ColorStringType, PointType, CoordinatesType, NodeIdType } from
+    "./types/types.js";
 
-import { setTesselationDataAction } from "./app/store/appActions.js";
-import { ColorString } from "./editTesselation/types/types";
+import { MESH_NODE, addPolygonAction, addNodesAction } from
+    "./store/actions.js";
 
 function voronoiBox(sitesData, bound) {
     const [[xmax, xmin], [ymax, ymin]] = getBBox(bound);
@@ -34,9 +28,9 @@ function voronoiBox(sitesData, bound) {
 }
 
 function trimToBoundingPolygon(
-    polygons: Coordinates[],
-    bound: Coordinates
-): Coordinates[] {
+    polygons: CoordinatesType[],
+    bound: CoordinatesType
+): CoordinatesType[] {
     const trimmedPolygons = [];
 
     polygons.forEach((coordinates) => {
@@ -84,7 +78,7 @@ function trimToBoundingPolygon(
 }
 
 // If it can't calculate a color, set `color = "none"` and log to console
-function averageColor(polygon: Coordinates, raster): ColorString {
+function averageColor(polygon: CoordinatesType, raster): ColorStringType {
     const pjsPolygon = new paper.Path(polygon);
 
     let color;
@@ -104,9 +98,13 @@ function averageColor(polygon: Coordinates, raster): ColorString {
 
 // Create a Voronoi tesselation bounded by the outline the user traced
 function voronoiTesselation(
+    state,
+    dispatch,
+    addNodeAction,
+    addPolygonAction,
     raster, // : A paperjs raster,
-    sitesData: Point[],
-    outlineData: Point[]
+    sitesData: PointType[],
+    outlineData: PointType[]
 ) {
     // Voronoi tesselation filling the bounding box of the outline
     const rawVoronoiPolygons = voronoiBox(sitesData, outlineData);
@@ -127,44 +125,41 @@ function voronoiTesselation(
        - Give each polygon an id.
        - Put each polygon in a dictionary ([key=id, value=polygon]) this is
            `polygons` */
-    const nodes = {};
-    const polygons = {};
-    const nodeIDer = new IncrementalId("node");
-    const polygonIDer = new IncrementalId("polygon");
     voronoiPolygons.forEach((polygon) => {
         // Find or create a unique id for `currPoint`
         // Represent each polygon as a list of node ids.
-        const polygonNodes: NodeId[] = polygon.map((currPoint) => {
+        const polygonNodes: NodeIdType[] = polygon.map((currPoint) => {
             // Find any matching pre-existing nodes
-            const matches = Object.entries(nodes).filter(([, point]) =>
+            // $FlowFixMe
+            const matches = Object.entries(state).filter(([, { point }]) =>
                 arrayEquals(point, currPoint));
 
             // Find or create the ID for the unique node.
             // Add the node to `nodes` if the point is new.
-            let nodeId: NodeId;
+            let nodeId: NodeIdType;
             switch (matches.length) {
                 case 0: {
-                    // If new, make an ID and add to `nodes`
-                    const newId = nodeIDer.newId();
-                    nodes[newId] = currPoint;
-                    nodeId = newId;
+                    // If new, dispatch add action
+                    const action = addNodeAction(currPoint);
+                    nodeId = Object.keys(action.payload.nodes)[0];
+                    dispatch(action);
                     break;
                 }
                 case 1: {
                     // If there's a match, record the id
-                    [nodeId] = matches[0]; // [nodeId, point] = match[0]
+                    [nodeId] = matches[0]; // [nodeId, { point }] = match[0]
                     break;
                 }
                 default: {
                     // If there are multiple matches, record the first
                     //   match's id and print all matches to console.
-                    [nodeId] = matches[0]; // [nodeId, point] = match[0]
+                    [nodeId] = matches[0]; // [nodeId, { point }] = match[0]
 
                     // eslint-disable-next-line no-console
                     console.log("There are several nodes at the same " +
-                            `point. The point ${currPoint.toString()} ` +
-                            `matched ${matches.length} existing nodes with ` +
-                            `ids: ${matches.map(([id]) => id).join(", ")} `);
+                        `point. The point ${currPoint.toString()} ` +
+                        `matched ${matches.length} existing nodes with ` +
+                        `ids: ${matches.map(([id]) => id).join(", ")} `);
                 }
             }
 
@@ -174,26 +169,24 @@ function voronoiTesselation(
         // Calculate the polygon's color
         const color = averageColor(polygon, raster);
 
-        // Add the polygon to `polygons`
-        const polygonId: PolygonId = polygonIDer.newId();
-        polygons[polygonId] = {
-            nodes: polygonNodes,
-            color
-        };
+        // Dispatch addPolygon action
+        dispatch(addPolygonAction(polygonNodes, color));
     });
-
-    const tesselation: ReduxTesselation = { nodes, polygons };
-
-    return tesselation;
 }
 
 // Coerce to work like before
 export function generateVoronoi() {
+    const { store } = this;
     const raster = this.pjsProject.pjsRaster;
     const { sitesData, outlineData } = this.data;
 
-    const tesselation = voronoiTesselation(raster, sitesData, outlineData);
-
-    // Save useful stuff to project objects
-    this.store.dispatch(setTesselationDataAction(tesselation));
+    voronoiTesselation(
+        store.getState(),
+        store.dispatch,
+        (...nodes) => addNodesAction(MESH_NODE, ...nodes),
+        addPolygonAction,
+        raster,
+        sitesData,
+        outlineData
+    );
 }

@@ -7,13 +7,7 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-import { Nodes } from "../../app/components/Node";
-
-import {
-    addSitesAction,
-    deleteSitesAction,
-    moveSiteAction
-} from "../store/sitesActions";
+import { OUTLINE, SEED, addNodesAction } from "../store/actions";
 
 class Outline extends React.Component {
     componentDidMount() {
@@ -24,10 +18,10 @@ class Outline extends React.Component {
 
     render() {
         return (
-            <g className="outlines">
+            <g className={`${OUTLINE}s`}>
                 <path
-                    className="outline"
-                    d={`M${this.props.outlineData.join("L")}Z`}
+                    className={OUTLINE}
+                    d={`M${this.props.outlinePoints.join("L")}Z`}
                     ref={(el) => {
                         this.outline = el;
                     }}
@@ -37,13 +31,11 @@ class Outline extends React.Component {
     }
 }
 
-export const OutlineContainer = connect(
-    (state) => ({ outlineData: state.outlineData }),
+export const OutlineConnector = connect(
+    (state) => ({
+        outlinePoints: Object.values(state[OUTLINE]).map(({ point }) => point)
+    }),
     (dispatch) => ({
-        addSites: (point) => dispatch(addSitesAction(point))
+        addSites: (point) => dispatch(addNodesAction(SEED, point))
     })
 )(Outline);
-
-const Sites = ({ sites }) => <Nodes className="site" nodes={sites} />;
-
-export const SitesConnector = connect((state) => ({ sites: state.sites }))(Sites);
