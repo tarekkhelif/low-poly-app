@@ -7,17 +7,31 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { MESH_NODE, MESH_POLY } from "../store/actions";
+import { MESH_NODE, MESH_POLY, DELETE, MOVE } from "../store/actions";
 
 import { Polygons } from "./Polygons";
 import { Nodes } from "./Node";
 
-const Tesselation = ({ meshNodes, meshPolygons }) => (
-    <g className="tesselation">
-        <Polygons className={MESH_POLY} nodes={meshNodes} polygons={meshPolygons} />
-        <Nodes className={MESH_NODE} nodes={meshNodes} />
-    </g>
-);
+const Tesselation = ({ meshNodes, meshPolygons }) => {
+    const allowedActions = {};
+    allowedActions[DELETE] = false;
+    allowedActions[MOVE] = true;
+
+    return (
+        <g className="tesselation">
+            <Polygons
+                className={MESH_POLY}
+                nodes={meshNodes}
+                polygons={meshPolygons}
+            />
+            <Nodes
+                className={MESH_NODE}
+                nodes={meshNodes}
+                allowedActions={allowedActions}
+            />
+        </g>
+    );
+};
 
 const mapStateToProps = (state) => ({
     meshNodes: state[MESH_NODE],

@@ -179,7 +179,9 @@ export function generateVoronoi() {
     const { store } = this;
     const state = store.getState();
     const raster = this.pjsProject.pjsRaster;
+    // $FlowFixMe
     const sitesData = Object.values(state[SEED]).map(({ point }) => point);
+    // $FlowFixMe
     const outlineData = Object.values(state[OUTLINE]).map(({ point }) => point);
 
     voronoiTesselation(

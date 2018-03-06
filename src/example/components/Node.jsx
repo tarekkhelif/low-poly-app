@@ -10,15 +10,17 @@ import { connect } from "react-redux";
 
 import * as d3 from "d3";
 
-import { PointType, NodeType, IDType, NodeGroupType } from "../types/types.js";
+import { PointType, IDType, NodeGroupType } from "../types/types.js";
 
-import { deleteNodesAction, moveNodeAction } from "../store/actions";
+import { deleteNodesAction, moveNodeAction, DELETE, MOVE } from
+    "../store/actions";
 
 
 class Node extends React.Component<{
     className: NodeGroupType,
     id: IDType,
     point: PointType,
+    allowedActions: Object,
     deleteNode: (id: IDType) => void,
     moveNode: (id: IDType, newPoint: PointType) => void
 
@@ -30,7 +32,7 @@ class Node extends React.Component<{
         const moveNode = this.props.moveNode;
 
         // MouseDown to delete
-        if (deleteNode) {
+        if (this.props.allowedActions[DELETE]) {
             node.on("mousedown", () => {
                 if (!d3.event.ctrlKey &&
                     !d3.event.altKey &&
@@ -40,7 +42,7 @@ class Node extends React.Component<{
         }
 
         // Click and drag to move
-        if (moveNode) {
+        if (this.props.allowedActions[MOVE]) {
             node.call(d3.drag()
                 .filter(() => (d3.event.ctrlKey &&
                     !d3.event.altKey &&
@@ -78,10 +80,8 @@ const NodeContainer = connect(
     })
 )(Node);
 
-
-export const Nodes = ({ className, nodes }: {
-    className: NodeGroupType, nodes: NodeType[]
-}) =>
+// $FlowFixMe
+export const Nodes = ({ className, nodes, ...props }) =>
     (
         <g className={`${className}s`}>
             {/* $FlowFixMe */}
@@ -91,6 +91,7 @@ export const Nodes = ({ className, nodes }: {
                     id={id}
                     className={className}
                     point={point}
+                    {...props} // allowedActions
                 />
             ))}
         </g>
