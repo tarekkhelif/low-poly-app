@@ -9,7 +9,7 @@ import { getBBox } from "./util/geometry";
 import { ColorStringType, PointType, CoordinatesType, NodeIdType } from
     "./types/types.js";
 
-import { MESH_NODE, addPolygonAction, addNodesAction } from
+import { SEED, OUTLINE, MESH_NODE, addPolygonAction, addNodesAction } from
     "./store/actions.js";
 
 function voronoiBox(sitesData, bound) {
@@ -98,7 +98,7 @@ function averageColor(polygon: CoordinatesType, raster): ColorStringType {
 
 // Create a Voronoi tesselation bounded by the outline the user traced
 function voronoiTesselation(
-    state,
+    store,
     dispatch,
     addNodeAction,
     addPolygonAction,
@@ -130,9 +130,9 @@ function voronoiTesselation(
         // Represent each polygon as a list of node ids.
         const polygonNodes: NodeIdType[] = polygon.map((currPoint) => {
             // Find any matching pre-existing nodes
-            // $FlowFixMe
-            const matches = Object.entries(state).filter(([, { point }]) =>
-                arrayEquals(point, currPoint));
+            const matches = Object.entries(store.getState()[MESH_NODE])
+                // $FlowFixMe
+                .filter(([, { point }]) => arrayEquals(point, currPoint));
 
             // Find or create the ID for the unique node.
             // Add the node to `nodes` if the point is new.
@@ -177,13 +177,15 @@ function voronoiTesselation(
 // Coerce to work like before
 export function generateVoronoi() {
     const { store } = this;
+    const state = store.getState();
     const raster = this.pjsProject.pjsRaster;
-    const { sitesData, outlineData } = this.data;
+    const sitesData = Object.values(state[SEED]).map(({ point }) => point);
+    const outlineData = Object.values(state[OUTLINE]).map(({ point }) => point);
 
     voronoiTesselation(
-        store.getState(),
+        store,
         store.dispatch,
-        (...nodes) => addNodesAction(MESH_NODE, ...nodes),
+        (...points) => addNodesAction(MESH_NODE, ...points),
         addPolygonAction,
         raster,
         sitesData,

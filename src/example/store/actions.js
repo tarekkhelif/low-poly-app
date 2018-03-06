@@ -50,9 +50,9 @@ export function killStageAction() {
     return { type: KILL };
 }
 
-export function addPolygonAction(nodeIDs: string[], color: string) {
+export function addPolygonAction(nodeIds: string[], color: string) {
     const id = IDers[MESH_POLY].newId();
-    const polygon = { nodeIDs, color };
+    const polygon = { nodeIds, color };
 
     return { type: ADD_POLYGON, payload: { id, polygon } };
 }

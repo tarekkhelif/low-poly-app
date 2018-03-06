@@ -14,7 +14,7 @@ import { Nodes } from "./Node";
 
 const Tesselation = ({ meshNodes, meshPolygons }) => (
     <g className="tesselation">
-        <Polygons polygons={meshPolygons} />
+        <Polygons className={MESH_POLY} nodes={meshNodes} polygons={meshPolygons} />
         <Nodes className={MESH_NODE} nodes={meshNodes} />
     </g>
 );

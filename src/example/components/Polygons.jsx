@@ -31,16 +31,22 @@ const PolygonComponent = ({
 // Wrap the `PolygonComponent` in a container component
 // The container component maps the `NodeIdType`s that define the polygon to
 //   the actually coordinates the `NodeIdType` corresponds to
-const mapStateToProps = (state, { nodes: nodeIds }) => ({
-    points: nodeIds.map((nodeId: NodeIdType): PointType => state.nodes[nodeId])
+const mapStateToProps = (state, { nodes, nodeIds }) => ({
+    points: nodeIds.map((nodeId: NodeIdType): PointType => nodes[nodeId].point)
 });
 // $FlowFixMe
 const PolygonContainer = connect(mapStateToProps)(PolygonComponent);
 
-export const Polygons = ({ polygons }: Object) => (
-    <g className="polygons">
+export const Polygons = ({ className, polygons, ...props }: Object) => (
+    <g className={`${className}s`}>
         {Object.entries(polygons).map(([polygonId, polygon]) => (
-            <PolygonContainer key={polygonId} id={polygonId} {...polygon} />
+            <PolygonContainer
+                key={polygonId}
+                id={polygonId}
+                className={className}
+                {...polygon} // nodeIds, color
+                {...props} // nodes
+            />
         ))}
     </g>
 );
