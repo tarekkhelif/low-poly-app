@@ -24,7 +24,7 @@ import { appReducer } from "./store/reducer";
 
 import { setUpUI } from "./setUpUI.js";
 import { setUpWorkspace } from "./setUpWorkspace.js";
-import { getRaster } from "./getRaster.js";
+import { getRaster } from "./getRaster.jsx";
 import { outlineRaster } from "./outlineRaster.jsx";
 import { chooseSites } from "./generateSites.jsx";
 import { generateVoronoi } from "./generateVoronoi.js";
