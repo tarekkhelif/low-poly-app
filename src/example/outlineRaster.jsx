@@ -15,12 +15,21 @@ import { OUTLINE, addNodesAction } from "./store/actions";
 import { OutlineConnector } from "./components/Outline.jsx";
 
 export async function outlineRaster() {
+    const addNodes = (...points) =>
+        this.store.dispatch(addNodesAction(OUTLINE, ...points));
+
+    d3.select("#svgProject").on("mousedown", (d, i, nodes) => {
+        addNodes(d3.mouse(nodes[i]));
+    });
+
+
     // REAL // UI for drawing outline
     // MOCK // Load outline this.data from file
-    const rawOutlineData = await d3.text(this.exampleData.outlineExampleData);
-    const outlineData = d3.csvParseRows(rawOutlineData, (row) =>
-        row.map((value) => +value));
-    this.store.dispatch(addNodesAction(OUTLINE, ...outlineData));
+    // const rawOutlineData = await d3.text(this.exampleData.outlineExampleData);
+    // const outlineData = d3.csvParseRows(rawOutlineData, (row) =>
+    //     row.map((value) => +value));
+
+    // addNodes(...outlineData);
 
     const outlineGroup = d3
         .select("#svgProject")
