@@ -29,6 +29,7 @@ import { outlineRaster } from "./outlineRaster.jsx";
 import { chooseSites } from "./generateSites.jsx";
 import { generateVoronoi } from "./generateVoronoi.js";
 import { editTesselation } from "./editTesselation.jsx";
+import { exportArt } from "./exportArt";
 
 import rasterPath from "./example-data/nile.jpg";
 import outlineExampleData from
@@ -69,5 +70,6 @@ Object.assign(LowPolyProject.prototype, {
     outlineRaster,
     chooseSites,
     generateVoronoi,
-    editTesselation
+    editTesselation,
+    exportArt
 });

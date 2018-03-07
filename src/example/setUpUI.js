@@ -38,9 +38,7 @@ export function setUpUI() {
         { name: "Edit Tesselation", func: this.editTesselation.bind(this) },
         {
             name: "Export",
-            func: () =>
-                // eslint-disable-next-line no-console
-                console.log("Sorry, exporting your art isn't supported yet.")
+            func: this.exportArt.bind(this)
         }
     ];
 
