@@ -26,8 +26,7 @@ class Outline extends React.Component {
                 !d3.event.target.classList.contains(this.firstClass)) {
                 this.props.addNode(this.state.mousePoint);
             }
-        })
-            .bind(this));
+        }));
 
         d3.select("#svgProject").on("mousemove", () => {
             if (this.props.editing) {
