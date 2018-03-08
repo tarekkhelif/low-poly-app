@@ -36,7 +36,7 @@ class Outline extends React.Component {
         });
 
         d3.select(this.outline).on("mousedown", () => {
-            if (this.props.active) {
+            if (!this.props.editing) {
                 this.props.addSite(d3.mouse(this.outline));
             }
         });
