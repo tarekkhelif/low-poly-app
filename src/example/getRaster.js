@@ -2,9 +2,6 @@
     react/jsx-indent,
     react/jsx-indent-props,
     react/prop-types */
-import React from "react";
-import ReactDOM from "react-dom";
-
 import * as d3 from "d3";
 import { paper } from "paper";
 
@@ -16,7 +13,15 @@ export async function getRaster() {
 
         const reader = new FileReader();
 
-        reader.onload = () => hi(reader.result);
+        reader.onload = () => {
+            const img = new Image();
+
+            img.onload = () => {
+                hi(reader.result, img.width, img.height);
+            };
+
+            img.src = reader.result;
+        };
 
         reader.readAsDataURL(file);
     }
@@ -30,22 +35,7 @@ export async function getRaster() {
 
     rasterInput.click();
 
-    // const rasterInput = (<input
-    //     type="file"
-    //     id="rasterInput"
-    //     accept="image/*"
-    //     style={{ display: "none" }}
-    //     onClick={this.element.click}
-    //     onChange={onChange}
-    //     ref={(element) => { this.element = element; }}
-    // />);
-
-    // ReactDOM.render(rasterInput, document.createElement("div"));
-
-    // rasterInput.props.onClick();
-
-
-    async function handleImage(rasterPath) {
+    async function handleImage(rasterPath, fullWidth, fullHeight) {
         // Load the raster in an `svg:image` element
         const svgRaster = await new Promise((resolve, reject) => {
             d3
@@ -60,15 +50,10 @@ export async function getRaster() {
                     ${rasterPath}`)));
         });
 
-        // REAL // Calculate appropriate scaling
-        // MOCK // Set dimensions using this.exampleDatay
-        const { width, height } = calcRasterScale(svgRaster, this.exampleData);
-        // eslint-disable-next-line no-unused-vars
-        function calcRasterScale(svgImageNode, exampleData) {
-            // REAL // Do calculation
-            // MOCK // Use example this.data for scaling
-            const width = exampleData.width;
-            const height = exampleData.height;
+        const { width, height } = calcRasterScale(fullWidth, fullHeight);
+        function calcRasterScale(fullWidth, fullHeight) {
+            const width = 1200;
+            const height = fullHeight / fullWidth * width;
 
             return { width, height };
         }
@@ -98,9 +83,7 @@ export async function getRaster() {
         });
         // Set dimensions of Paper.js raster
         const maxBox = new paper.Rectangle(this.pjsProject.view.viewSize);
-        if (!maxBox.contains(pjsRaster.size)) {
-            pjsRaster.fitBounds(maxBox);
-        }
+        pjsRaster.fitBounds(maxBox);
 
         // Save useful stuff to project objects
         Object.assign(this.d3Project, {});
