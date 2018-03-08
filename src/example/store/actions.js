@@ -2,9 +2,12 @@
 
 import { IncrementalId } from "../util/id";
 
+export const SET_EDITING_OUTLINE = "SET_EDITING_OUTLINE";
+
 export const ADD = "ADD";
 export const DELETE = "DELETE";
 export const MOVE = "MOVE";
+
 export const KILL = "KILL";
 
 export const ADD_POLYGON = "ADD_POLYGON";
@@ -23,6 +26,10 @@ IDers[OUTLINE] = new IncrementalId(OUTLINE);
 IDers[SEED] = new IncrementalId(SEED);
 IDers[MESH_NODE] = new IncrementalId(MESH_NODE);
 IDers[MESH_POLY] = new IncrementalId(MESH_POLY);
+
+export function setEditingOutlineAction(editingOutline: boolean) {
+    return { type: SET_EDITING_OUTLINE, payload: { editingOutline } };
+}
 
 export function addNodesAction(nodeGroup: string, ...points: number[][]) {
     const nodes = {};

@@ -1,6 +1,7 @@
 // @flow
 
 import {
+    SET_EDITING_OUTLINE,
     ADD,
     DELETE,
     MOVE,
@@ -26,12 +27,18 @@ const polygonsReducer = (state, action) => {
     }
 };
 
-const defaultState = { active: true };
+const defaultState = { editingOutline: false, active: true };
 // $FlowFixMe
 nodeGroups.forEach((group) => { defaultState[group] = {}; });
 
 export const appReducer = (state: Object = defaultState, action: Object) => {
-    if (action.type === ADD ||
+    if (action.type === SET_EDITING_OUTLINE) {
+        const { editingOutline } = action.payload;
+
+        const nextState = { ...state };
+        nextState.editingOutline = editingOutline;
+        return nextState;
+    } else if (action.type === ADD ||
         action.type === DELETE ||
         action.type === MOVE) {
         const { nodeGroup } = action.payload;
