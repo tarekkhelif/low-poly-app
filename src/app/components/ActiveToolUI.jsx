@@ -7,6 +7,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { OUTLINE_TOOL } from "../actions/actionTypes";
+import { DefaultToolUI } from "./DefaultToolUI";
 import { OutlineToolUI } from "./OutlineToolUI";
 
 const toolUIs = new Map([
@@ -18,7 +19,7 @@ const ActiveToolUI = ({ tool }) => {
         const ToolUI = toolUIs.get(tool);
         return <ToolUI />;
     }
-    return <g className="defaultForUnrecognizedTools" />;
+    return <DefaultToolUI />;
 };
 
 const mapStateToProps = (state) => {
