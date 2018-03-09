@@ -5,7 +5,7 @@ export const setRasterAction = (rasterBase64, width, height) => ({
     payload: { rasterBase64, width, height }
 });
 
-export const changeToolAction = (toolName) => ({
+export const changeToolAction = (tool) => ({
     type: CHANGE_TOOL,
-    payload: { toolName }
+    payload: { tool }
 });
