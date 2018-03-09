@@ -7,14 +7,13 @@
  */
 
 /* @flow */
-
-import React from "react";
-import ReactDOM from "react-dom";
-
 import "./style.scss";
 
-import { LowPolyProject } from "./example/app.js";
+/* import { LowPolyProject } from "./example/app.js";
 
 const app = new LowPolyProject();
 // app.runExample();
-app.setUpUI();
+app.setUpUI(); */
+
+
+import "./app/app";
