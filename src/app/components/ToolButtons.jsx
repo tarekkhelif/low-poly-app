@@ -12,8 +12,8 @@ import { camelize } from "../util/stringTools";
 
 import { setRasterAction, changeToolAction } from "../actions/actionGenerators";
 import {
-    TOOL_EDIT_AN_OUTLINE,
-    TOOL_EDIT_TESSELATIONS
+    OUTLINE_TOOL,
+    TESSELATION_TOOL
 } from "../actions/actionTypes";
 
 
@@ -74,11 +74,11 @@ export const ToolButtons = connect()(({ dispatch }) => {
         },
         {
             label: "Outline",
-            onClick: () => dispatch(changeToolAction(TOOL_EDIT_AN_OUTLINE))
+            onClick: () => dispatch(changeToolAction(OUTLINE_TOOL))
         },
         {
             label: "Edit Tesselation",
-            onClick: () => dispatch(changeToolAction(TOOL_EDIT_TESSELATIONS))
+            onClick: () => dispatch(changeToolAction(TESSELATION_TOOL))
         },
         {
             label: "Save Art",

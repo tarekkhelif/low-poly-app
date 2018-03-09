@@ -1,5 +1,5 @@
 export const SET_RASTER = "SET_RASTER";
 
 export const CHANGE_TOOL = "CHANGE_TOOL";
-export const TOOL_EDIT_AN_OUTLINE = "TOOL_EDIT_AN_OUTLINE";
-export const TOOL_EDIT_TESSELATIONS = "TOOL_EDIT_TESSELATIONS";
+export const OUTLINE_TOOL = "outline-tool";
+export const TESSELATION_TOOL = "tesselation-tool";

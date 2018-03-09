@@ -1,7 +1,7 @@
 import {
     SET_RASTER,
     CHANGE_TOOL,
-    TOOL_EDIT_AN_OUTLINE,
+    OUTLINE_TOOL,
 } from "../actions/actionTypes";
 
 const defaultState = {
@@ -11,7 +11,7 @@ const defaultState = {
         height: 400
     },
     currentTool: {
-        tool: TOOL_EDIT_AN_OUTLINE
+        tool: OUTLINE_TOOL
     }
 };
 

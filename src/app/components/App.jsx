@@ -7,8 +7,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { ToolButtons } from "./ToolButtons";
-
-const patches = [];
+import { ConnectedActiveToolUI } from "./ActiveToolUI";
 
 const App = ({ rasterBase64, width, height }) =>
     (
@@ -28,11 +27,7 @@ const App = ({ rasterBase64, width, height }) =>
                     width={width}
                     height={height}
                 />
-                <g className="patches">
-                    {patches.forEach((patch) => (
-                        <g className="currentTool-ui"></g>))
-                    }
-                </g>
+                <ConnectedActiveToolUI />
             </svg>
         </div>);
 
@@ -48,6 +43,7 @@ function scaleDimensions(fullWidth, fullHeight) {
 }
 
 const mapStateToProps = (state) => {
+    let rasterProps;
     const {
         rasterBase64,
         width: nativeWidth,
@@ -56,8 +52,15 @@ const mapStateToProps = (state) => {
 
     if (nativeHeight !== 0 && nativeHeight !== 0) {
         const { width, height } = scaleDimensions(nativeWidth, nativeHeight);
-        return { rasterBase64, width, height };
+        rasterProps = { rasterBase64, width, height };
+    } else {
+        rasterProps = {
+            rasterBase64,
+            width: nativeWidth,
+            height: nativeHeight
+        };
     }
-    return { rasterBase64, width: nativeWidth, height: nativeHeight };
+
+    return { ...rasterProps };
 };
 export const ConnectedApp = connect(mapStateToProps)(App);
