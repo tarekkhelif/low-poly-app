@@ -4,6 +4,8 @@ import {
     OUTLINE_TOOL,
 } from "../actions/actionTypes";
 
+import testState from "./testState.json";
+
 const defaultState = {
     raster: {
         rasterBase64: "",
@@ -15,7 +17,7 @@ const defaultState = {
     }
 };
 
-export const reducer = (state = defaultState, action) => {
+export const reducer = (state = testState, action) => {
     console.log(action);
     if (action.type === SET_RASTER) {
         const nextState = { ...state };
