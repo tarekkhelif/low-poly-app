@@ -6,14 +6,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore } from "redux";
-import { Provider, connect } from "react-redux";
+import { Provider } from "react-redux";
 
 import { App } from "./components/App";
 
 const container = document.createElement("div");
 document.body.appendChild(container);
 
-const reducer = (state = {}, action) => state;
+const reducer = (state = {}, action) => {
+    return state;
+};
 const store = createStore(reducer);
 
 // const ConnectedApp = connect()(App);

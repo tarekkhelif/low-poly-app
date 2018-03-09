@@ -16,4 +16,4 @@ const app = new LowPolyProject();
 app.setUpUI(); */
 
 
-import "./app/app";
+import "./app/app"; // Run app as a side effect
