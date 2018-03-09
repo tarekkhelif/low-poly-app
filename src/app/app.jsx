@@ -14,6 +14,7 @@ const container = document.createElement("div");
 document.body.appendChild(container);
 
 const reducer = (state = {}, action) => {
+    console.log(action);
     return state;
 };
 const store = createStore(reducer);
