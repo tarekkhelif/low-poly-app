@@ -6,6 +6,8 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import FileSaver from "file-saver";
+
 import { camelize } from "../util/stringTools";
 
 import { setRasterAction, changeToolAction } from "../actions/actionGenerators";
@@ -36,6 +38,14 @@ function askUserForRaster() {
     });
 }
 
+function exportArt(/* state */) {
+    // const svg = <Art state={state}/>;
+    const svg = document.querySelector(".workspace");
+    const data = (new XMLSerializer()).serializeToString(svg);
+    const svgFile = new File([data], { type: "image/svg+xml;charset=utf-8" });
+    FileSaver.saveAs(svgFile, "low-poly-project.svg");
+}
+
 export const ToolButtons = connect()(({ dispatch }) => {
     const tools = [
         {
@@ -55,7 +65,7 @@ export const ToolButtons = connect()(({ dispatch }) => {
         },
         {
             label: "Save Art",
-            onClick: () => { }
+            onClick: () => { exportArt(); }
         }
     ];
 
