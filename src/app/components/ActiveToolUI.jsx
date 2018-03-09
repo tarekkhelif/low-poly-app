@@ -6,11 +6,17 @@
 import React from "react";
 import { connect } from "react-redux";
 
-const toolUIs = {};
+import { OUTLINE_TOOL } from "../actions/actionTypes";
+import { OutlineToolUI } from "./OutlineToolUI";
+
+const toolUIs = new Map([
+    [OUTLINE_TOOL, OutlineToolUI]
+]);
 
 const ActiveToolUI = ({ tool }) => {
-    if (Object.prototype.hasOwnProperty.call(toolUIs, tool)) {
-        return toolUIs[tool];
+    if (toolUIs.has(tool)) {
+        const ToolUI = toolUIs.get(tool);
+        return <ToolUI />;
     }
     return <g className="defaultForUnrecognizedTools" />;
 };
