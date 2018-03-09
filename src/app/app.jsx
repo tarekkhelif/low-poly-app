@@ -8,15 +8,12 @@ import ReactDOM from "react-dom";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 
-import { App } from "./components/App";
+import { reducer } from "./reducer/reducer";
+import { ConnectedApp } from "./components/App";
 
 const container = document.createElement("div");
 document.body.appendChild(container);
 
-const reducer = (state = {}, action) => {
-    console.log(action);
-    return state;
-};
 const store = createStore(reducer);
 
 // const ConnectedApp = connect()(App);
@@ -24,7 +21,7 @@ const store = createStore(reducer);
 ReactDOM.render(
     (
         <Provider store={store}>
-            <App />
+            <ConnectedApp />
         </Provider>),
     container
 );

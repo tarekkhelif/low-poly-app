@@ -4,19 +4,23 @@
     react/prop-types */
 
 import React from "react";
+import { connect } from "react-redux";
 
 import { ToolButtons } from "./ToolButtons";
 
 const patches = [];
 
-export const App = () => (
+const App = ({ raster }) => (
     <div className="app">
         <div className="pane">
             <ToolButtons />
             <div className="currentToolOptions"></div>
         </div>
         <svg className="workspace">
-            <g className="raster"></g>
+            <image
+                className="raster"
+                href={raster}
+            />
             <g className="patches">
                 {patches.forEach((patch) => (
                     <g className="currentTool-ui"></g>))
@@ -24,3 +28,6 @@ export const App = () => (
             </g>
         </svg>
     </div>);
+
+const mapStateToProps = ({ raster }) => ({ raster });
+export const ConnectedApp = connect(mapStateToProps)(App);

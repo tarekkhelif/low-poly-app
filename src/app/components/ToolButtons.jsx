@@ -86,5 +86,5 @@ export const ToolButtons = connect()(({ dispatch }) => {
                 })
             }
         </div>
-    )
+    );
 });
