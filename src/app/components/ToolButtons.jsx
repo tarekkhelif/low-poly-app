@@ -38,6 +38,22 @@ function askUserForRaster() {
     });
 }
 
+const getRasterDimensions = (base64ImgURL) => {
+    const dimensions = new Promise((resolve, reject) => {
+        const htmlImg = new Image();
+
+        htmlImg.onload = () => {
+            const { width, height } = htmlImg;
+            resolve({ width, height });
+        };
+        htmlImg.onerror = (err) => reject(err);
+
+        htmlImg.src = base64ImgURL;
+    });
+
+    return dimensions;
+};
+
 function exportArt(/* state */) {
     // const svg = <Art state={state}/>;
     const svg = document.querySelector(".workspace");
@@ -52,7 +68,8 @@ export const ToolButtons = connect()(({ dispatch }) => {
             label: "Import Image",
             onClick: async () => {
                 const raster = await askUserForRaster();
-                dispatch(setRasterAction(raster));
+                const { width, height } = await getRasterDimensions(raster);
+                dispatch(setRasterAction(raster, width, height));
             }
         },
         {

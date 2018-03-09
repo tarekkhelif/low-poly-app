@@ -16,8 +16,6 @@ document.body.appendChild(container);
 
 const store = createStore(reducer);
 
-// const ConnectedApp = connect()(App);
-
 ReactDOM.render(
     (
         <Provider store={store}>

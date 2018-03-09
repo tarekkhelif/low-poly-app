@@ -10,24 +10,34 @@ import { ToolButtons } from "./ToolButtons";
 
 const patches = [];
 
-const App = ({ raster }) => (
-    <div className="app">
-        <div className="pane">
-            <ToolButtons />
-            <div className="currentToolOptions"></div>
-        </div>
-        <svg className="workspace">
-            <image
-                className="raster"
-                href={raster}
-            />
-            <g className="patches">
-                {patches.forEach((patch) => (
-                    <g className="currentTool-ui"></g>))
-                }
-            </g>
-        </svg>
-    </div>);
+const App = ({ rasterBase64, width, height }) =>
+    (
+        <div className="app">
+            <div className="pane">
+                <ToolButtons />
+                <div className="currentToolOptions"></div>
+            </div>
+            <svg
+                className="workspace"
+                width={width}
+                height={height}
+            >
+                <image
+                    className="raster"
+                    href={rasterBase64}
+                    width={width}
+                    height={height}
+                />
+                <g className="patches">
+                    {patches.forEach((patch) => (
+                        <g className="currentTool-ui"></g>))
+                    }
+                </g>
+            </svg>
+        </div>);
 
-const mapStateToProps = ({ raster }) => ({ raster });
+const mapStateToProps = (state) => {
+    const { rasterBase64, width, height } = state.raster;
+    return { rasterBase64, width, height };
+};
 export const ConnectedApp = connect(mapStateToProps)(App);
