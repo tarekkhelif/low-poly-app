@@ -14,11 +14,7 @@ export const DefaultToolUI = connect(mapStateToProps)(({ patches }) => (
         {Object.entries(patches).map((patchEntry) => {
             const [
                 patchId,
-                {
-                    outline,
-                    meshNodes: { nodes: meshNodes },
-                    meshPolygons: { polygons }
-                }
+                { outline, mesh: { nodes: meshNodes, polygons } }
             ] = patchEntry;
             return (
                 <React.Fragment key={`${patchId}-fragment`}>

@@ -25,7 +25,7 @@
                     }
                 }
             },
-            "meshNodes": {
+            "mesh": {
                 "nodes": {
                     "meshNode-1": {
                         "point": [629.5236469293316, 95.39173839282876]
@@ -1992,9 +1992,7 @@
                     "meshNode-655": {
                         "point": [295.08508927876875, 538.6049638583602]
                     }
-                }
-            },
-            "meshPolygons": {
+                },
                 "polygons": {
                     "meshPolygon-1": {
                         "nodeIds": [
@@ -2116,7 +2114,11 @@
                         "color": "rgb(235,223,210)"
                     },
                     "meshPolygon-12": {
-                        "nodeIds": ["meshNode-63", "meshNode-64", "meshNode-65"],
+                        "nodeIds": [
+                            "meshNode-63",
+                            "meshNode-64",
+                            "meshNode-65"
+                        ],
                         "color": "rgb(224,224,229)"
                     },
                     "meshPolygon-13": {
@@ -3346,7 +3348,11 @@
                         "color": "rgb(197,164,150)"
                     },
                     "meshPolygon-127": {
-                        "nodeIds": ["meshNode-501", "meshNode-502", "meshNode-503"],
+                        "nodeIds": [
+                            "meshNode-501",
+                            "meshNode-502",
+                            "meshNode-503"
+                        ],
                         "color": "rgb(226,226,231)"
                     },
                     "meshPolygon-128": {
@@ -3671,7 +3677,11 @@
                         "color": "rgb(223,224,228)"
                     },
                     "meshPolygon-157": {
-                        "nodeIds": ["meshNode-72", "meshNode-533", "meshNode-73"],
+                        "nodeIds": [
+                            "meshNode-72",
+                            "meshNode-533",
+                            "meshNode-73"
+                        ],
                         "color": "rgb(149,145,147)"
                     },
                     "meshPolygon-158": {
@@ -4256,7 +4266,11 @@
                         "color": "rgb(190,171,156)"
                     },
                     "meshPolygon-212": {
-                        "nodeIds": ["meshNode-354", "meshNode-615", "meshNode-616"],
+                        "nodeIds": [
+                            "meshNode-354",
+                            "meshNode-615",
+                            "meshNode-616"
+                        ],
                         "color": "rgb(134,147,198)"
                     },
                     "meshPolygon-213": {
