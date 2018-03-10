@@ -7,6 +7,7 @@
  */
 
 /* @flow */
+// import "./oldStyle.scss";
 import "./style.scss";
 
 /* import { LowPolyProject } from "./example/app.js";
@@ -14,6 +15,5 @@ import "./style.scss";
 const app = new LowPolyProject();
 // app.runExample();
 app.setUpUI(); */
-
 
 import "./app/app"; // Run app as a side effect
