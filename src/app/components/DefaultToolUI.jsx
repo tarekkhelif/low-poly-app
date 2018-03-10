@@ -6,17 +6,66 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Patch } from "./Patch";
+const mapStateToProps = ({ patches }) => ({ patches });
+export const DefaultToolUI = connect(mapStateToProps)(({ patches }) => (
+    <g className="defaultToolUI">
+        {Object.entries(patches).map((patchEntry) => {
+            const [
+                patchId,
+                {
+                    outline: { nodes: outlineNodes },
+                    meshNodes: { nodes: meshNodes },
+                    meshPolygons: { polygons }
+                }
+            ] = patchEntry;
+            // prettier-ignore
+            // eslint-disable-next-line function-paren-newline
+            const outlinePoints = Object.entries(outlineNodes).map(
+                ([outlineNodeId, { point }]) => point);
 
-// const mapStateToProps = ({ patches }) => ({
-//     patchIDs: patches.map(({ id }) => id)
-// });
-// export const DefaultToolUI = connect(mapStateToProps)(({ patchIDs }) => (
-//     <g className="patches">
-//         {patchIDs.map(([id]) => (
-//             <Patch key={id} id={id} />
-//         ))}
-//     </g>
-// ));
+            const outlinePathString =
+                outlinePoints.length > 0
+                    ? `M ${outlinePoints.join(" L ")} Z`
+                    : "";
 
-export const DefaultToolUI = () => <g className="defaultToolUI" />;
+            return (
+                <React.Fragment>
+                    <path
+                        key={patchId}
+                        id={patchId}
+                        className="outline"
+                        d={outlinePathString}
+                    />
+                    <g className="polygons">
+                        {Object.entries(polygons).map((polygonEntry) => {
+                            const [
+                                polygonId,
+                                { nodeIds, color }
+                            ] = polygonEntry;
+
+                            const polygonPoints = nodeIds.map((nodeId) => {
+                                const { point } = meshNodes[nodeId];
+                                return point;
+                            });
+
+                            const polygonPathString =
+                                polygonPoints.length > 0
+                                    ? `M ${polygonPoints.join(" L ")} Z`
+                                    : "";
+
+                            return (
+                                <path
+                                    id={polygonId}
+                                    key={polygonId}
+                                    className="polygon"
+                                    d={polygonPathString}
+                                    style={{ stroke: color, fill: color }}
+                                />
+                            );
+                        })}
+                    </g>
+                </React.Fragment>
+            );
+        })}
+    </g>
+));

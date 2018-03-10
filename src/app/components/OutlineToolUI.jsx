@@ -9,23 +9,22 @@ import { connect } from "react-redux";
 const mapStateToProps = ({ patches }) => ({ patches });
 export const OutlineToolUI = connect(mapStateToProps)(({ patches }) => (
     <g className="outlineToolUI">
-        {
-            Object.entries(patches).map(([patchId, { outline: { nodes } }]) => {
-                const outlinePoints = Object.entries(nodes)
-                    .map(([nodeId, { point }]) => point);
+        {Object.entries(patches).map(([patchId, { outline: { nodes } }]) => {
+            const outlinePoints = Object.entries(nodes).map(([nodeId, { point }]) => point);
 
-                const pathString = outlinePoints.length > 0
-                    ? `M${outlinePoints.join("L")}Z`
+            const pathString =
+                outlinePoints.length > 0
+                    ? `M ${outlinePoints.join(" L ")} Z`
                     : "";
 
-                return (
-                    <path
-                        key={patchId}
-                        id={patchId}
-                        className="outline"
-                        d={pathString}
-                    />
-                );
-            })
-        }
-    </g>));
+            return (
+                <path
+                    key={patchId}
+                    id={patchId}
+                    className="outline"
+                    d={pathString}
+                />
+            );
+        })}
+    </g>
+));
