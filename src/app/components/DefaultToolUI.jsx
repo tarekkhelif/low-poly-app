@@ -11,9 +11,9 @@ import { setSelectionAction } from "../actions/actionGenerators";
 import { Outline } from "./Outline";
 import { Mesh } from "./Mesh";
 
-const mapStateToProps = ({ patches }) => ({ patches });
+const mapStateToProps = ({ selection, patches }) => ({ selection, patches });
 export const DefaultToolUI = connect(mapStateToProps)((props) => {
-    const { dispatch, patches } = props;
+    const { dispatch, selection, patches } = props;
 
     return (
         <g className="defaultToolUI">
@@ -29,8 +29,12 @@ export const DefaultToolUI = connect(mapStateToProps)((props) => {
                             e.stopPropagation();
                         }}
                     >
-                        <Outline id={`${patchId}-outline`} outline={outline} />
                         <Mesh id={`${patchId}-mesh`} mesh={mesh} />
+                        <Outline
+                            id={`${patchId}-outline`}
+                            selected={patchId === selection}
+                            outline={outline}
+                        />
                     </g>
                 );
             })}

@@ -10,9 +10,9 @@ import { setSelectionAction } from "../actions/actionGenerators";
 
 import { Outline } from "./Outline";
 
-const mapStateToProps = ({ patches }) => ({ patches });
+const mapStateToProps = ({ selection, patches }) => ({ selection, patches });
 export const OutlineToolUI = connect(mapStateToProps)((props) => {
-    const { dispatch, patches } = props;
+    const { dispatch, selection, patches } = props;
 
     return (
         <g className="defaultToolUI">
@@ -28,7 +28,11 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                             e.stopPropagation();
                         }}
                     >
-                        <Outline id={`${patchId}-outline`} outline={outline} />
+                        <Outline
+                            id={`${patchId}-outline`}
+                            selected={patchId === selection}
+                            outline={outline}
+                        />
                     </g>
                 );
             })}

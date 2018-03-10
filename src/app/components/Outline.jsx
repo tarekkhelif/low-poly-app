@@ -5,7 +5,9 @@
 
 import React from "react";
 
-export const Outline = ({ id, outline }) => {
+export const Outline = ({ id, selected, outline }) => {
+    const className = `outline${selected ? " selected" : ""}`;
+
     const { nodes } = outline;
 
     const points = Object.entries(nodes).map((entry) => {
@@ -15,5 +17,13 @@ export const Outline = ({ id, outline }) => {
 
     const pathString = points.length > 0 ? `M ${points.join(" L ")} Z` : "";
 
-    return <path key={id} id={id} className="outline" d={pathString} />;
+    return (
+        <path
+            key={id}
+            id={id}
+            className={className}
+            d={pathString}
+            style={{ pointerEvents: "visible" }}
+        />
+    );
 };

@@ -1,5 +1,5 @@
 $colorA: white;
-$colorB: rgb(49, 90, 224);
+$colorB: rgb(71, 120, 146);
 $transitionDuration: 0.4s;
 $fontFamily: Arial, Helvetica, sans-serif;
 $stdPadding: 10px;
@@ -7,6 +7,7 @@ $stdBorder: 2px;
 $buttonsWidth: 168px;
 $nodeSize: 1.5px;
 $fontFamily: Arial, Helvetica, sans-serif;
+$selectedColor: rgb(95, 151, 255);
 
 body {
     margin: 0;
@@ -67,12 +68,11 @@ circle {
 
 .outline {
     fill: none;
-    stroke: black;
+    stroke: grey;
     stroke-width: 2;
 }
 
 .seed {
-    // fill: #c7545467;
     fill: white;
     stroke: black;
     r: 5px;
@@ -88,4 +88,8 @@ circle {
     stroke: black;
     stroke-width: $nodeSize;
     r: $nodeSize;
+}
+
+.selected {
+    stroke: $selectedColor;
 }
