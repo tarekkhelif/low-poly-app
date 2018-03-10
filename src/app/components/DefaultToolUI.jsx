@@ -6,6 +6,8 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { Outline } from "./Outline";
+
 const mapStateToProps = ({ patches }) => ({ patches });
 export const DefaultToolUI = connect(mapStateToProps)(({ patches }) => (
     <g className="defaultToolUI">
@@ -13,30 +15,23 @@ export const DefaultToolUI = connect(mapStateToProps)(({ patches }) => (
             const [
                 patchId,
                 {
-                    outline: { nodes: outlineNodes },
+                    outline,
                     meshNodes: { nodes: meshNodes },
                     meshPolygons: { polygons }
                 }
             ] = patchEntry;
-            // prettier-ignore
-            // eslint-disable-next-line function-paren-newline
-            const outlinePoints = Object.entries(outlineNodes).map(
-                ([outlineNodeId, { point }]) => point);
-
-            const outlinePathString =
-                outlinePoints.length > 0
-                    ? `M ${outlinePoints.join(" L ")} Z`
-                    : "";
-
             return (
-                <React.Fragment>
-                    <path
-                        key={patchId}
-                        id={patchId}
-                        className="outline"
-                        d={outlinePathString}
+                <React.Fragment key={`${patchId}-fragment`}>
+                    <Outline
+                        key={`${patchId}-outline`}
+                        id={`${patchId}-outline`}
+                        outline={outline}
                     />
-                    <g className="polygons">
+                    <g
+                        key={`${patchId}-polygons`}
+                        id={`${patchId}-polygons`}
+                        className="polygons"
+                    >
                         {Object.entries(polygons).map((polygonEntry) => {
                             const [
                                 polygonId,
@@ -55,8 +50,8 @@ export const DefaultToolUI = connect(mapStateToProps)(({ patches }) => (
 
                             return (
                                 <path
-                                    id={polygonId}
                                     key={polygonId}
+                                    id={polygonId}
                                     className="polygon"
                                     d={polygonPathString}
                                     style={{ stroke: color, fill: color }}
