@@ -18,6 +18,8 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
         <g className="outlineToolUI">
             {Object.entries(patches).map((patchEntry) => {
                 const [patchId, { outline }] = patchEntry;
+                const selected = patchId === selection;
+
                 return (
                     <g
                         key={patchId}
@@ -30,9 +32,26 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                     >
                         <Outline
                             id={`${patchId}-outline`}
-                            selected={patchId === selection}
+                            selected={selected}
                             outline={outline}
                         />
+                        <g
+                            className="outlineNodes"
+                            visibility={selected ? "inherit" : "hidden"}
+                        >
+                            {Object.entries(outline.nodes).map((entry) => {
+                                const [nodeId, { point: [cx, cy] }] = entry;
+                                return (
+                                    <circle
+                                        key={nodeId}
+                                        id={nodeId}
+                                        className="outlineNode"
+                                        cx={cx}
+                                        cy={cy}
+                                    />
+                                );
+                            })}
+                        </g>
                     </g>
                 );
             })}

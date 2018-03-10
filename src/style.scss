@@ -61,14 +61,14 @@ svg {
 }
 
 circle {
-    fill: grey;
-    stroke: grey;
+    fill: rgb(77, 77, 77);
+    stroke: rgb(77, 77, 77);
     r: 5px;
 }
 
 .outline {
     fill: none;
-    stroke: grey;
+    stroke: rgb(175, 175, 175);
     stroke-width: 2;
 }
 
