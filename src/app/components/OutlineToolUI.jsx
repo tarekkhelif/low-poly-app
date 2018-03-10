@@ -22,7 +22,7 @@ export const OutlineToolUI = connect(mapStateToProps)(({ patches }) => (
                     <path
                         key={patchId}
                         id={patchId}
-                        className="patch"
+                        className="outline"
                         d={pathString}
                     />
                 );

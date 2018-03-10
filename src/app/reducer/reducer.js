@@ -30,5 +30,5 @@ export const reducer = (state = testState, action) => {
         nextState.currentTool = { tool };
         return nextState;
     }
-    return state;
+    return state
 };

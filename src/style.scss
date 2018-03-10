@@ -24,73 +24,68 @@ h1 {
     padding: $stdPadding;
 }
 
-#container {
+.container {
     display: grid;
     grid-template-columns: $buttonsWidth 1fr;
     grid-gap: $stdPadding;
 }
 
-#controlPane {
-    button {
-        -webkit-transition-duration: $transitionDuration; /* Safari */
-        transition-duration: $transitionDuration;
-        background-color: $colorB;
-        border: $stdBorder solid $colorA;
-        margin-bottom: 4px;
-        padding: $stdPadding;
-        width: 100%;
-        display: block;
-        font-size: 16px;
-        color: $colorA;
-        text-align: center;
+button {
+    -webkit-transition-duration: $transitionDuration; /* Safari */
+    transition-duration: $transitionDuration;
+    background-color: $colorB;
+    border: $stdBorder solid $colorA;
+    margin-bottom: 4px;
+    padding: $stdPadding;
+    width: 100%;
+    display: block;
+    font-size: 16px;
+    color: $colorA;
+    text-align: center;
 
-        &:disabled {
-            opacity: 0.4;
-        }
+    &:disabled {
+        opacity: 0.4;
+    }
 
-        &:enabled:hover {
-            background-color: $colorA;
-            color: $colorB;
-        }
+    &:enabled:hover {
+        background-color: $colorA;
+        color: $colorB;
     }
 }
 
-#workspace {
-    svg {
-        max-width: 100%;
-        height: auto;
-        object-fit: contain;
+svg {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
 
-        circle {
-            // fill: #c7545467;
-            fill: grey;
-            stroke: grey;
-            r: 5px;
-        }
+circle {
+    fill: grey;
+    stroke: grey;
+    r: 5px;
+}
 
-        .outline {
-            fill: none;
-            stroke: black;
-            stroke-width: 2;
-        }
+.outline {
+    fill: none;
+    stroke: black;
+    stroke-width: 2;
+}
 
-        .seed {
-            // fill: #c7545467;
-            fill: white;
-            stroke: black;
-            r: 5px;
-        }
+.seed {
+    // fill: #c7545467;
+    fill: white;
+    stroke: black;
+    r: 5px;
+}
 
-        .meshPoly {
-            fill: none;
-            stroke: none;
-        }
+.meshPoly {
+    fill: none;
+    stroke: none;
+}
 
-        .meshNode {
-            fill: white;
-            stroke: black;
-            stroke-width: $nodeSize;
-            r: $nodeSize;
-        }
-    }
+.meshNode {
+    fill: white;
+    stroke: black;
+    stroke-width: $nodeSize;
+    r: $nodeSize;
 }
