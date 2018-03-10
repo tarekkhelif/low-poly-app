@@ -15,7 +15,10 @@ export const Outline = ({ id, selected, outline }) => {
         return point;
     });
 
-    const pathString = points.length > 0 ? `M ${points.join(" L ")} Z` : "";
+    const pathString =
+        points.length > 0
+            ? `M ${points.join(" L ")}${selected ? "" : " Z"}`
+            : "";
 
     return (
         <path
