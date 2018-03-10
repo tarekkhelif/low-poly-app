@@ -15,7 +15,7 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
     const { dispatch, selection, patches } = props;
 
     return (
-        <g className="defaultToolUI">
+        <g className="outlineToolUI">
             {Object.entries(patches).map((patchEntry) => {
                 const [patchId, { outline }] = patchEntry;
                 return (
