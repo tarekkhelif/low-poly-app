@@ -6,25 +6,32 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { setSelectionAction } from "../actions/actionGenerators";
+
+import { Outline } from "./Outline";
+
 const mapStateToProps = ({ patches }) => ({ patches });
-export const OutlineToolUI = connect(mapStateToProps)(({ patches }) => (
-    <g className="outlineToolUI">
-        {Object.entries(patches).map(([patchId, { outline: { nodes } }]) => {
-            const outlinePoints = Object.entries(nodes).map(([nodeId, { point }]) => point);
+export const OutlineToolUI = connect(mapStateToProps)((props) => {
+    const { dispatch, patches } = props;
 
-            const pathString =
-                outlinePoints.length > 0
-                    ? `M ${outlinePoints.join(" L ")} Z`
-                    : "";
-
-            return (
-                <path
-                    key={patchId}
-                    id={patchId}
-                    className="outline"
-                    d={pathString}
-                />
-            );
-        })}
-    </g>
-));
+    return (
+        <g className="defaultToolUI">
+            {Object.entries(patches).map((patchEntry) => {
+                const [patchId, { outline }] = patchEntry;
+                return (
+                    <g
+                        key={patchId}
+                        id={patchId}
+                        className="patch"
+                        onMouseDown={(e) => {
+                            dispatch(setSelectionAction(patchId));
+                            e.stopPropagation();
+                        }}
+                    >
+                        <Outline id={`${patchId}-outline`} outline={outline} />
+                    </g>
+                );
+            })}
+        </g>
+    );
+});
