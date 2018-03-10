@@ -9,7 +9,7 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 
 import { reducer } from "./reducer/reducer";
-import { ConnectedApp } from "./components/App";
+import { App } from "./components/App";
 
 const container = document.createElement("div");
 document.body.appendChild(container);
@@ -17,9 +17,8 @@ document.body.appendChild(container);
 const store = createStore(reducer);
 
 ReactDOM.render(
-    (
-        <Provider store={store}>
-            <ConnectedApp />
-        </Provider>),
+    <Provider store={store}>
+        <App />
+    </Provider>,
     container
 );

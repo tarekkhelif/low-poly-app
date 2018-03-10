@@ -6,41 +6,12 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import * as d3 from "d3";
+
 import { ToolButtons } from "./ToolButtons";
 import { ConnectedActiveToolUI } from "./ActiveToolUI";
 
-const App = ({ rasterBase64, width, height }) =>
-    (
-        <div className="app">
-            <div className="pane">
-                <ToolButtons />
-                <div className="currentToolOptions"></div>
-            </div>
-            <svg
-                className="workspace"
-                width={width}
-                height={height}
-            >
-                <image
-                    className="raster"
-                    href={rasterBase64}
-                    width={width}
-                    height={height}
-                />
-                <ConnectedActiveToolUI />
-            </svg>
-        </div>);
-
-function scaleDimensions(fullWidth, fullHeight) {
-    if (fullWidth === 0 || fullHeight === 0) {
-        throw new Error("Dimensions must be nonzero");
-    }
-
-    const width = 600;
-    const height = fullHeight / fullWidth * width;
-
-    return { width, height };
-}
+const setSelectionAction = () => ({ type: "SET_SELECTION", payload: {} });
 
 const mapStateToProps = (state) => {
     let rasterProps;
@@ -63,4 +34,37 @@ const mapStateToProps = (state) => {
 
     return { ...rasterProps };
 };
-export const ConnectedApp = connect(mapStateToProps)(App);
+export const App = connect(mapStateToProps)((props) => {
+    const {
+        dispatch, rasterBase64, width, height
+    } = props;
+
+    return (
+        <div className="app" onMouseDown={() => dispatch(setSelectionAction())}>
+            <div className="pane">
+                <ToolButtons />
+                <div className="currentToolOptions" />
+            </div>
+            <svg className="workspace" width={width} height={height}>
+                <image
+                    className="raster"
+                    href={rasterBase64}
+                    width={width}
+                    height={height}
+                />
+                <ConnectedActiveToolUI />
+            </svg>
+        </div>
+    );
+});
+
+function scaleDimensions(fullWidth, fullHeight) {
+    if (fullWidth === 0 || fullHeight === 0) {
+        throw new Error("Dimensions must be nonzero");
+    }
+
+    const width = 600;
+    const height = fullHeight / fullWidth * width;
+
+    return { width, height };
+}
