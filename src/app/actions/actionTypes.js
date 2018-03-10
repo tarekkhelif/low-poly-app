@@ -1,3 +1,5 @@
+export const SET_SELECTION = "SET_SELECTION";
+
 export const SET_RASTER = "SET_RASTER";
 
 export const CHANGE_TOOL = "CHANGE_TOOL";

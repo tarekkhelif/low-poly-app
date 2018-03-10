@@ -6,12 +6,10 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import * as d3 from "d3";
+import { setSelectionAction } from "../actions/actionGenerators";
 
 import { ToolButtons } from "./ToolButtons";
 import { ConnectedActiveToolUI } from "./ActiveToolUI";
-
-const setSelectionAction = () => ({ type: "SET_SELECTION", payload: {} });
 
 const mapStateToProps = (state) => {
     let rasterProps;
@@ -40,7 +38,11 @@ export const App = connect(mapStateToProps)((props) => {
     } = props;
 
     return (
-        <div className="app" onMouseDown={() => dispatch(setSelectionAction())}>
+        <div
+            className="app"
+            onMouseDown={() => dispatch(setSelectionAction(null))}
+            role="presentation"
+        >
             <div className="pane">
                 <ToolButtons />
                 <div className="currentToolOptions" />
