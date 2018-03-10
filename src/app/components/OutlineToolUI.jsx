@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { setSelectionAction } from "../actions/actionGenerators";
 
 import { Outline } from "./Outline";
+import { Nodes } from "./Nodes";
 
 const mapStateToProps = ({ selection, patches }) => ({ selection, patches });
 export const OutlineToolUI = connect(mapStateToProps)((props) => {
@@ -35,23 +36,7 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                             selected={selected}
                             outline={outline}
                         />
-                        <g
-                            className="outlineNodes"
-                            visibility={selected ? "inherit" : "hidden"}
-                        >
-                            {Object.entries(outline.nodes).map((entry) => {
-                                const [nodeId, { point: [cx, cy] }] = entry;
-                                return (
-                                    <circle
-                                        key={nodeId}
-                                        id={nodeId}
-                                        className="outlineNode"
-                                        cx={cx}
-                                        cy={cy}
-                                    />
-                                );
-                            })}
-                        </g>
+                        <Nodes nodes={outline.nodes} selected={selected} />
                     </g>
                 );
             })}
