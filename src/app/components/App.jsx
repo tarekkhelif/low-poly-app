@@ -38,16 +38,18 @@ export const App = connect(mapStateToProps)((props) => {
     } = props;
 
     return (
-        <div
-            className="app"
-            onMouseDown={() => dispatch(setSelectionAction(null))}
-            role="presentation"
-        >
+        <div className="app">
             <div className="pane">
                 <ToolButtons />
                 <div className="currentToolOptions" />
             </div>
-            <svg className="workspace" width={width} height={height}>
+            <svg
+                className="workspace"
+                width={width}
+                height={height}
+                onMouseDown={() => dispatch(setSelectionAction(null))}
+                role="presentation"
+            >
                 <image
                     className="raster"
                     href={rasterBase64}
