@@ -4,18 +4,16 @@
     react/prop-types */
 
 import React from "react";
-import { connect } from "react-redux";
 
-const mapStateToProps = () => ({});
 export const Outline = ({ id, outline }) => {
     const { nodes } = outline;
-    const outlinePoints = Object.entries(nodes).map((entry) => {
-        const [outlineNodeId, { point }] = entry;
+
+    const points = Object.entries(nodes).map((entry) => {
+        const [nodeId, { point }] = entry;
         return point;
     });
 
-    const outlinePathString =
-        outlinePoints.length > 0 ? `M ${outlinePoints.join(" L ")} Z` : "";
+    const pathString = points.length > 0 ? `M ${points.join(" L ")} Z` : "";
 
-    return <path key={id} id={id} className="outline" d={outlinePathString} />;
+    return <path key={id} id={id} className="outline" d={pathString} />;
 };
