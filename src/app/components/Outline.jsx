@@ -20,13 +20,15 @@ export const Outline = ({ id, selected, outline }) => {
             ? `M ${points.join(" L ")}${selected ? "" : " Z"}`
             : "";
 
+    const pointerEvents = selected ? "stroke" : "visible";
+
     return (
         <path
             key={id}
             id={id}
             className={className}
             d={pathString}
-            style={{ pointerEvents: "visible" }}
+            style={{ pointerEvents }}
         />
     );
 };
