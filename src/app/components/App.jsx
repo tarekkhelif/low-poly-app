@@ -6,8 +6,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { setSelectionAction } from "../actions/actionGenerators";
-
 import { ToolButtons } from "./ToolButtons";
 import { CurrentToolUI } from "./CurrentToolUI";
 import { CurrentToolControls } from "./CurrentToolControls";
@@ -34,9 +32,7 @@ const mapStateToProps = (state) => {
     return { ...rasterProps };
 };
 export const App = connect(mapStateToProps)((props) => {
-    const {
-        dispatch, rasterBase64, width, height
-    } = props;
+    const { rasterBase64, width, height } = props;
 
     return (
         <div className="app">
@@ -48,7 +44,6 @@ export const App = connect(mapStateToProps)((props) => {
                 className="workspace"
                 width={width}
                 height={height}
-                onMouseDown={() => dispatch(setSelectionAction(null))}
                 role="presentation"
             >
                 <image

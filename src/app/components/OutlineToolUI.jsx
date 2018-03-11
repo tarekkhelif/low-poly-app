@@ -6,9 +6,16 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import * as d3 from "d3";
+
+import { noop } from "../util/funcTools";
+
 import { SELECT_MODE, EDIT_MODE } from "../actions/actionTypes";
 
-import { setSelectionAction } from "../actions/actionGenerators";
+import {
+    setSelectionAction,
+    addOutlineNodeAction
+} from "../actions/actionGenerators";
 
 import { Outline } from "./Outline";
 import { OutlineNodes } from "./OutlineNodes";
@@ -30,37 +37,70 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
 
                 const selected = patchId === selection;
 
-                const selectPatch = (e) => {
-                    e.stopPropagation();
+                const setSelection = (id) => dispatch(setSelectionAction(id));
+
+                const addNode = (point) => {
+                    const randNum = Math.floor(Math.random() * 1e16);
+                    const nodeId = `bad-ID-${randNum.toString(16)}`;
+                    dispatch(addOutlineNodeAction(patchId, nodeId, point));
+                };
+
+                const dispatchActionOnUnmodifiedMouseDown = (dispatchAction) => (e, ...args) => {
+                    // e.stopPropagation();
 
                     const correctModifiers =
                         !e.ctrlKey && !e.altKey && !e.shiftKey && !e.button;
+
                     if (correctModifiers) {
-                        dispatch(setSelectionAction(patchId));
+                        dispatchAction(...args);
                     }
                 };
 
-                let onMouseDown;
+                const setSelectionMouseDown = dispatchActionOnUnmodifiedMouseDown(setSelection);
+                const addNodeMouseDown = dispatchActionOnUnmodifiedMouseDown(addNode);
+
+                const patchElement = d3.select(`#${patchId}`).node();
+                let onWorkspaceMouseDown;
+                let onPatchMouseDown;
                 switch (mode) {
                     case SELECT_MODE: {
-                        onMouseDown = selectPatch;
+                        onWorkspaceMouseDown = (e) =>
+                            setSelectionMouseDown(e, null);
+                        onPatchMouseDown = (e) =>
+                            setSelectionMouseDown(e, patchId);
                         break;
                     }
                     case EDIT_MODE: {
-                        onMouseDown = null;
+                        onWorkspaceMouseDown = (e) =>
+                            addNodeMouseDown(
+                                e,
+                                d3.clientPoint(patchElement, e)
+                            );
+                        onPatchMouseDown = (e) =>
+                            addNodeMouseDown(
+                                e,
+                                d3.clientPoint(patchElement, e)
+                            );
                         break;
                     }
                     default: {
-                        onMouseDown = null;
+                        onWorkspaceMouseDown = noop;
+                        onPatchMouseDown = noop;
                     }
                 }
+
+                // Set listener on `.workspace` (the `<svg>` element eveything's
+                //     inside of)
+                d3
+                    .select(".workspace")
+                    .on("mousedown", () => onWorkspaceMouseDown(d3.event));
 
                 return (
                     <g
                         key={patchId}
                         id={patchId}
                         className="patch"
-                        onMouseDown={onMouseDown}
+                        onMouseDown={onPatchMouseDown}
                     >
                         <Outline
                             id={`${patchId}-outline`}

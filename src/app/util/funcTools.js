@@ -3,6 +3,9 @@
  * @author Tarek Khelif
  */
 
+/** A no-op; does nothing. */
+export const noop = () => {};
+
 /** Takes a function and some of its arguments, and returns a copy of that
  * function that takes the remaining arguments and executes the original
  * function with the full set of arguments
