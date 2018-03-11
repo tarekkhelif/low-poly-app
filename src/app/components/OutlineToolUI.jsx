@@ -6,14 +6,22 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { SELECT_MODE, EDIT_MODE } from "../actions/actionTypes";
+
 import { setSelectionAction } from "../actions/actionGenerators";
 
 import { Outline } from "./Outline";
 import { OutlineNodes } from "./OutlineNodes";
 
-const mapStateToProps = ({ selection, patches }) => ({ selection, patches });
+const mapStateToProps = ({ currentTool: { mode }, selection, patches }) => ({
+    mode,
+    selection,
+    patches
+});
 export const OutlineToolUI = connect(mapStateToProps)((props) => {
-    const { dispatch, selection, patches } = props;
+    const {
+        dispatch, mode, selection, patches
+    } = props;
 
     return (
         <g className="outlineToolUI">
@@ -32,12 +40,27 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                     }
                 };
 
+                let onMouseDown;
+                switch (mode) {
+                    case SELECT_MODE: {
+                        onMouseDown = selectPatch;
+                        break;
+                    }
+                    case EDIT_MODE: {
+                        onMouseDown = null;
+                        break;
+                    }
+                    default: {
+                        onMouseDown = null;
+                    }
+                }
+
                 return (
                     <g
                         key={patchId}
                         id={patchId}
                         className="patch"
-                        onMouseDown={selectPatch}
+                        onMouseDown={onMouseDown}
                     >
                         <Outline
                             id={`${patchId}-outline`}
