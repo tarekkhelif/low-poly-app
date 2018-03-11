@@ -21,6 +21,7 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                 const [patchId, { outline }] = patchEntry;
 
                 const selected = patchId === selection;
+
                 const selectPatch = (e) => {
                     e.stopPropagation();
 
@@ -43,11 +44,7 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                             selected={selected}
                             outline={outline}
                         />
-                        <OutlineNodes
-                            patchId={patchId}
-                            nodes={outline.nodes}
-                            selected={selected}
-                        />
+                        <OutlineNodes patchId={patchId} selected={selected} />
                     </g>
                 );
             })}

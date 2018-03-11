@@ -13,7 +13,9 @@ import {
 
 import { OutlineNode } from "./OutlineNode";
 
-const mapStateToProps = ({}) => ({});
+const mapStateToProps = ({ patches }, { patchId }) => ({
+    nodes: patches[patchId].outline.nodes
+});
 export const OutlineNodes = connect(mapStateToProps)(({
     dispatch, patchId, nodes, selected
 }) => (
@@ -21,8 +23,8 @@ export const OutlineNodes = connect(mapStateToProps)(({
         className="outlineNodes"
         visibility={selected ? "inherit" : "hidden"}
     >
-        {Object.entries(nodes).map((entry) => {
-            const [nodeId, { point }] = entry;
+        {Object.entries(nodes).map((entries) => {
+            const [nodeId, { point }] = entries;
 
             const deleteNode = () => {
                 dispatch(deleteOutlineNodeAction(patchId, nodeId));

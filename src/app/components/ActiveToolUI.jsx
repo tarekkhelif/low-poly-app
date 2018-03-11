@@ -7,25 +7,16 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { OUTLINE_TOOL } from "../actions/actionTypes";
-import { DefaultToolUI } from "./DefaultToolUI";
 import { OutlineToolUI } from "./OutlineToolUI";
+import { DefaultToolUI } from "./DefaultToolUI";
 
-const toolUIs = new Map([
-    [OUTLINE_TOOL, OutlineToolUI]
-]);
+const toolUIs = new Map([[OUTLINE_TOOL, OutlineToolUI]]);
 
-const ActiveToolUI = ({ tool }) => {
+const mapStateToProps = ({ currentTool: { tool } }) => ({ tool });
+export const ActiveToolUI = connect(mapStateToProps)(({ tool }) => {
     if (toolUIs.has(tool)) {
         const ToolUI = toolUIs.get(tool);
         return <ToolUI />;
     }
     return <DefaultToolUI />;
-};
-
-const mapStateToProps = (state) => {
-    const { tool } = state.currentTool;
-
-    return { tool };
-};
-
-export const ConnectedActiveToolUI = connect(mapStateToProps)(ActiveToolUI);
+});
