@@ -10,6 +10,7 @@ import { setSelectionAction } from "../actions/actionGenerators";
 
 import { ToolButtons } from "./ToolButtons";
 import { CurrentToolUI } from "./CurrentToolUI";
+import { CurrentToolControls } from "./CurrentToolControls";
 
 const mapStateToProps = (state) => {
     let rasterProps;
@@ -41,7 +42,7 @@ export const App = connect(mapStateToProps)((props) => {
         <div className="app">
             <div className="pane">
                 <ToolButtons />
-                <div className="currentToolOptions" />
+                <CurrentToolControls />
             </div>
             <svg
                 className="workspace"
