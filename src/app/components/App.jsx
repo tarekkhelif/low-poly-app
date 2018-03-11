@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { setSelectionAction } from "../actions/actionGenerators";
 
 import { ToolButtons } from "./ToolButtons";
-import { ActiveToolUI } from "./ActiveToolUI";
+import { CurrentToolUI } from "./CurrentToolUI";
 
 const mapStateToProps = (state) => {
     let rasterProps;
@@ -56,7 +56,7 @@ export const App = connect(mapStateToProps)((props) => {
                     width={width}
                     height={height}
                 />
-                <ActiveToolUI />
+                <CurrentToolUI />
             </svg>
         </div>
     );

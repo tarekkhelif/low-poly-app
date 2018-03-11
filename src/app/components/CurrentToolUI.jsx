@@ -13,7 +13,7 @@ import { DefaultToolUI } from "./DefaultToolUI";
 const toolUIs = new Map([[OUTLINE_TOOL, OutlineToolUI]]);
 
 const mapStateToProps = ({ currentTool: { tool } }) => ({ tool });
-export const ActiveToolUI = connect(mapStateToProps)(({ tool }) => {
+export const CurrentToolUI = connect(mapStateToProps)(({ tool }) => {
     if (toolUIs.has(tool)) {
         const ToolUI = toolUIs.get(tool);
         return <ToolUI />;
