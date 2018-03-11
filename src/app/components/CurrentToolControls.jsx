@@ -7,9 +7,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { OUTLINE_TOOL } from "../actions/actionTypes";
-// import { OutlineToolControls } from "./OutlineToolControls";
-
-const OutlineToolControls = () => <div className="outlineToolControls" />;
+import { OutlineToolControls } from "./OutlineToolControls";
 
 const toolControls = new Map([[OUTLINE_TOOL, OutlineToolControls]]);
 

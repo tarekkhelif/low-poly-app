@@ -2,6 +2,7 @@ import {
     SET_SELECTION,
     SET_RASTER,
     CHANGE_TOOL,
+    CHANGE_OUTLINE_TOOL_MODE,
     DELETE_OUTLINE_NODE,
     MOVE_OUTLINE_NODE
 } from "./actionTypes";
@@ -19,6 +20,11 @@ export const setRasterAction = (rasterBase64, width, height) => ({
 export const changeToolAction = (tool) => ({
     type: CHANGE_TOOL,
     payload: { tool }
+});
+
+export const changeOutlineModeAction = (mode) => ({
+    type: CHANGE_OUTLINE_TOOL_MODE,
+    payload: { mode }
 });
 
 export const deleteOutlineNodeAction = (patchId, nodeId) => ({
