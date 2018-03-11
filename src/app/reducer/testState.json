@@ -6,7 +6,8 @@
         "height": 400
     },
     "currentTool": {
-        "tool": ""
+        "tool": "",
+        "mode": null
     },
     "patches": {
         "patch-1": {

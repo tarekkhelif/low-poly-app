@@ -2,6 +2,7 @@ import {
     SET_SELECTION,
     SET_RASTER,
     CHANGE_TOOL,
+    CHANGE_OUTLINE_TOOL_MODE,
     DELETE_OUTLINE_NODE,
     MOVE_OUTLINE_NODE
 } from "../actions/actionTypes";
@@ -30,7 +31,13 @@ export const reducer = (state = testState, action) => {
         case CHANGE_TOOL: {
             nextState = deepCopy(state);
             const { tool } = action.payload;
-            nextState.currentTool = { tool };
+            nextState.currentTool.tool = tool;
+            break;
+        }
+        case CHANGE_OUTLINE_TOOL_MODE: {
+            nextState = deepCopy(state);
+            const { mode } = action.payload;
+            nextState.currentTool.mode = mode;
             break;
         }
         case DELETE_OUTLINE_NODE: {

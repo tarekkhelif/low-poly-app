@@ -52,6 +52,10 @@ button {
         background-color: $colorA;
         color: $colorB;
     }
+
+    &.active {
+        border-style: dashed;
+    }
 }
 
 svg {
