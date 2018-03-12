@@ -25,7 +25,7 @@ h1 {
     padding: $stdPadding;
 }
 
-.container {
+.app {
     display: grid;
     grid-template-columns: $buttonsWidth 1fr;
     grid-gap: $stdPadding;
