@@ -62,10 +62,12 @@ function exportArt(/* state */) {
     FileSaver.saveAs(svgFile, "low-poly-project.svg");
 }
 
-export const ToolButtons = connect()(({ dispatch }) => {
+const mapStateToProps = ({ currentTool: { tool } }) => ({ tool });
+export const ToolButtons = connect(mapStateToProps)(({ dispatch, tool }) => {
     const tools = [
         {
             label: "Import Image",
+            className: "toolButton",
             onClick: async () => {
                 dispatch(changeToolAction(null));
 
@@ -76,14 +78,19 @@ export const ToolButtons = connect()(({ dispatch }) => {
         },
         {
             label: "Outline",
+            className: `toolButton${tool === OUTLINE_TOOL ? " active" : ""}`,
             onClick: () => dispatch(changeToolAction(OUTLINE_TOOL))
         },
         {
             label: "Edit Tesselation",
+            className: `toolButton${
+                tool === TESSELATION_TOOL ? " active" : ""
+            }`,
             onClick: () => dispatch(changeToolAction(TESSELATION_TOOL))
         },
         {
             label: "Save Art",
+            className: "toolButton",
             onClick: () => {
                 dispatch(changeToolAction(null));
 
@@ -94,13 +101,13 @@ export const ToolButtons = connect()(({ dispatch }) => {
 
     return (
         <div className="toolButtons">
-            {tools.map(({ label, onClick }) => {
+            {tools.map(({ label, className, onClick }) => {
                 const id = camelize(label);
                 return (
                     <button
                         key={id}
                         id={id}
-                        className="toolButton"
+                        className={className}
                         onClick={onClick}
                     >
                         {label}
