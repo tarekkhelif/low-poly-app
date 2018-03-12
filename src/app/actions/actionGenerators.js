@@ -3,6 +3,7 @@ import {
     SET_RASTER,
     CHANGE_TOOL,
     CHANGE_OUTLINE_TOOL_MODE,
+    CREATE_PATCH,
     ADD_OUTLINE_NODE,
     DELETE_OUTLINE_NODE,
     MOVE_OUTLINE_NODE
@@ -26,6 +27,11 @@ export const changeToolAction = (tool) => ({
 export const changeOutlineModeAction = (mode) => ({
     type: CHANGE_OUTLINE_TOOL_MODE,
     payload: { mode }
+});
+
+export const createPatchAction = (patchId) => ({
+    type: CREATE_PATCH,
+    payload: { patchId }
 });
 
 export const addOutlineNodeAction = (patchId, nodeId, point) => ({

@@ -16,7 +16,6 @@ type Props = {
     patchId: string,
     outline: Object,
     selected: boolean,
-    workspaceEventHandler: (e: Event) => void,
     patchEventHandler: (e: Event) => void
 };
 
@@ -39,17 +38,10 @@ export const OutlineToolPatch = class extends React.Component<Props> {
 
     installListeners() {
         const { patchElement } = this;
-        const { workspaceEventHandler, patchEventHandler } = this.props;
+        const { patchEventHandler } = this.props;
 
         // Handlers to un/install in `componentDidMout` / `componentWillUnmount`
         this.handlers = [
-            {
-                // `.workspace` (the `<svg>` element eveything's inside of)
-                element: ".workspace",
-                event: "mousedown",
-                handler: () =>
-                    executeOnPlainMouseDown(workspaceEventHandler)(d3.event)
-            },
             {
                 // This patch
                 element: patchElement,

@@ -9,10 +9,12 @@ import { connect } from "react-redux";
 import * as d3 from "d3";
 
 import { noop } from "../util/funcTools";
+import { executeOnPlainMouseDown } from "../util/eventTools";
 
 import { SELECT_MODE, EDIT_MODE } from "../actions/actionTypes";
 
 import {
+    createPatchAction,
     setSelectionAction,
     addOutlineNodeAction
 } from "../actions/actionGenerators";
@@ -29,8 +31,8 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
         dispatch, mode, selection, patches
     } = props;
 
+    const createPatch = (newPatchId) => dispatch(createPatchAction(newPatchId));
     const setSelection = (id) => dispatch(setSelectionAction(id));
-
     const addNode = (patchId, point) => {
         const randNum = Math.floor(Math.random() * 1e16);
         const nodeId = `bad-ID-${randNum.toString(16)}`;
@@ -38,32 +40,64 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
         dispatch(addOutlineNodeAction(patchId, nodeId, point));
     };
 
+    let workspaceEventHandler;
+    const workspaceElement = document.querySelector(".workspace");
+    switch (mode) {
+        case SELECT_MODE: {
+            workspaceEventHandler = () => setSelection(null);
+            break;
+        }
+        case EDIT_MODE: {
+            workspaceEventHandler = (e) => {
+                const point = d3.clientPoint(workspaceElement, e);
+
+                // Add to selected patch. If none are selected, create one.
+                if (selection) {
+                    const patchId = selection;
+                    addNode(patchId, point);
+                } else {
+                    const randNum = Math.floor(Math.random() * 1e16);
+                    const newPatchId = `bad-ID-${randNum.toString(16)}`;
+                    createPatch(newPatchId);
+                    setSelection(newPatchId);
+                    addNode(newPatchId, point);
+                }
+            };
+            break;
+        }
+        default: {
+            workspaceEventHandler = noop;
+        }
+    }
+
+    // Install listener on `svg.workspace` element (which contains everything)
+    d3
+        .select(workspaceElement)
+        .on("mousedown.workspace.outlineTool", () =>
+            executeOnPlainMouseDown(workspaceEventHandler)(d3.event));
+
+    // Render patches with appropriate listener
     return (
         <g className="outlineToolUI">
             {Object.entries(patches).map((patchEntry) => {
                 const [patchId, { outline }] = patchEntry;
                 const selected = patchId === selection;
 
-                // Choose event listeners for `.workspace` and `.patch`
-                //   depending on mode.
-                let workspaceEventHandler;
+                // Choose event listeners for depending on mode.
                 let patchEventHandler;
                 switch (mode) {
                     case SELECT_MODE: {
-                        workspaceEventHandler = () => setSelection(null);
-                        patchEventHandler = () => setSelection(patchId);
+                        patchEventHandler = (e) => {
+                            e.stopPropagation();
+                            setSelection(patchId);
+                        };
                         break;
                     }
                     case EDIT_MODE: {
-                        const patchElement = d3.select(`#${patchId}`).node();
-                        workspaceEventHandler = (e) =>
-                            addNode(patchId, d3.clientPoint(patchElement, e));
-                        patchEventHandler = (e) =>
-                            addNode(patchId, d3.clientPoint(patchElement, e));
+                        patchEventHandler = noop;
                         break;
                     }
                     default: {
-                        workspaceEventHandler = noop;
                         patchEventHandler = noop;
                     }
                 }
@@ -74,11 +108,7 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
                         patchId={patchId}
                         outline={outline}
                         selected={selected}
-                        workspaceEventHandler={workspaceEventHandler}
-                        patchEventHandler={(e) => {
-                            e.stopPropagation();
-                            patchEventHandler(e);
-                        }}
+                        patchEventHandler={patchEventHandler}
                     />
                 );
             })}

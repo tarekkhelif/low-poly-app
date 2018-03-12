@@ -3,6 +3,7 @@ import {
     SET_RASTER,
     CHANGE_TOOL,
     CHANGE_OUTLINE_TOOL_MODE,
+    CREATE_PATCH,
     ADD_OUTLINE_NODE,
     DELETE_OUTLINE_NODE,
     MOVE_OUTLINE_NODE
@@ -37,6 +38,11 @@ export const reducer = (state = testState, action) => {
         case CHANGE_OUTLINE_TOOL_MODE: {
             const { mode } = payload;
             nextState.currentTool.mode = mode;
+            break;
+        }
+        case CREATE_PATCH: {
+            const { patchId } = payload;
+            nextState.patches[patchId] = { outline: { nodes: {} }, mesh: { nodes: {}, polygons: {} } };
             break;
         }
         case ADD_OUTLINE_NODE: {
