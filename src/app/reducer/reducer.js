@@ -30,7 +30,7 @@ export const reducer = (state = testState, action) => {
         }
         case CHANGE_TOOL: {
             const { tool } = action.payload;
-            nextState.currentTool.tool = tool;
+            nextState.currentTool = { tool };
             break;
         }
         case CHANGE_OUTLINE_TOOL_MODE: {
