@@ -10,7 +10,7 @@ import {
 
 import testState from "./testState.json";
 
-// SO says this is a fast way to get a deep copy
+// SO says this is a good way to get a deep copy
 const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
 
 export const reducer = (state = testState, action) => {
