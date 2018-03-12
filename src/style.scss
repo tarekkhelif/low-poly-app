@@ -31,6 +31,10 @@ h1 {
     grid-gap: $stdPadding;
 }
 
+hr {
+    border: $stdBorder/2 solid $colorA;
+}
+
 button {
     -webkit-transition-duration: $transitionDuration; /* Safari */
     transition-duration: $transitionDuration;

@@ -15,7 +15,17 @@ const mapStateToProps = ({ currentTool: { tool } }) => ({ tool });
 export const CurrentToolControls = connect(mapStateToProps)(({ tool }) => {
     if (toolControls.has(tool)) {
         const ToolControl = toolControls.get(tool);
-        return <ToolControl />;
+        return (
+            <React.Fragment>
+                <hr
+                    style={{
+                        marginTop: "14px",
+                        marginBottom: "14px"
+                    }}
+                />
+                <ToolControl />
+            </React.Fragment>
+        );
     }
     return null;
 });
