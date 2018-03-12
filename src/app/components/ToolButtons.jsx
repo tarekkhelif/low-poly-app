@@ -11,19 +11,19 @@ import FileSaver from "file-saver";
 import { camelize } from "../util/stringTools";
 
 import { setRasterAction, changeToolAction } from "../actions/actionGenerators";
-import {
-    OUTLINE_TOOL,
-    TESSELATION_TOOL
-} from "../actions/actionTypes";
-
+import { OUTLINE_TOOL, TESSELATION_TOOL } from "../actions/actionTypes";
 
 function askUserForRaster() {
     return new Promise((resolve, reject) => {
         function onChange() {
             const file = this.files[0];
             const reader = new FileReader();
-            reader.onload = () => { resolve(reader.result); };
-            reader.onerror = (err) => { reject(err); };
+            reader.onload = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = (err) => {
+                reject(err);
+            };
             reader.readAsDataURL(file);
         }
 
@@ -57,7 +57,7 @@ const getRasterDimensions = (base64ImgURL) => {
 function exportArt(/* state */) {
     // const svg = <Art state={state}/>;
     const svg = document.querySelector(".workspace");
-    const data = (new XMLSerializer()).serializeToString(svg);
+    const data = new XMLSerializer().serializeToString(svg);
     const svgFile = new File([data], { type: "image/svg+xml;charset=utf-8" });
     FileSaver.saveAs(svgFile, "low-poly-project.svg");
 }
@@ -67,6 +67,8 @@ export const ToolButtons = connect()(({ dispatch }) => {
         {
             label: "Import Image",
             onClick: async () => {
+                dispatch(changeToolAction(null));
+
                 const raster = await askUserForRaster();
                 const { width, height } = await getRasterDimensions(raster);
                 dispatch(setRasterAction(raster, width, height));
@@ -82,26 +84,29 @@ export const ToolButtons = connect()(({ dispatch }) => {
         },
         {
             label: "Save Art",
-            onClick: () => { exportArt(); }
+            onClick: () => {
+                dispatch(changeToolAction(null));
+
+                exportArt();
+            }
         }
     ];
 
     return (
         <div className="toolButtons">
-            {
-                tools.map(({ label, onClick }) => {
-                    const id = camelize(label);
-                    return (
-                        <button
-                            key={id}
-                            id={id}
-                            className="toolButton"
-                            onClick={onClick}
-                        >
-                            {label}
-                        </button>);
-                })
-            }
+            {tools.map(({ label, onClick }) => {
+                const id = camelize(label);
+                return (
+                    <button
+                        key={id}
+                        id={id}
+                        className="toolButton"
+                        onClick={onClick}
+                    >
+                        {label}
+                    </button>
+                );
+            })}
         </div>
     );
 });
