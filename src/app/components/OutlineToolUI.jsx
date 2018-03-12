@@ -17,8 +17,7 @@ import {
     addOutlineNodeAction
 } from "../actions/actionGenerators";
 
-import { Outline } from "./Outline";
-import { OutlineNodes } from "./OutlineNodes";
+import { OutlineToolPatch } from "./OutlineToolPatch";
 
 const mapStateToProps = ({ currentTool: { mode }, selection, patches }) => ({
     mode,
@@ -30,85 +29,57 @@ export const OutlineToolUI = connect(mapStateToProps)((props) => {
         dispatch, mode, selection, patches
     } = props;
 
+    const setSelection = (id) => dispatch(setSelectionAction(id));
+
+    const addNode = (patchId, point) => {
+        const randNum = Math.floor(Math.random() * 1e16);
+        const nodeId = `bad-ID-${randNum.toString(16)}`;
+
+        dispatch(addOutlineNodeAction(patchId, nodeId, point));
+    };
+
     return (
         <g className="outlineToolUI">
             {Object.entries(patches).map((patchEntry) => {
                 const [patchId, { outline }] = patchEntry;
-
                 const selected = patchId === selection;
 
-                const setSelection = (id) => dispatch(setSelectionAction(id));
-
-                const addNode = (point) => {
-                    const randNum = Math.floor(Math.random() * 1e16);
-                    const nodeId = `bad-ID-${randNum.toString(16)}`;
-                    dispatch(addOutlineNodeAction(patchId, nodeId, point));
-                };
-
-                const dispatchActionOnUnmodifiedMouseDown = (dispatchAction) => (e, ...args) => {
-                    // e.stopPropagation();
-
-                    const correctModifiers =
-                        !e.ctrlKey && !e.altKey && !e.shiftKey && !e.button;
-
-                    if (correctModifiers) {
-                        dispatchAction(...args);
-                    }
-                };
-
-                const setSelectionMouseDown = dispatchActionOnUnmodifiedMouseDown(setSelection);
-                const addNodeMouseDown = dispatchActionOnUnmodifiedMouseDown(addNode);
-
-                const patchElement = d3.select(`#${patchId}`).node();
-                let onWorkspaceMouseDown;
-                let onPatchMouseDown;
+                // Choose event listeners for `.workspace` and `.patch`
+                //   depending on mode.
+                let workspaceEventHandler;
+                let patchEventHandler;
                 switch (mode) {
                     case SELECT_MODE: {
-                        onWorkspaceMouseDown = (e) =>
-                            setSelectionMouseDown(e, null);
-                        onPatchMouseDown = (e) =>
-                            setSelectionMouseDown(e, patchId);
+                        workspaceEventHandler = () => setSelection(null);
+                        patchEventHandler = () => setSelection(patchId);
                         break;
                     }
                     case EDIT_MODE: {
-                        onWorkspaceMouseDown = (e) =>
-                            addNodeMouseDown(
-                                e,
-                                d3.clientPoint(patchElement, e)
-                            );
-                        onPatchMouseDown = (e) =>
-                            addNodeMouseDown(
-                                e,
-                                d3.clientPoint(patchElement, e)
-                            );
+                        const patchElement = d3.select(`#${patchId}`).node();
+                        workspaceEventHandler = (e) =>
+                            addNode(patchId, d3.clientPoint(patchElement, e));
+                        patchEventHandler = (e) =>
+                            addNode(patchId, d3.clientPoint(patchElement, e));
                         break;
                     }
                     default: {
-                        onWorkspaceMouseDown = noop;
-                        onPatchMouseDown = noop;
+                        workspaceEventHandler = noop;
+                        patchEventHandler = noop;
                     }
                 }
 
-                // Set listener on `.workspace` (the `<svg>` element eveything's
-                //     inside of)
-                d3
-                    .select(".workspace")
-                    .on("mousedown", () => onWorkspaceMouseDown(d3.event));
-
                 return (
-                    <g
+                    <OutlineToolPatch
                         key={patchId}
-                        id={patchId}
-                        className="patch"
-                        onMouseDown={onPatchMouseDown}
-                    >
-                        <Outline
-                            id={`${patchId}-outline`}
-                            selected={selected}
-                            outline={outline}
-                        />
-                        <OutlineNodes patchId={patchId} selected={selected} />
-                    </g>
+                        patchId={patchId}
+                        outline={outline}
+                        selected={selected}
+                        workspaceEventHandler={workspaceEventHandler}
+                        patchEventHandler={(e) => {
+                            e.stopPropagation();
+                            patchEventHandler(e);
+                        }}
+                    />
                 );
             })}
         </g>
