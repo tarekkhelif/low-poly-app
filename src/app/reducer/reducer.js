@@ -16,9 +16,9 @@ const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
 export const reducer = (state = testState, action) => {
     console.log("action: ", action);
     let nextState = deepCopy(state);
-    const payload = deepCopy(action.payload);
+    const { type, payload } = deepCopy(action);
 
-    switch (action.type) {
+    switch (type) {
         case SET_SELECTION: {
             const { id } = payload;
             nextState.selection = id;
