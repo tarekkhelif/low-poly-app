@@ -17,12 +17,9 @@ const mapStateToProps = ({ patches }, { patchId }) => ({
     nodes: patches[patchId].outline.nodes
 });
 export const OutlineNodes = connect(mapStateToProps)(({
-    dispatch, patchId, nodes, selected
+    dispatch, patchId, nodes, visibility
 }) => (
-    <g
-        className="outlineNodes"
-        visibility={selected ? "inherit" : "hidden"}
-    >
+    <g className="outlineNodes" visibility={visibility}>
         {Object.entries(nodes).map((entries) => {
             const [nodeId, { point }] = entries;
 
