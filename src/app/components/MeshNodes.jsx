@@ -6,27 +6,22 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {
-    outlineDeleteNodeAction,
-    outlineMoveNodeAction
-} from "../actions/actionGenerators";
+import { noop } from "../util/funcTools";
+
+import { meshMoveNodeAction } from "../actions/actionGenerators";
 
 import { OutlineNode } from "./OutlineNode";
 
 const mapStateToProps = ({ patches }, { patchId }) => ({
-    nodes: patches[patchId].outline.nodes
+    nodes: patches[patchId].mesh.nodes
 });
 export const MeshNodes = connect(mapStateToProps)(({ dispatch, patchId, nodes }) => (
     <g className="outlineNodes">
         {Object.entries(nodes).map((entries) => {
             const [nodeId, { point }] = entries;
 
-            const deleteNode = () => {
-                dispatch(outlineDeleteNodeAction(patchId, nodeId));
-            };
-
             const moveNode = (newPoint) => {
-                dispatch(outlineMoveNodeAction(patchId, nodeId, newPoint));
+                dispatch(meshMoveNodeAction(patchId, nodeId, newPoint));
             };
 
             return (
@@ -34,7 +29,7 @@ export const MeshNodes = connect(mapStateToProps)(({ dispatch, patchId, nodes })
                     key={nodeId}
                     nodeId={nodeId}
                     point={point}
-                    deleteNode={deleteNode}
+                    deleteNode={noop}
                     moveNode={moveNode}
                 />
             );

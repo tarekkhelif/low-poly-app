@@ -10,7 +10,8 @@ import {
     OUTLINE_DELETE_NODE,
     OUTLINE_MOVE_NODE,
     // TESSELATION TOOL
-    TESSELATION_CHANGE_TOOL_MODE
+    TESSELATION_CHANGE_TOOL_MODE,
+    MESH_MOVE_NODE
 } from "./actionTypes";
 
 export const setSelectionAction = (id) => ({
@@ -63,6 +64,11 @@ export const outlineMoveNodeAction = (patchId, nodeId, newPoint) => ({
 export const tesselationChangeModeAction = (mode) => ({
     type: TESSELATION_CHANGE_TOOL_MODE,
     payload: { mode }
+});
+
+export const meshMoveNodeAction = (patchId, nodeId, newPoint) => ({
+    type: MESH_MOVE_NODE,
+    payload: { patchId, nodeId, newPoint }
 });
 // #endregion
 

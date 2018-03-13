@@ -10,7 +10,8 @@ import {
     OUTLINE_DELETE_NODE,
     OUTLINE_MOVE_NODE,
     // TESSELATION TOOL
-    TESSELATION_CHANGE_TOOL_MODE
+    TESSELATION_CHANGE_TOOL_MODE,
+    MESH_MOVE_NODE
 } from "../actions/actionTypes";
 
 import testState from "./testState.json";
@@ -73,6 +74,11 @@ export const reducer = (state = testState, action) => {
         case TESSELATION_CHANGE_TOOL_MODE: {
             const { mode } = payload;
             nextState.currentTool.mode = mode;
+            break;
+        }
+        case MESH_MOVE_NODE: {
+            const { patchId, nodeId, newPoint } = payload;
+            nextState.patches[patchId].mesh.nodes[nodeId].point = newPoint;
             break;
         }
         default:
