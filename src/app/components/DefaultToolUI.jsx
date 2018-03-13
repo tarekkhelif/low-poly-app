@@ -7,7 +7,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { Outline } from "./Outline";
-import { Mesh } from "./Mesh";
+import { MeshPolygons } from "./MeshPolygons";
 
 const mapStateToProps = ({ selection, patches }) => ({ selection, patches });
 export const DefaultToolUI = connect(mapStateToProps)((props) => {
@@ -22,7 +22,7 @@ export const DefaultToolUI = connect(mapStateToProps)((props) => {
 
                 return (
                     <g key={patchId} id={patchId} className="patch">
-                        <Mesh id={`${patchId}-mesh`} mesh={mesh} />
+                        <MeshPolygons id={`${patchId}-mesh`} mesh={mesh} />
                         <Outline
                             id={`${patchId}-outline`}
                             selected={selected}

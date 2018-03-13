@@ -19,8 +19,9 @@ import { setSelectionAction } from "../actions/actionGenerators";
 
 import { HandlerInstaller } from "./HandlerInstaller";
 import { Outline } from "./Outline";
-import { OutlineNodes } from "./OutlineNodes";
-import { Mesh } from "./Mesh";
+import { MeshPolygons } from "./MeshPolygons";
+
+const MeshNodes = ({ id }) => <g id={id} />;
 
 type Props = {
     dispatch: (action: Object) => Object,
@@ -128,46 +129,96 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                     const [patchId, { outline, mesh }] = patchEntry;
                     const selected = patchId === selection;
 
-                    // Choose event listeners for depending on mode.
-                    let patchEventHandler;
+                    // Render according to mode
+                    let toDisplay;
                     switch (mode) {
                         case TESSELATION_SELECT_MODE: {
-                            patchEventHandler = (e) => {
-                                e.stopPropagation();
-                                this.setSelection(patchId);
-                            };
+                            toDisplay = (
+                                <React.Fragment>
+                                    <MeshPolygons
+                                        id={`${patchId}-meshPolygons`}
+                                        mesh={mesh}
+                                    />
+                                    <Outline
+                                        id={`${patchId}-outline`}
+                                        selected={selected}
+                                        outline={outline}
+                                    />
+                                </React.Fragment>
+                            );
                             break;
                         }
                         case TESSELATION_CREATE_MODE: {
-                            patchEventHandler = noop;
+                            toDisplay = (
+                                <React.Fragment>
+                                    <MeshPolygons
+                                        id={`${patchId}-meshPolygons`}
+                                        mesh={mesh}
+                                    />
+                                    <Outline
+                                        id={`${patchId}-outline`}
+                                        selected={selected}
+                                        outline={outline}
+                                    />
+                                </React.Fragment>
+                            );
                             break;
                         }
                         case TESSELATION_EDIT_MODE: {
-                            patchEventHandler = noop;
+                            toDisplay = (
+                                <React.Fragment>
+                                    <MeshPolygons
+                                        id={`${patchId}-meshPolygons`}
+                                        mesh={mesh}
+                                    />
+                                    <Outline
+                                        id={`${patchId}-outline`}
+                                        selected={selected}
+                                        outline={outline}
+                                    />
+                                    {selected ? (
+                                        <MeshNodes
+                                            id={`${patchId}-meshNodes`}
+                                            mesh={mesh}
+                                        />
+                                    ) : null}
+                                </React.Fragment>
+                            );
                             break;
                         }
                         default: {
-                            patchEventHandler = noop;
+                            toDisplay = (
+                                <React.Fragment>
+                                    <MeshPolygons
+                                        id={`${patchId}-meshPolygons`}
+                                        mesh={mesh}
+                                    />
+                                    <Outline
+                                        id={`${patchId}-outline`}
+                                        selected={selected}
+                                        outline={outline}
+                                    />
+                                </React.Fragment>
+                            );
                         }
                     }
+
+                    const patchEventHandler =
+                            mode === TESSELATION_SELECT_MODE
+                                ? executeOnPlainMouseDown((e) => {
+                                    e.stopPropagation();
+                                    this.setSelection(patchId);
+                                })
+                                : executeOnPlainMouseDown(noop);
 
                     return (
                         <g
                             key={patchId}
                             id={patchId}
                             className="patch"
-                            onMouseDown={executeOnPlainMouseDown(patchEventHandler)}
+                            onMouseDown={patchEventHandler}
                         >
-                            <Mesh id={`${patchId}-mesh`} mesh={mesh} />
-                            <Outline
-                                id={`${patchId}-outline`}
-                                selected={selected}
-                                outline={outline}
-                            />
-                            <OutlineNodes
-                                patchId={patchId}
-                                selected={selected}
-                            />
+                            {toDisplay}
                         </g>
                     );
                 })}

@@ -5,7 +5,7 @@
 
 import React from "react";
 
-export const Mesh = ({ id, mesh }) => {
+export const MeshPolygons = ({ id, mesh }) => {
     const { nodes, polygons } = mesh;
 
     return (
