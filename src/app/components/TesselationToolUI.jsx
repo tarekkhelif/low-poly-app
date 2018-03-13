@@ -7,7 +7,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { noop } from "../util/funcTools";
-import { executeOnPlainMouseDown } from "../util/eventTools";
+import { onPlainMouseDown } from "../util/eventTools";
 
 import {
     TESSELATION_SELECT_MODE,
@@ -61,7 +61,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                         eventType:
                                 "mousedown.select.workspace.tesselationTool",
                         handler: () => setSelection(null),
-                        modifiersWrapper: executeOnPlainMouseDown
+                        modifiersWrapper: onPlainMouseDown
                     }
                 ]
             ],
@@ -74,7 +74,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                         eventType:
                                 "mousedown.create.workspace.tesselationTool",
                         handler: () => setSelection(null),
-                        modifiersWrapper: executeOnPlainMouseDown
+                        modifiersWrapper: onPlainMouseDown
                     }
                 ]
             ],
@@ -87,7 +87,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                         eventType:
                                 "mousedown.edit.workspace.tesselationTool",
                         handler: () => setSelection(null),
-                        modifiersWrapper: executeOnPlainMouseDown
+                        modifiersWrapper: onPlainMouseDown
                     }
                 ]
             ]
@@ -220,11 +220,11 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
 
                     const patchEventHandler =
                             mode === TESSELATION_SELECT_MODE
-                                ? executeOnPlainMouseDown((e) => {
+                                ? onPlainMouseDown((e) => {
                                     e.stopPropagation();
                                     this.setSelection(patchId);
                                 })
-                                : executeOnPlainMouseDown(noop);
+                                : onPlainMouseDown(noop);
 
                     return (
                         <g

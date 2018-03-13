@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import * as d3 from "d3";
 
 import { noop } from "../util/funcTools";
-import { executeOnPlainMouseDown } from "../util/eventTools";
+import { onPlainMouseDown } from "../util/eventTools";
 
 import { OUTLINE_SELECT_MODE, OUTLINE_EDIT_MODE } from "../actions/actionTypes";
 
@@ -61,7 +61,7 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                         element: workspaceElement,
                         eventType: "mousedown.select.workspace.outlineTool",
                         handler: () => setSelection(null),
-                        modifiersWrapper: executeOnPlainMouseDown
+                        modifiersWrapper: onPlainMouseDown
                     }
                 ]
             ],
@@ -92,7 +92,7 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                                 addNode(newPatchId, point);
                             }
                         },
-                        modifiersWrapper: executeOnPlainMouseDown
+                        modifiersWrapper: onPlainMouseDown
                     }
                 ]
             ]
@@ -154,7 +154,7 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                             key={patchId}
                             id={patchId}
                             className="patch"
-                            onMouseDown={executeOnPlainMouseDown(OUTLINE_SELECT_MODE
+                            onMouseDown={onPlainMouseDown(OUTLINE_SELECT_MODE
                                 ? (e) => {
                                     e.stopPropagation();
                                     this.setSelection(patchId);
