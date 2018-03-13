@@ -7,8 +7,8 @@ import React from "react";
 import { connect } from "react-redux";
 
 import {
-    deleteOutlineNodeAction,
-    moveOutlineNodeAction
+    outlineDeleteNodeAction,
+    outlineMoveNodeAction
 } from "../actions/actionGenerators";
 
 import { OutlineNode } from "./OutlineNode";
@@ -27,11 +27,11 @@ export const OutlineNodes = connect(mapStateToProps)(({
             const [nodeId, { point }] = entries;
 
             const deleteNode = () => {
-                dispatch(deleteOutlineNodeAction(patchId, nodeId));
+                dispatch(outlineDeleteNodeAction(patchId, nodeId));
             };
 
             const moveNode = (newPoint) => {
-                dispatch(moveOutlineNodeAction(patchId, nodeId, newPoint));
+                dispatch(outlineMoveNodeAction(patchId, nodeId, newPoint));
             };
 
             return (
