@@ -22,6 +22,8 @@ import { Outline } from "./Outline";
 import { MeshPolygons } from "./MeshPolygons";
 
 const MeshNodes = ({ id }) => <g id={id} />;
+const TesselationSeeds = ({ id }) => <g id={id} />;
+const seeds = {};
 
 type Props = {
     dispatch: (action: Object) => Object,
@@ -152,16 +154,24 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                         case TESSELATION_CREATE_MODE: {
                             toDisplay = (
                                 <React.Fragment>
-                                    <MeshPolygons
-                                        id={`${patchId}-meshPolygons`}
-                                        mesh={mesh}
-                                    />
+                                    {!selected ? (
+                                        <MeshPolygons
+                                            id={`${patchId}-meshPolygons`}
+                                            mesh={mesh}
+                                        />
+                                    ) : null}
                                     <Outline
                                         id={`${patchId}-outline`}
                                         selected={selected}
                                         closed
                                         outline={outline}
                                     />
+                                    {selected ? (
+                                        <TesselationSeeds
+                                            id={`${patchId}-tesselationSeeds`}
+                                            seeds={seeds}
+                                        />
+                                    ) : null}
                                 </React.Fragment>
                             );
                             break;
