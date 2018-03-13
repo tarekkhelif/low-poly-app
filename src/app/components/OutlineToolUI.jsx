@@ -147,51 +147,29 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                 {patchesArray.map((patchEntry) => {
                     const [patchId, { outline }] = patchEntry;
                     const selected = patchId === selection;
-
-                    // Choose event listeners for depending on mode.
-                    let patchEventHandler;
-                    switch (mode) {
-                        case OUTLINE_SELECT_MODE: {
-                            patchEventHandler = (e) => {
-                                e.stopPropagation();
-                                this.setSelection(patchId);
-                            };
-                            break;
-                        }
-                        case OUTLINE_EDIT_MODE: {
-                            patchEventHandler = noop;
-                            break;
-                        }
-                        default: {
-                            patchEventHandler = noop;
-                        }
-                    }
+                    const editing = mode === OUTLINE_EDIT_MODE && selected;
 
                     return (
                         <g
                             key={patchId}
                             id={patchId}
                             className="patch"
-                            onMouseDown={executeOnPlainMouseDown(patchEventHandler)}
+                            onMouseDown={executeOnPlainMouseDown(OUTLINE_SELECT_MODE
+                                ? (e) => {
+                                    e.stopPropagation();
+                                    this.setSelection(patchId);
+                                }
+                                : noop)}
                         >
                             <Outline
                                 id={`${patchId}-outline`}
                                 selected={selected}
-                                closed={
-                                    !(
-                                        mode === OUTLINE_EDIT_MODE &&
-                                            selected
-                                    )
-                                }
+                                closed={!editing}
                                 outline={outline}
                             />
                             <OutlineNodes
                                 patchId={patchId}
-                                visibility={
-                                    mode === OUTLINE_EDIT_MODE && selected
-                                        ? "inherit"
-                                        : "hidden"
-                                }
+                                visibility={editing ? "inherit" : "hidden"}
                             />
                         </g>
                     );
