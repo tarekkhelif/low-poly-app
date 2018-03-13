@@ -5,7 +5,9 @@
 
 import React from "react";
 
-export const Outline = ({ id, selected, outline }) => {
+export const Outline = ({
+    id, selected, closed, outline
+}) => {
     const className = `outline${selected ? " selected" : ""}`;
 
     const { nodes } = outline;
@@ -16,9 +18,7 @@ export const Outline = ({ id, selected, outline }) => {
     });
 
     const pathString =
-        points.length > 0
-            ? `M ${points.join(" L ")}${selected ? "" : " Z"}`
-            : "";
+        points.length > 0 ? `M ${points.join(" L ")}${closed ? " Z" : ""}` : "";
 
     const pointerEvents = selected ? "stroke" : "visible";
 

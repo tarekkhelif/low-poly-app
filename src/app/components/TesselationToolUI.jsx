@@ -142,6 +142,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                     <Outline
                                         id={`${patchId}-outline`}
                                         selected={selected}
+                                        closed
                                         outline={outline}
                                     />
                                 </React.Fragment>
@@ -158,6 +159,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                     <Outline
                                         id={`${patchId}-outline`}
                                         selected={selected}
+                                        closed
                                         outline={outline}
                                     />
                                 </React.Fragment>
@@ -174,6 +176,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                     <Outline
                                         id={`${patchId}-outline`}
                                         selected={selected}
+                                        closed
                                         outline={outline}
                                     />
                                     {selected ? (
@@ -196,6 +199,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                     <Outline
                                         id={`${patchId}-outline`}
                                         selected={selected}
+                                        closed
                                         outline={outline}
                                     />
                                 </React.Fragment>

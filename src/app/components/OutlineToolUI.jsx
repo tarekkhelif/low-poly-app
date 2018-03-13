@@ -177,6 +177,7 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                             <Outline
                                 id={`${patchId}-outline`}
                                 selected={selected}
+                                closed={!selected}
                                 outline={outline}
                             />
                             <OutlineNodes

@@ -22,10 +22,14 @@ export const DefaultToolUI = connect(mapStateToProps)((props) => {
 
                 return (
                     <g key={patchId} id={patchId} className="patch">
-                        <MeshPolygons id={`${patchId}-mesh`} mesh={mesh} />
+                        <MeshPolygons
+                            id={`${patchId}-meshPolygons`}
+                            mesh={mesh}
+                        />
                         <Outline
                             id={`${patchId}-outline`}
                             selected={selected}
+                            closed
                             outline={outline}
                         />
                     </g>
