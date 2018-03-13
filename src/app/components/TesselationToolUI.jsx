@@ -20,8 +20,8 @@ import { setSelectionAction } from "../actions/actionGenerators";
 import { HandlerInstaller } from "./HandlerInstaller";
 import { Outline } from "./Outline";
 import { MeshPolygons } from "./MeshPolygons";
+import { MeshNodes } from "./MeshNodes";
 
-const MeshNodes = ({ id }) => <g id={id} />;
 const TesselationSeeds = ({ id }) => <g id={id} />;
 const seeds = {};
 
@@ -193,6 +193,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                         <MeshNodes
                                             id={`${patchId}-meshNodes`}
                                             mesh={mesh}
+                                            patchId={patchId}
                                         />
                                     ) : null}
                                 </React.Fragment>
