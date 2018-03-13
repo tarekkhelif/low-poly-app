@@ -15,6 +15,7 @@ body {
     background-color: $colorB;
     font-family: $fontFamily;
     text-align: center;
+    color: $colorA;
 }
 
 h1 {
@@ -72,6 +73,22 @@ circle {
     fill: rgb(77, 77, 77);
     stroke: rgb(77, 77, 77);
     r: 5px;
+}
+
+input {
+    background-color: $colorA;
+    color: $colorB;
+    caret-color: $colorB;
+    font-size: 16px;
+    border: $stdBorder solid $colorA;
+    margin-bottom: 4px;
+    padding: $stdPadding;
+    width: $buttonsWidth - 2 * ($stdBorder + $stdPadding);
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.4;
 }
 
 .outline {

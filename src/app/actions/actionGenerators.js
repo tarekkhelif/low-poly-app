@@ -1,12 +1,16 @@
 import {
     SET_SELECTION,
     SET_RASTER,
+    /* TOOLS */
     CHANGE_TOOL,
-    CHANGE_OUTLINE_TOOL_MODE,
-    CREATE_PATCH,
-    ADD_OUTLINE_NODE,
-    DELETE_OUTLINE_NODE,
-    MOVE_OUTLINE_NODE
+    // OUTLINE TOOL
+    OUTLINE_CHANGE_TOOL_MODE,
+    OUTLINE_CREATE_PATCH,
+    OUTLINE_ADD_NODE,
+    OUTLINE_DELETE_NODE,
+    OUTLINE_MOVE_NODE,
+    // TESSELATION TOOL
+    TESSELATION_CHANGE_TOOL_MODE
 } from "./actionTypes";
 
 export const setSelectionAction = (id) => ({
@@ -19,32 +23,47 @@ export const setRasterAction = (rasterBase64, width, height) => ({
     payload: { rasterBase64, width, height }
 });
 
+/* TOOLS */
+// #region
 export const changeToolAction = (tool) => ({
     type: CHANGE_TOOL,
     payload: { tool }
 });
 
-export const changeOutlineModeAction = (mode) => ({
-    type: CHANGE_OUTLINE_TOOL_MODE,
+// OUTLINE TOOL
+// #region
+export const outlineChangeModeAction = (mode) => ({
+    type: OUTLINE_CHANGE_TOOL_MODE,
     payload: { mode }
 });
 
-export const createPatchAction = (patchId) => ({
-    type: CREATE_PATCH,
+export const outlineCreatePatchAction = (patchId) => ({
+    type: OUTLINE_CREATE_PATCH,
     payload: { patchId }
 });
 
-export const addOutlineNodeAction = (patchId, nodeId, point) => ({
-    type: ADD_OUTLINE_NODE,
+export const outlineAddNodeAction = (patchId, nodeId, point) => ({
+    type: OUTLINE_ADD_NODE,
     payload: { patchId, nodeId, point }
 });
 
-export const deleteOutlineNodeAction = (patchId, nodeId) => ({
-    type: DELETE_OUTLINE_NODE,
+export const outlineDeleteNodeAction = (patchId, nodeId) => ({
+    type: OUTLINE_DELETE_NODE,
     payload: { patchId, nodeId }
 });
 
-export const moveOutlineNodeAction = (patchId, nodeId, newPoint) => ({
-    type: MOVE_OUTLINE_NODE,
+export const outlineMoveNodeAction = (patchId, nodeId, newPoint) => ({
+    type: OUTLINE_MOVE_NODE,
     payload: { patchId, nodeId, newPoint }
 });
+// #endregion
+
+// TESSELATION TOOL
+// #region
+export const tesselationChangeModeAction = (mode) => ({
+    type: TESSELATION_CHANGE_TOOL_MODE,
+    payload: { mode }
+});
+// #endregion
+
+// #endregion

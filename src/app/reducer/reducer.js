@@ -1,12 +1,16 @@
 import {
     SET_SELECTION,
     SET_RASTER,
+    /* TOOLS */
     CHANGE_TOOL,
-    CHANGE_OUTLINE_TOOL_MODE,
-    CREATE_PATCH,
-    ADD_OUTLINE_NODE,
-    DELETE_OUTLINE_NODE,
-    MOVE_OUTLINE_NODE
+    // OUTLINE TOOL
+    OUTLINE_CHANGE_TOOL_MODE,
+    OUTLINE_CREATE_PATCH,
+    OUTLINE_ADD_NODE,
+    OUTLINE_DELETE_NODE,
+    OUTLINE_MOVE_NODE,
+    // TESSELATION TOOL
+    TESSELATION_CHANGE_TOOL_MODE
 } from "../actions/actionTypes";
 
 import testState from "./testState.json";
@@ -30,34 +34,45 @@ export const reducer = (state = testState, action) => {
             nextState.raster = { rasterBase64, width, height };
             break;
         }
+        /* TOOLS */
         case CHANGE_TOOL: {
             const { tool } = payload;
             nextState.currentTool = { tool };
             break;
         }
-        case CHANGE_OUTLINE_TOOL_MODE: {
+        // OUTLINE TOOL
+        case OUTLINE_CHANGE_TOOL_MODE: {
             const { mode } = payload;
             nextState.currentTool.mode = mode;
             break;
         }
-        case CREATE_PATCH: {
+        case OUTLINE_CREATE_PATCH: {
             const { patchId } = payload;
-            nextState.patches[patchId] = { outline: { nodes: {} }, mesh: { nodes: {}, polygons: {} } };
+            nextState.patches[patchId] = {
+                outline: { nodes: {} },
+                mesh: { nodes: {}, polygons: {} }
+            };
             break;
         }
-        case ADD_OUTLINE_NODE: {
+        case OUTLINE_ADD_NODE: {
             const { patchId, nodeId, point } = payload;
             nextState.patches[patchId].outline.nodes[nodeId] = { point };
             break;
         }
-        case DELETE_OUTLINE_NODE: {
+        case OUTLINE_DELETE_NODE: {
             const { patchId, nodeId } = payload;
             delete nextState.patches[patchId].outline.nodes[nodeId];
             break;
         }
-        case MOVE_OUTLINE_NODE: {
+        case OUTLINE_MOVE_NODE: {
             const { patchId, nodeId, newPoint } = payload;
             nextState.patches[patchId].outline.nodes[nodeId].point = newPoint;
+            break;
+        }
+        // TESSELATION TOOL
+        case TESSELATION_CHANGE_TOOL_MODE: {
+            const { mode } = payload;
+            nextState.currentTool.mode = mode;
             break;
         }
         default:

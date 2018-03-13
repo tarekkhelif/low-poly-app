@@ -6,10 +6,14 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { OUTLINE_TOOL } from "../actions/actionTypes";
+import { OUTLINE_TOOL, TESSELATION_TOOL } from "../actions/actionTypes";
 import { OutlineToolControls } from "./OutlineToolControls";
+import { TesselationToolControls } from "./TesselationToolControls";
 
-const toolControls = new Map([[OUTLINE_TOOL, OutlineToolControls]]);
+const toolControls = new Map([
+    [OUTLINE_TOOL, OutlineToolControls],
+    [TESSELATION_TOOL, TesselationToolControls]
+]);
 
 const mapStateToProps = ({ currentTool: { tool } }) => ({ tool });
 export const CurrentToolControls = connect(mapStateToProps)(({ tool }) => {

@@ -2,15 +2,23 @@ export const SET_SELECTION = "SET_SELECTION";
 
 export const SET_RASTER = "SET_RASTER";
 
+/* TOOLS */
 export const CHANGE_TOOL = "CHANGE_TOOL";
 export const OUTLINE_TOOL = "outline-tool";
 export const TESSELATION_TOOL = "tesselation-tool";
 
-export const CHANGE_OUTLINE_TOOL_MODE = "CHANGE_OUTLINE_TOOL_MODE";
-export const SELECT_MODE = "select-mode";
-export const EDIT_MODE = "edit-mode";
+// OUTLINE TOOL
+export const OUTLINE_CHANGE_TOOL_MODE = "OUTLINE_CHANGE_TOOL_MODE";
+export const OUTLINE_SELECT_MODE = "outline-select-mode";
+export const OUTLINE_EDIT_MODE = "outline-edit-mode";
 
-export const CREATE_PATCH = "CREATE_PATCH";
-export const ADD_OUTLINE_NODE = "ADD_OUTLINE_NODE";
-export const DELETE_OUTLINE_NODE = "DELETE_OUTLINE_NODE";
-export const MOVE_OUTLINE_NODE = "MOVE_OUTLINE_NODE";
+export const OUTLINE_CREATE_PATCH = "OUTLINE_CREATE_PATCH";
+export const OUTLINE_ADD_NODE = "OUTLINE_ADD_NODE";
+export const OUTLINE_DELETE_NODE = "OUTLINE_DELETE_NODE";
+export const OUTLINE_MOVE_NODE = "OUTLINE_MOVE_NODE";
+
+// TESSELATION TOOL
+export const TESSELATION_CHANGE_TOOL_MODE = "TESSELATION_CHANGE_TOOL_MODE";
+export const TESSELATION_SELECT_MODE = "tesselation-select-mode";
+export const TESSELATION_CREATE_MODE = "tesselation-create-mode";
+export const TESSELATION_EDIT_MODE = "tesselation-edit-mode";
