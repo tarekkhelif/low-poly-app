@@ -20,7 +20,8 @@ import {
 } from "../actions/actionGenerators";
 
 import { HandlerInstaller } from "./HandlerInstaller";
-import { OutlineToolPatch } from "./OutlineToolPatch";
+import { Outline } from "./Outline";
+import { OutlineNodes } from "./OutlineNodes";
 
 type Props = {
     dispatch: (action: Object) => Object,
@@ -167,13 +168,22 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                     }
 
                     return (
-                        <OutlineToolPatch
+                        <g
                             key={patchId}
-                            patchId={patchId}
-                            outline={outline}
-                            selected={selected}
-                            patchEventHandler={patchEventHandler}
-                        />
+                            id={patchId}
+                            className="patch"
+                            onMouseDown={executeOnPlainMouseDown(patchEventHandler)}
+                        >
+                            <Outline
+                                id={`${patchId}-outline`}
+                                selected={selected}
+                                outline={outline}
+                            />
+                            <OutlineNodes
+                                patchId={patchId}
+                                selected={selected}
+                            />
+                        </g>
                     );
                 })}
             </g>
