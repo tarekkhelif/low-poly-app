@@ -6,6 +6,8 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import * as d3 from "d3";
+
 import { noop } from "../util/funcTools";
 import { onPlainMouseDown } from "../util/eventTools";
 
@@ -15,7 +17,10 @@ import {
     TESSELATION_EDIT_MODE
 } from "../actions/actionTypes";
 
-import { setSelectionAction } from "../actions/actionGenerators";
+import {
+    setSelectionAction,
+    voronoiAddSiteAction
+} from "../actions/actionGenerators";
 
 import { HandlerInstaller } from "./HandlerInstaller";
 import { Outline } from "./Outline";
@@ -43,6 +48,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
 
         // I think this is necessary for dispatch to work???
         this.setSelection = this.setSelection.bind(this);
+        this.addVoronoiSite = this.addVoronoiSite.bind(this);
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -73,7 +79,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                         element: workspaceElement,
                         eventType:
                                 "mousedown.create.workspace.tesselationTool",
-                        handler: () => setSelection(null),
+                        handler: noop,
                         modifiersWrapper: onPlainMouseDown
                     }
                 ]
@@ -103,6 +109,14 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
         const { dispatch } = this.props;
         dispatch(setSelectionAction(id));
     }
+
+    addVoronoiSite(point) {
+        const { dispatch } = this.props;
+        const randNum = Math.floor(Math.random() * 1e16);
+        const siteId = `bad-ID-${randNum.toString(16)}`;
+
+        dispatch(voronoiAddSiteAction(siteId, point));
+    }
     // #endregion
 
     render() {
@@ -131,12 +145,21 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                     const [patchId, { outline, mesh }] = patchEntry;
                     const selected = patchId === selection;
 
-                    // Render according to mode
-                    let toDisplay;
+                    const selectPatchPlainMouseDown = onPlainMouseDown((e) => {
+                        e.stopPropagation();
+                        this.setSelection(patchId);
+                    });
+
+                        // Render according to mode
                     switch (mode) {
                         case TESSELATION_SELECT_MODE: {
-                            toDisplay = (
-                                <React.Fragment>
+                            return (
+                                <g
+                                    key={patchId}
+                                    id={patchId}
+                                    className="patch"
+                                    onMouseDown={selectPatchPlainMouseDown}
+                                >
                                     <MeshPolygons
                                         id={`${patchId}-meshPolygons`}
                                         mesh={mesh}
@@ -147,13 +170,33 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                         closed
                                         outline={outline}
                                     />
-                                </React.Fragment>
+                                </g>
                             );
-                            break;
                         }
                         case TESSELATION_CREATE_MODE: {
-                            toDisplay = (
-                                <React.Fragment>
+                            return (
+                                <g
+                                    key={patchId}
+                                    id={patchId}
+                                    className="patch"
+                                    onMouseDown={
+                                        selected
+                                            ? onPlainMouseDown((e) => {
+                                                e.stopPropagation();
+
+                                                const thisPatch =
+                                                          e.currentTarget;
+
+                                                const point = d3.clientPoint(
+                                                    thisPatch,
+                                                    e
+                                                );
+
+                                                this.addVoronoiSite(point);
+                                            })
+                                            : selectPatchPlainMouseDown
+                                    }
+                                >
                                     {!selected ? (
                                         <MeshPolygons
                                             id={`${patchId}-meshPolygons`}
@@ -172,13 +215,21 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                             seeds={seeds}
                                         />
                                     ) : null}
-                                </React.Fragment>
+                                </g>
                             );
-                            break;
                         }
                         case TESSELATION_EDIT_MODE: {
-                            toDisplay = (
-                                <React.Fragment>
+                            return (
+                                <g
+                                    key={patchId}
+                                    id={patchId}
+                                    className="patch"
+                                    onMouseDown={
+                                        selected
+                                            ? onPlainMouseDown(noop)
+                                            : selectPatchPlainMouseDown
+                                    }
+                                >
                                     <MeshPolygons
                                         id={`${patchId}-meshPolygons`}
                                         mesh={mesh}
@@ -196,13 +247,17 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                             patchId={patchId}
                                         />
                                     ) : null}
-                                </React.Fragment>
+                                </g>
                             );
-                            break;
                         }
                         default: {
-                            toDisplay = (
-                                <React.Fragment>
+                            return (
+                                <g
+                                    key={patchId}
+                                    id={patchId}
+                                    className="patch"
+                                    onMouseDown={onPlainMouseDown(noop)}
+                                >
                                     <MeshPolygons
                                         id={`${patchId}-meshPolygons`}
                                         mesh={mesh}
@@ -213,29 +268,10 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                         closed
                                         outline={outline}
                                     />
-                                </React.Fragment>
+                                </g>
                             );
                         }
                     }
-
-                    const patchEventHandler =
-                            mode === TESSELATION_SELECT_MODE
-                                ? onPlainMouseDown((e) => {
-                                    e.stopPropagation();
-                                    this.setSelection(patchId);
-                                })
-                                : onPlainMouseDown(noop);
-
-                    return (
-                        <g
-                            key={patchId}
-                            id={patchId}
-                            className="patch"
-                            onMouseDown={patchEventHandler}
-                        >
-                            {toDisplay}
-                        </g>
-                    );
                 })}
             </g>
         );

@@ -20,7 +20,7 @@ export const Outline = ({
     const pathString =
         points.length > 0 ? `M ${points.join(" L ")}${closed ? " Z" : ""}` : "";
 
-    const pointerEvents = selected ? "stroke" : "visible";
+    const pointerEvents = closed ? "visible" : "stroke";
 
     return (
         <path

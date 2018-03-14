@@ -11,6 +11,7 @@ import {
     OUTLINE_MOVE_NODE,
     // TESSELATION TOOL
     TESSELATION_CHANGE_TOOL_MODE,
+    VORONOI_ADD_SITE,
     MESH_MOVE_NODE
 } from "./actionTypes";
 
@@ -64,6 +65,11 @@ export const outlineMoveNodeAction = (patchId, nodeId, newPoint) => ({
 export const tesselationChangeModeAction = (mode) => ({
     type: TESSELATION_CHANGE_TOOL_MODE,
     payload: { mode }
+});
+
+export const voronoiAddSiteAction = (siteId, point) => ({
+    type: VORONOI_ADD_SITE,
+    payload: { siteId, point }
 });
 
 export const meshMoveNodeAction = (patchId, nodeId, newPoint) => ({

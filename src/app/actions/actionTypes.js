@@ -23,4 +23,5 @@ export const TESSELATION_SELECT_MODE = "tesselation-select-mode";
 export const TESSELATION_CREATE_MODE = "tesselation-create-mode";
 export const TESSELATION_EDIT_MODE = "tesselation-edit-mode";
 
+export const VORONOI_ADD_SITE = "VORONOI_ADD_SITE";
 export const MESH_MOVE_NODE = "MESH_MOVE_NODE";
