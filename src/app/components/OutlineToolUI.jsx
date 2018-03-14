@@ -154,12 +154,15 @@ export const OutlineToolUI = connect(mapStateToProps)(class extends React.Compon
                             key={patchId}
                             id={patchId}
                             className="patch"
-                            onMouseDown={onPlainMouseDown(OUTLINE_SELECT_MODE
-                                ? (e) => {
-                                    e.stopPropagation();
-                                    this.setSelection(patchId);
-                                }
-                                : noop)}
+                            // Select patch onMouseDown if in select mode
+                            onMouseDown={
+                                mode === OUTLINE_SELECT_MODE
+                                    ? onPlainMouseDown((e) => {
+                                        e.stopPropagation();
+                                        this.setSelection(patchId);
+                                    })
+                                    : onPlainMouseDown(noop)
+                            }
                         >
                             <Outline
                                 id={`${patchId}-outline`}
