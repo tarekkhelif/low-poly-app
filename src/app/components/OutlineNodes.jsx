@@ -11,7 +11,7 @@ import {
     outlineMoveNodeAction
 } from "../actions/actionGenerators";
 
-import { OutlineNode } from "./OutlineNode";
+import { Node } from "./Node";
 
 const mapStateToProps = ({ patches }, { patchId }) => ({
     nodes: patches[patchId].outline.nodes
@@ -32,7 +32,7 @@ export const OutlineNodes = connect(mapStateToProps)(({
             };
 
             return (
-                <OutlineNode
+                <Node
                     key={nodeId}
                     nodeId={nodeId}
                     point={point}

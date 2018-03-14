@@ -12,6 +12,8 @@ import {
     // TESSELATION TOOL
     TESSELATION_CHANGE_TOOL_MODE,
     VORONOI_ADD_SITE,
+    VORONOI_DELETE_SITE,
+    VORONOI_MOVE_SITE,
     MESH_MOVE_NODE
 } from "../actions/actionTypes";
 
@@ -39,7 +41,7 @@ export const reducer = (state = testState, action) => {
         /* TOOLS */
         case CHANGE_TOOL: {
             const { tool } = payload;
-            nextState.currentTool = { tool, mode: {}, state: {} };
+            nextState.currentTool = { tool, mode: {}, modeState: {} };
             break;
         }
         // OUTLINE TOOL
@@ -75,11 +77,22 @@ export const reducer = (state = testState, action) => {
         case TESSELATION_CHANGE_TOOL_MODE: {
             const { mode } = payload;
             nextState.currentTool.mode = mode;
+            nextState.currentTool.modeState = {};
             break;
         }
         case VORONOI_ADD_SITE: {
             const { siteId, point } = payload;
-            nextState.currentTool.state[siteId] = { point };
+            nextState.currentTool.modeState[siteId] = { point };
+            break;
+        }
+        case VORONOI_DELETE_SITE: {
+            const { siteId } = payload;
+            delete nextState.currentTool.modeState[siteId];
+            break;
+        }
+        case VORONOI_MOVE_SITE: {
+            const { siteId, newPoint } = payload;
+            nextState.currentTool.modeState[siteId].point = newPoint;
             break;
         }
         case MESH_MOVE_NODE: {

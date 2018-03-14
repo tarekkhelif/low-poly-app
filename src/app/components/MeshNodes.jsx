@@ -10,7 +10,7 @@ import { noop } from "../util/funcTools";
 
 import { meshMoveNodeAction } from "../actions/actionGenerators";
 
-import { OutlineNode } from "./OutlineNode";
+import { Node } from "./Node";
 
 const mapStateToProps = ({ patches }, { patchId }) => ({
     nodes: patches[patchId].mesh.nodes
@@ -25,7 +25,7 @@ export const MeshNodes = connect(mapStateToProps)(({ dispatch, patchId, nodes })
             };
 
             return (
-                <OutlineNode
+                <Node
                     key={nodeId}
                     nodeId={nodeId}
                     point={point}

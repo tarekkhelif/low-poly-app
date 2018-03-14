@@ -7,7 +7,7 @@ import React from "react";
 
 import * as d3 from "d3";
 
-export const OutlineNode = class extends React.Component {
+export const Node = class extends React.Component {
     componentDidMount() {
         const { deleteNode, moveNode } = this.props;
         const { node } = this;

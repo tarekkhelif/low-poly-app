@@ -26,18 +26,22 @@ import { HandlerInstaller } from "./HandlerInstaller";
 import { Outline } from "./Outline";
 import { MeshPolygons } from "./MeshPolygons";
 import { MeshNodes } from "./MeshNodes";
-
-const TesselationSeeds = ({ id }) => <g id={id} />;
-const seeds = {};
+import { VoronoiSites } from "./VoronoiSites";
 
 type Props = {
     dispatch: (action: Object) => Object,
     mode: string,
+    modeState: Object,
     selection: string,
     patches: Object
 };
-const mapStateToProps = ({ currentTool: { mode }, selection, patches }) => ({
+const mapStateToProps = ({
+    currentTool: { mode, modeState },
+    selection,
+    patches
+}) => ({
     mode,
+    modeState,
     selection,
     patches
 });
@@ -120,9 +124,11 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
     // #endregion
 
     render() {
-        const { mode, selection, patches } = this.props;
+        const {
+            mode, modeState, selection, patches
+        } = this.props;
 
-        // Recreate listeners in case changes in properties change what they do
+            // Recreate listeners in case changes in properties change what they do
         const handlers = this.createListeners();
         // Get the handlers for the current mode
         const modeHandlers = handlers.has(mode) ? handlers.get(mode) : [];
@@ -174,6 +180,7 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                             );
                         }
                         case TESSELATION_CREATE_MODE: {
+                            const sites = modeState;
                             return (
                                 <g
                                     key={patchId}
@@ -210,9 +217,9 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                         outline={outline}
                                     />
                                     {selected ? (
-                                        <TesselationSeeds
-                                            id={`${patchId}-tesselationSeeds`}
-                                            seeds={seeds}
+                                        <VoronoiSites
+                                            id={`${patchId}-tesselationSites`}
+                                            sites={sites}
                                         />
                                     ) : null}
                                 </g>
@@ -243,7 +250,6 @@ export const TesselationToolUI = connect(mapStateToProps)(class extends React.Co
                                     {selected ? (
                                         <MeshNodes
                                             id={`${patchId}-meshNodes`}
-                                            mesh={mesh}
                                             patchId={patchId}
                                         />
                                     ) : null}

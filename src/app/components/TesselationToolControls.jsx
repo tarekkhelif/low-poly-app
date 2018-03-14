@@ -52,7 +52,7 @@ export const TesselationToolControls = connect(mapStateToProps)((props) => {
                 >
                     <div className="numberPicker">
                         <label htmlFor="numberPickerInput">
-                            Random Seeds
+                            Random Sites
                             <input id="numberPickerInput" type="number" />
                             <button>➡</button>
                         </label>
