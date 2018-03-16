@@ -10,27 +10,11 @@ import { ToolButtons } from "./ToolButtons";
 import { CurrentToolUI } from "./CurrentToolUI";
 import { CurrentToolControls } from "./CurrentToolControls";
 
-const mapStateToProps = (state) => {
-    let rasterProps;
-    const {
-        rasterBase64,
-        width: nativeWidth,
-        height: nativeHeight
-    } = state.raster;
-
-    if (nativeHeight !== 0 && nativeHeight !== 0) {
-        const { width, height } = scaleDimensions(nativeWidth, nativeHeight);
-        rasterProps = { rasterBase64, width, height };
-    } else {
-        rasterProps = {
-            rasterBase64,
-            width: nativeWidth,
-            height: nativeHeight
-        };
-    }
-
-    return { ...rasterProps };
-};
+const mapStateToProps = ({ raster: { rasterBase64, width, height } }) => ({
+    rasterBase64,
+    width,
+    height
+});
 export const App = connect(mapStateToProps)((props) => {
     const { rasterBase64, width, height } = props;
 
@@ -57,14 +41,3 @@ export const App = connect(mapStateToProps)((props) => {
         </div>
     );
 });
-
-function scaleDimensions(fullWidth, fullHeight) {
-    if (fullWidth === 0 || fullHeight === 0) {
-        throw new Error("Dimensions must be nonzero");
-    }
-
-    const width = 600;
-    const height = fullHeight / fullWidth * width;
-
-    return { width, height };
-}

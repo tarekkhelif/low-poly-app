@@ -26,4 +26,6 @@ export const TESSELATION_EDIT_MODE = "tesselation-edit-mode";
 export const VORONOI_ADD_SITE = "VORONOI_ADD_SITE";
 export const VORONOI_DELETE_SITE = "VORONOI_DELETE_SITE";
 export const VORONOI_MOVE_SITE = "VORONOI_MOVE_SITE";
+export const MESH_SET_MESH = "MESH_SET_MESH";
+export const MESH_SET_POLYGON_COLOR = "MESH_SET_POLYGON_COLOR";
 export const MESH_MOVE_NODE = "MESH_MOVE_NODE";

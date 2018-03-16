@@ -14,6 +14,8 @@ import {
     VORONOI_ADD_SITE,
     VORONOI_DELETE_SITE,
     VORONOI_MOVE_SITE,
+    MESH_SET_MESH,
+    MESH_SET_POLYGON_COLOR,
     MESH_MOVE_NODE
 } from "./actionTypes";
 
@@ -82,6 +84,16 @@ export const voronoiDeleteSiteAction = (siteId) => ({
 export const voronoiMoveSiteAction = (siteId, newPoint) => ({
     type: VORONOI_MOVE_SITE,
     payload: { siteId, newPoint }
+});
+
+export const meshSetMeshAction = (patchId, nodes, polygons) => ({
+    type: MESH_SET_MESH,
+    payload: { patchId, mesh: { nodes, polygons } }
+});
+
+export const meshSetPolygonColorAction = (patchId, polygonId, color) => ({
+    type: MESH_SET_POLYGON_COLOR,
+    payload: { patchId, polygonId, color }
 });
 
 export const meshMoveNodeAction = (patchId, nodeId, newPoint) => ({

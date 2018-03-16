@@ -23,7 +23,12 @@ export const ToolButtons = connect(mapStateToProps)(({ dispatch, tool }) => {
                 dispatch(changeToolAction(null));
 
                 const raster = await askUserForRaster();
-                const { width, height } = await getRasterDimensions(raster);
+                const { nativeWidth, nativeHeight } = await getRasterDimensions(raster);
+                const { width, height } = scaleDimensions(
+                    nativeWidth,
+                    nativeHeight
+                );
+
                 dispatch(setRasterAction(raster, width, height));
             }
         },
@@ -100,7 +105,7 @@ function getRasterDimensions(base64ImgURL) {
 
         htmlImg.onload = () => {
             const { width, height } = htmlImg;
-            resolve({ width, height });
+            resolve({ nativeWidth: width, nativeHeight: height });
         };
         htmlImg.onerror = (err) => reject(err);
 
@@ -108,6 +113,17 @@ function getRasterDimensions(base64ImgURL) {
     });
 
     return dimensions;
+}
+
+function scaleDimensions(fullWidth, fullHeight) {
+    if (fullWidth === 0 || fullHeight === 0) {
+        throw new Error("Dimensions must be nonzero");
+    }
+
+    const width = 600;
+    const height = fullHeight / fullWidth * width;
+
+    return { width, height };
 }
 
 function exportArt(/* state */) {

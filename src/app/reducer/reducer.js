@@ -14,6 +14,8 @@ import {
     VORONOI_ADD_SITE,
     VORONOI_DELETE_SITE,
     VORONOI_MOVE_SITE,
+    MESH_SET_MESH,
+    MESH_SET_POLYGON_COLOR,
     MESH_MOVE_NODE
 } from "../actions/actionTypes";
 
@@ -93,6 +95,16 @@ export const reducer = (state = testState, action) => {
         case VORONOI_MOVE_SITE: {
             const { siteId, newPoint } = payload;
             nextState.currentTool.modeState[siteId].point = newPoint;
+            break;
+        }
+        case MESH_SET_MESH: {
+            const { patchId, mesh } = payload;
+            nextState.patches[patchId].mesh = mesh;
+            break;
+        }
+        case MESH_SET_POLYGON_COLOR: {
+            const { patchId, polygonId, color } = payload;
+            nextState.patches[patchId].mesh.polygons[polygonId].color = color;
             break;
         }
         case MESH_MOVE_NODE: {

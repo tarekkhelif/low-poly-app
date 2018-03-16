@@ -14,9 +14,7 @@ import {
 
 import { tesselationChangeModeAction } from "../actions/actionGenerators";
 
-import { noop } from "../util/funcTools";
-
-const generateVoronoi = noop;
+import { TesselationCreateControls } from "./TesselationCreateControls";
 
 const mapStateToProps = ({ currentTool: { mode } }) => ({ mode });
 export const TesselationToolControls = connect(mapStateToProps)((props) => {
@@ -45,21 +43,9 @@ export const TesselationToolControls = connect(mapStateToProps)((props) => {
                 >
                     Create
                 </button>
-                <div
-                    className={`${TESSELATION_CREATE_MODE}_controls ${
-                        mode === TESSELATION_CREATE_MODE ? "" : " disabled"
-                    }`}
-                >
-                    <div className="numberPicker">
-                        <label htmlFor="numberPickerInput">
-                            Random Sites
-                            <input id="numberPickerInput" type="number" />
-                            <button>➡</button>
-                        </label>
-                    </div>
-
-                    <button onClick={generateVoronoi}>Generate</button>
-                </div>
+                {mode === TESSELATION_CREATE_MODE ? (
+                    <TesselationCreateControls />
+                ) : null}
                 <hr />
             </div>
             <button
