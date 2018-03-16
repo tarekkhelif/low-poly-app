@@ -1,0 +1,13 @@
+{
+    "selection": null,
+    "raster": {
+        "rasterBase64": "",
+        "width": 600,
+        "height": 400
+    },
+    "currentTool": {
+        "tool": "",
+        "mode": null
+    },
+    "patches": {}
+}

@@ -20,11 +20,12 @@ import {
 } from "../actions/actionTypes";
 
 import testState from "./testState.json";
+import defaultState from "./defaultState.json";
 
 // SO says this is a good way to get a deep copy
 const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
 
-export const reducer = (state = testState, action) => {
+export const reducer = (state = defaultState, action) => {
     console.log("action: ", action);
     let nextState = deepCopy(state);
     const { type, payload } = deepCopy(action);
